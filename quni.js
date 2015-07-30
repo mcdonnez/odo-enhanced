@@ -130,6 +130,7 @@ function changeFavicon(src) {
 }
 /* DEV ------------- Integrate QWiki into Odo Tags ---------------- */
 var pageSet = 0;
+var page;
 function getQWiki(page) {
     var url = "http://qwiki.dev.qualtrics.com/index.php/" + page;
     console.log(url);
@@ -137,22 +138,48 @@ function getQWiki(page) {
     xmlhttp.open("GET",url,true);
     xmlhttp.responseType = "document";
     xmlhttp.send();
-    if (xmlhttp.onerror) {
-        console.log("Error: " + xmlhttp.onerror);
-    }
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var QWiki = xmlhttp.response;
-            console.log(QWiki.getElementById('content'));
             var QWikiArticle = QWiki.getElementById('content');
-            //var qEdits = QWikiArticle.getElementsByClassName('editsection'); //this is to remove hyperlinks to qwiki
-            //for (i=0;i<qEdits.length;i++) {
-            //    QWikiArticle.removeChild(qEdits[i]);    
-            //}
+            var q = QWikiArticle.getElementsByTagName('A'); //this is to remove hyperlinks to qwiki
+            for (i=0;i<q.length;i++) {
+                q[i].setAttribute('target','_blank');
+            }
             var odoArticle = document.getElementById('Articles');
             odoArticle.innerHTML = QWikiArticle.innerHTML;
             odoArticle.removeAttribute('style'); //removes height limit of content
-            pageSet = 1;
+            var pageSet = document.createElement('div');
+                pageSet.setAttribute('id','addedArticle');
+                odoArticle.appendChild(pageSet);
+        }
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 404) {
+            page = page.replace(/_/g, " ");
+            url = "http://qwiki.dev.qualtrics.com/index.php?title=Special%3ASearch&go=Go&search=" + page;
+            console.log('test');
+            console.log(url);
+            var xmlhttp1 = new XMLHttpRequest();
+            xmlhttp1.open("GET",url,true);
+            xmlhttp1.responseType = "document";
+            xmlhttp1.send();
+            xmlhttp1.onreadystatechange = function() {
+            if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+                var QWiki = xmlhttp1.response;
+                var QWikiArticle = QWiki.getElementsByClassName('searchresults')[0];
+                var q = QWikiArticle.getElementsByTagName('A'); //this is to open Qwiki links in new tab
+                for (i=0;i<q.length;i++) {
+                    var m = q[i].href;
+                    q[i].setAttribute('href',m); //fix the base url for href
+                    q[i].setAttribute('target','_blank');
+                }
+                var odoArticle = document.getElementById('Articles');
+                odoArticle.innerHTML = QWikiArticle.innerHTML;
+                odoArticle.removeAttribute('style'); //removes height limit of content
+                var pageSet = document.createElement('div');
+                pageSet.setAttribute('id','addedArticle');
+                odoArticle.appendChild(pageSet);
+            }
+            }
         }
     }
 };
@@ -168,8 +195,10 @@ changeDialog.onmouseenter = function() {
     document.getElementById('JiraProduct').appendChild(cpr);
     }
     /* DEV ------------- Get dynamic QWiki article ---------- */
-    if (document.getElementById('Articles') && pageSet != 1) {
-    getQWiki('Collaboration');
+    if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
+    page = document.getElementById('TopicList').innerHTML.match(/\| ([\w\s]+)/)[1];
+    page = page.replace(/\s/, "_");
+    getQWiki(page);
     }
     /* ------------- List of IDs to autofill ---------- */
     var user = document.getElementsByClassName('BodyContent')[0].innerHTML;

@@ -2,8 +2,8 @@
     "manifest_version": 2,
 
     "name": "Odo Enhanced",
-    "description": "Custom CSS, Added Functionality to Odo",
-    "version": "1.0",
+    "description": "Custom CSS, Favicons, Autofill Tickets, QWiki Integration",
+    "version": "1.2",
     "permissions": [
         "activeTab",
         "https://ajax.googleapis.com/",
