@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+
+    "name": "Odo Enhanced",
+    "description": "Custom CSS, Added Functionality to Odo",
+    "version": "1.0",
+    "permissions": [
+        "activeTab",
+        "https://ajax.googleapis.com/",
+        "http://odo.corp.qualtrics.com/*"
+    ],
+    "content_scripts": [
+    {
+    "matches": ["http://odo.corp.qualtrics.com/*"],
+    "js": ["quni.js"],
+    "css": ["odo-enhanced.css"]
+    }
+    ]
+}
