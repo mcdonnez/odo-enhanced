@@ -128,6 +128,34 @@ function changeFavicon(src) {
  }
  document.head.appendChild(link);
 }
+/* DEV ------------- Integrate QWiki into Odo Tags ---------------- */
+var pageSet = 0;
+function getQWiki(page) {
+    var url = "http://qwiki.dev.qualtrics.com/index.php/" + page;
+    console.log(url);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET",url,true);
+    xmlhttp.responseType = "document";
+    xmlhttp.send();
+    if (xmlhttp.onerror) {
+        console.log("Error: " + xmlhttp.onerror);
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var QWiki = xmlhttp.response;
+            console.log(QWiki.getElementById('content'));
+            var QWikiArticle = QWiki.getElementById('content');
+            //var qEdits = QWikiArticle.getElementsByClassName('editsection'); //this is to remove hyperlinks to qwiki
+            //for (i=0;i<qEdits.length;i++) {
+            //    QWikiArticle.removeChild(qEdits[i]);    
+            //}
+            var odoArticle = document.getElementById('Articles');
+            odoArticle.innerHTML = QWikiArticle.innerHTML;
+            odoArticle.removeAttribute('style'); //removes height limit of content
+            pageSet = 1;
+        }
+    }
+};
 /* ------------- Autofill dialog box depending on fields present ---------------- */
 var changeDialog = document.getElementById('Dialog');
 changeDialog.onmouseenter = function() {
@@ -138,6 +166,10 @@ changeDialog.onmouseenter = function() {
     cpr.id = 'addCPR';
     cpr.innerHTML = 'Control Panel Reporting(CPR)';
     document.getElementById('JiraProduct').appendChild(cpr);
+    }
+    /* DEV ------------- Get dynamic QWiki article ---------- */
+    if (document.getElementById('Articles') && pageSet != 1) {
+    getQWiki('Collaboration');
     }
     /* ------------- List of IDs to autofill ---------- */
     var user = document.getElementsByClassName('BodyContent')[0].innerHTML;

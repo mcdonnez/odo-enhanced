@@ -7,7 +7,8 @@
     "permissions": [
         "activeTab",
         "https://ajax.googleapis.com/",
-        "http://odo.corp.qualtrics.com/*"
+        "http://odo.corp.qualtrics.com/*",
+        "http://qwiki.dev.qualtrics.com/*"
     ],
     "content_scripts": [
     {
