@@ -127,7 +127,7 @@ function changeFavicon(src) {
  }
  document.head.appendChild(link);
 }
-/* ------------- Integrate QWiki into Odo Tags ---------------- */
+/* ------------- Integrate QWiki into Odo Dialog ---------------- */
 var pageSet = 0;
 var page;
 function getQWiki(page) {
@@ -226,7 +226,6 @@ changeDialog.onmouseenter = function() {
     document.getElementById('RSBrandID').value = document.querySelectorAll("div.Box a")[0].innerHTML;
     }
     if (document.getElementById('ClientName') !== null && document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0] !== undefined && document.getElementById('ClientName').value == "") {
-    console.log(document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0]);
     document.getElementById('ClientName').value = document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0].innerHTML;
     }
     if (document.getElementById('ClientID') !== null && document.getElementById('ClientID').value == "") {

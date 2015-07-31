@@ -1,0 +1,15 @@
+HTTP/1.1 401 Unauthorized
+Server: nginx
+Date: Fri, 31 Jul 2015 19:13:09 GMT
+Content-Type: application/json;charset=UTF-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-AREQUESTID: 793x587727x1
+X-ASEN: SEN-2590240
+Set-Cookie: atlassian.xsrf.token=B3N8-3CUE-UOTR-PAU8|7eb7dc5d87f48a9ab87db6cff5973a43ea2ea65c|lout; Path=/; Secure
+X-AUSERNAME: anonymous
+X-ATENANT-ID: qualtrics.atlassian.net
+Cache-Control: no-cache, no-store, no-transform
+X-Content-Type-Options: nosniff
+WWW-Authenticate: OAuth realm="https%3A%2F%2Fqualtrics.atlassian.net"
+
