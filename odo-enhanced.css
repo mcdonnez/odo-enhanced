@@ -327,6 +327,10 @@
     outline: none !important;
 }
 
+.SearchContainer {
+    width: 800px !important;
+}
+
 #UploadFileButton > span {
     color: #333 !important;
 }

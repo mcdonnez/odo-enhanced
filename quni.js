@@ -13,7 +13,7 @@ var urlParams;
     while (match = search.exec(query))
        urlParams[decode(match[1])] = decode(match[2]);
 })();
-/* --------- Sets the appropriate favicon to use (works with the new css sheet made by Matthew Bloomfield) -------- */
+/* --------- Sets the appropriate favicon to use (works with the new css by Matt Bloomfield) -------- */
 var favicon;
 switch (urlParams["a"]) {
     case 'Tickets':
@@ -105,7 +105,6 @@ changeFavicon(favicon);
 /* ------------- Add Email Button ---------------- */
 function addEmailTicket() {
     var node = document.getElementsByClassName("SearchContainer")[0];
-    node.setAttribute('style', 'width:"790px !important;'); 
     var emailnode = document.createElement('IMG');
     emailnode.setAttribute('src','https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0Go4xikYP9Ald3L&V=1436994244');
     emailnode.setAttribute('class','CreateTicketButton');
@@ -128,7 +127,7 @@ function changeFavicon(src) {
  }
  document.head.appendChild(link);
 }
-/* DEV ------------- Integrate QWiki into Odo Tags ---------------- */
+/* ------------- Integrate QWiki into Odo Tags ---------------- */
 var pageSet = 0;
 var page;
 function getQWiki(page) {
@@ -142,8 +141,10 @@ function getQWiki(page) {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var QWiki = xmlhttp.response;
             var QWikiArticle = QWiki.getElementById('content');
-            var q = QWikiArticle.getElementsByTagName('A'); //this is to remove hyperlinks to qwiki
+            var q = QWikiArticle.getElementsByTagName('A'); //this is to update hyperlinks to qwiki
             for (i=0;i<q.length;i++) {
+                var m = q[i].href;
+                q[i].setAttribute('href',m); //fix the base url for href
                 q[i].setAttribute('target','_blank');
             }
             var odoArticle = document.getElementById('Articles');
@@ -153,11 +154,9 @@ function getQWiki(page) {
                 pageSet.setAttribute('id','addedArticle');
                 odoArticle.appendChild(pageSet);
         }
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 404) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 404) { //On failure run a search
             page = page.replace(/_/g, " ");
             url = "http://qwiki.dev.qualtrics.com/index.php?title=Special%3ASearch&go=Go&search=" + page;
-            console.log('test');
-            console.log(url);
             var xmlhttp1 = new XMLHttpRequest();
             xmlhttp1.open("GET",url,true);
             xmlhttp1.responseType = "document";
@@ -194,7 +193,7 @@ changeDialog.onmouseenter = function() {
     cpr.innerHTML = 'Control Panel Reporting(CPR)';
     document.getElementById('JiraProduct').appendChild(cpr);
     }
-    /* DEV ------------- Get dynamic QWiki article ---------- */
+    /* ------------- Get dynamic QWiki article ---------- */
     if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
     page = document.getElementById('TopicList').innerHTML.match(/\| ([\w\s]+)/)[1];
     page = page.replace(/\s/, "_");
