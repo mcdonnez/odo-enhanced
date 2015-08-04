@@ -106,11 +106,11 @@ changeFavicon(favicon);
 function addEmailTicket() {
     var node = document.getElementsByClassName("SearchContainer")[0];
     var emailnode = document.createElement('IMG');
-    emailnode.setAttribute('src','https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0Go4xikYP9Ald3L&V=1436994244');
+    emailnode.src = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0Go4xikYP9Ald3L&V=1436994244';
     emailnode.setAttribute('class','CreateTicketButton');
-    emailnode.setAttribute('style','border-radius:5px;margin: 0px 5px;');
+    emailnode.setAttribute('style',"border-radius:5px;margin: 0px 5px;");
     emailnode.setAttribute('onclick','Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
-    emailnode.setAttribute('height','51');
+    emailnode.height = '51';
     node.appendChild(emailnode);
 };
 addEmailTicket();
@@ -127,9 +127,27 @@ function changeFavicon(src) {
  }
  document.head.appendChild(link);
 }
-/* ------------- Integrate QWiki into Odo Dialog ---------------- */
-var pageSet = 0;
+/* ------------- Integrate QWiki into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var page;
+function updatelinks(p) {
+   var q = p.getElementsByTagName('A'); //updates hyperlinks to qwiki
+            for (i=0;i<q.length;i++) {
+                var m = q[i].href;
+                q[i].setAttribute('href',m); //fix the base url for href
+                q[i].setAttribute('target','_blank');
+            }
+    return p;
+}
+function insertArticle(QWiki) {
+var QWikiArticle = QWiki.getElementById('content');
+            QWikiArticle = updatelinks(QWikiArticle);
+            var odoArticle = document.getElementById('Articles');
+            odoArticle.innerHTML = QWikiArticle.innerHTML;
+            odoArticle.removeAttribute('style'); //removes height limit of content
+            var pageSet = document.createElement('div');
+                pageSet.id = 'addedArticle';
+                odoArticle.appendChild(pageSet);    
+}
 function getQWiki(page) {
     var url = "http://qwiki.dev.qualtrics.com/index.php/" + page;
     console.log(url);
@@ -139,20 +157,7 @@ function getQWiki(page) {
     xmlhttp.send();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var QWiki = xmlhttp.response;
-            var QWikiArticle = QWiki.getElementById('content');
-            var q = QWikiArticle.getElementsByTagName('A'); //this is to update hyperlinks to qwiki
-            for (i=0;i<q.length;i++) {
-                var m = q[i].href;
-                q[i].setAttribute('href',m); //fix the base url for href
-                q[i].setAttribute('target','_blank');
-            }
-            var odoArticle = document.getElementById('Articles');
-            odoArticle.innerHTML = QWikiArticle.innerHTML;
-            odoArticle.removeAttribute('style'); //removes height limit of content
-            var pageSet = document.createElement('div');
-                pageSet.setAttribute('id','addedArticle');
-                odoArticle.appendChild(pageSet);
+            insertArticle(xmlhttp.response);
         }
         if (xmlhttp.readyState == 4 && xmlhttp.status == 404) { //On failure run a search
             page = page.replace(/_/g, " ");
@@ -163,20 +168,7 @@ function getQWiki(page) {
             xmlhttp1.send();
             xmlhttp1.onreadystatechange = function() {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-                var QWiki = xmlhttp1.response;
-                var QWikiArticle = QWiki.getElementsByClassName('searchresults')[0];
-                var q = QWikiArticle.getElementsByTagName('A'); //this is to open Qwiki links in new tab
-                for (i=0;i<q.length;i++) {
-                    var m = q[i].href;
-                    q[i].setAttribute('href',m); //fix the base url for href
-                    q[i].setAttribute('target','_blank');
-                }
-                var odoArticle = document.getElementById('Articles');
-                odoArticle.innerHTML = QWikiArticle.innerHTML;
-                odoArticle.removeAttribute('style'); //removes height limit of content
-                var pageSet = document.createElement('div');
-                pageSet.setAttribute('id','addedArticle');
-                odoArticle.appendChild(pageSet);
+                insertArticle(xmlhttp1.response);
             }
             }
         }
