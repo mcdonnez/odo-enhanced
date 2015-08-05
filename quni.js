@@ -138,8 +138,12 @@ function updatelinks(p) {
             }
     return p;
 }
-function insertArticle(QWiki) {
-var QWikiArticle = QWiki.getElementById('content');
+function insertArticle(QWiki,nopage) {
+    if (nopage) {
+        var QWikiArticle = QWiki.getElementsByClassName('searchresults')[0];
+    } else {
+        var QWikiArticle = QWiki.getElementById('content');
+    }
             QWikiArticle = updatelinks(QWikiArticle);
             var odoArticle = document.getElementById('Articles');
             odoArticle.innerHTML = QWikiArticle.innerHTML;
@@ -168,7 +172,7 @@ function getQWiki(page) {
             xmlhttp1.send();
             xmlhttp1.onreadystatechange = function() {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
-                insertArticle(xmlhttp1.response);
+                insertArticle(xmlhttp1.response,"onlyresults");
             }
             }
         }
