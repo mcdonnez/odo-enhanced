@@ -127,6 +127,36 @@ function changeFavicon(src) {
  }
  document.head.appendChild(link);
 }
+/* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
+var feature;
+var product;
+function getBugs(){
+// Need to write function to parse Jira feed
+}
+function insertBugs(jira) {
+        var jiraBugs = getBugs(jira);
+            var odoBugs = document.getElementById('Bugs');
+            odoBugs.innerHTML = jiraBugs;
+            odoBugs.removeAttribute('style'); //removes height limit of content
+            var pageSet = document.createElement('div');
+                pageSet.id = 'addedBugs';
+                odoBugs.appendChild(pageSet);    
+}
+function getJira(product,feature) {
+    var query; //finish query from product and feature
+    var url = "https://zachs-webservices.herokuapp.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
+    console.log(url);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET",url,true);
+    xmlhttp.responseType = "document";
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            insertBugs(xmlhttp.response);
+        }
+        }
+    }
+};
 /* ------------- Integrate QWiki into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var page;
 function updatelinks(p) {
@@ -189,6 +219,12 @@ changeDialog.onmouseenter = function() {
     cpr.innerHTML = 'Control Panel Reporting(CPR)';
     document.getElementById('JiraProduct').appendChild(cpr);
     }
+    /* ------------- Get JIRA Search -------------------- */
+    if (document.getElementById('Bugs') && !document.getElementById('addedBugs')) {
+    product = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[1];
+    feature = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[2];
+    getJira(product,feature);
+    }
     /* ------------- Get dynamic QWiki article ---------- */
     if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
     page = document.getElementById('TopicList').innerHTML.match(/\| ([\w\s]+)/)[1];
@@ -196,35 +232,73 @@ changeDialog.onmouseenter = function() {
     getQWiki(page);
     }
     /* ------------- List of IDs to autofill ---------- */
-    var user = document.getElementsByClassName('BodyContent')[0].innerHTML;
+    var user
     if (document.getElementById('to') !== null && document.getElementById('to').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('to').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
+        } else {
+         user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('to').value = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
+        }
     }
     if (document.getElementById('LoginID') !== null && document.getElementById('LoginID').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('LoginID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
+        } else {
+        user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('LoginID').value = user.match(/UN: (.*)</)[1];
+        }
     }
     if (document.getElementById('UserName') !== null && document.getElementById('UserName').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('UserName').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/<br>(.*)/)[1];
+        } else {
+        user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('UserName').value = user.match(/UN: (.*)</)[1];
+        }
     }
     if (document.getElementById('DataCenterID') !== null && document.getElementById('DataCenterID').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('DataCenterID').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[3].innerHTML;
+        } else {
+        user = document.getElementsByClassName('Box')[2].innerHTML;
     document.getElementById('DataCenterID').value = user.match(/([UCAE][TOZU][1S]?[A]?)/)[1];
+        }
     }
     if (document.getElementById('UserID') !== null && document.getElementById('UserID').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('UserID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
+        } else {
+        user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('UserID').value = user.match(/(UR.?_\w{15})/)[1];
+        }
     }
     if (document.getElementById('RSUserID') !== null && document.getElementById('RSUserID').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('RSUserID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
+        } else {
+        user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('RSUserID').value = user.match(/(UR.?_\w{15})/)[1];
+        }
     }
     if (document.getElementById('BrandID') !== null && document.getElementById('BrandID').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('BrandID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[1].href.match(/bid=(.*)/)[1];
+        } else {
     document.getElementById('BrandID').value = document.querySelectorAll("div.Box a")[0].innerHTML;
+        }
     }
     if (document.getElementById('RSBrandID') !== null && document.getElementById('RSBrandID').value == "") {
+        if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('RSBrandID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[1].href.match(/bid=(.*)/)[1];
+        } else {
     document.getElementById('RSBrandID').value = document.querySelectorAll("div.Box a")[0].innerHTML;
+        }
     }
     if (document.getElementById('ClientName') !== null && document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0] !== undefined && document.getElementById('ClientName').value == "") {
-    document.getElementById('ClientName').value = document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0].innerHTML;
+    document.getElementById('ClientName').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].innerHTML;
     }
     if (document.getElementById('ClientID') !== null && document.getElementById('ClientID').value == "") {
-    document.getElementById('ClientID').value = document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0].href.match(/cid=(.*)/)[1];
+    document.getElementById('ClientID').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].href.match(/cid=(.*)/)[1];
     }
 };
