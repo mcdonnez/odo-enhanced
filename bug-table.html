@@ -1,0 +1,90 @@
+<div id="searchResults" style="width: 920px;"><style>
+#tablestyle td,th{
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+#tablestyle td{
+	padding: 8px 10px;
+}
+</style>
+
+<div id="BugTable_wrapper" class="dataTables_wrapper" role="grid">
+    <div id="BugTable_length" class="dataTables_length">
+        <label>Show 
+            <select size="1" name="BugTable_length" aria-controls="BugTable">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50" selected="selected">50</option>
+                <option value="100">100</option>
+            </select> entries</label>
+    </div>
+    <div class="dataTables_filter" id="BugTable_filter">
+        <label>Search: <input type="text" aria-controls="BugTable"></label>
+    </div>
+    <div class="dataTables_scroll">
+        <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
+            <div class="dataTables_scrollHeadInner" style="width: 920px; padding-right: 0px;">
+                <table class="display dataTable" cellspacing="0" width="920px" style="table-layout: fixed; margin-left: 0px; width: 920px;">
+                    <thead>
+				<tr role="row">
+                    <th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Key: activate to sort column descending" style="width: 57.777777671814px;">Key</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Summary: activate to sort column ascending" style="width: 212.777777671814px;">Summary</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="width: 211.777777671814px;">Description</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Priority: activate to sort column ascending" style="width: 56.777777671814px;">Priority</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 56.777777671814px;">Status</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Created: activate to sort column ascending" style="width: 56.777777671814px;">Created</th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Updated: activate to sort column ascending" style="width: 56.777777671814px;">Updated</th>
+                        </tr>
+		</thead>
+                </table>
+            </div>
+        </div>
+        <div class="dataTables_scrollBody" style="overflow: auto; width: 100%; height: 52px;">
+            <table id="BugTable" class="display dataTable" cellspacing="0" width="920px" style="table-layout: fixed; margin-left: 0px; width: 920px;" aria-describedby="BugTable_info">
+                <thead>
+				<tr role="row" style="height: 0px;">
+                    <th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Key: activate to sort column descending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 57.777777671814px;"></th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Summary: activate to sort column ascending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 212.777777671814px;"></th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 211.777777671814px;"></th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Priority: activate to sort column ascending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 56.777777671814px;"></th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 56.777777671814px;"></th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Created: activate to sort column ascending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 56.777777671814px;"></th>
+                    <th class="sorting" role="columnheader" tabindex="0" aria-controls="BugTable" rowspan="1" colspan="1" aria-label="Updated: activate to sort column ascending" style="padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px; width: 56.777777671814px;"></th>
+                    </tr>
+		</thead>
+	<colgroup>
+        <col width="50">
+	<col width="140">
+	<col width="140">
+	<col width="50">
+	<col width="50">
+	<col width="50">
+	<col width="50">
+		</colgroup>	
+<tbody role="alert" aria-live="polite" aria-relevant="all">
+    <!--End of Header-->
+    <tr onclick="document.location = '?a=QUni&amp;iid=MOB-295&amp;b=EB_Viewer';" class="odd"> <!--Alternate Class-->
+        <td class=" sorting_1">Bug ID</td>
+        <td class=" ">
+            <div style="height: 45px; overflow: hidden;">Insert Summary</div>
+        </td>
+        <td class=" ">
+            <div style="height: 45px; overflow: hidden;">Description</div>
+        </td>
+        <td class=" ">Priority</td>
+        <td class=" ">Status</td>
+        <td class=" ">Created</td>
+        <td class=" ">Updated</td>
+    </tr>
+    <!--footer-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="dataTables_info" id="BugTable_info">Showing 1 to 1 of 1 entries</div>
+    <div class="dataTables_paginate paging_two_button" id="BugTable_paginate">
+        <a class="paginate_disabled_previous" tabindex="0" role="button" id="BugTable_previous" aria-controls="BugTable">Previous</a>
+        <a class="paginate_disabled_next" tabindex="0" role="button" id="BugTable_next" aria-controls="BugTable">Next</a>
+    </div>
+    </div>
+</div>

@@ -130,20 +130,25 @@ function changeFavicon(src) {
 /* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var feature;
 var product;
-function getBugs(){
-// Need to write function to parse Jira feed
-}
-function insertBugs(jira) {
-        var jiraBugs = getBugs(jira);
+function getNewJira(){
+    product = document.getElementById('jiraProduct').value;
+    feature =document.getElementById('jiraSearchTerm').value;
+    getJira(product,feature);
+};
+function insertBugs(jiraBugs) {
             var odoBugs = document.getElementById('Bugs');
-            odoBugs.innerHTML = jiraBugs;
+            odoBugs.innerHTML = jiraBugs.getElementsByTagName('body')[0].innerHTML;
             odoBugs.removeAttribute('style'); //removes height limit of content
+            document.getElementById('newSearch').addEventListener('click', getNewJira);
             var pageSet = document.createElement('div');
                 pageSet.id = 'addedBugs';
-                odoBugs.appendChild(pageSet);    
+                odoBugs.appendChild(pageSet); 
+            $('#bugResults').DataTable();
 }
 function getJira(product,feature) {
-    var query; //finish query from product and feature
+    var query = "project = '" + product + "' AND issuetype = Bug AND status in (Open,'In Progress', Reopened) AND text ~ " + "'" + feature + "'";
+    query = query.replace(/ /g,'%20');
+    query = query.replace(/'/g,'%27');
     var url = "https://zachs-webservices.herokuapp.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
     console.log(url);
     var xmlhttp = new XMLHttpRequest();
@@ -153,7 +158,6 @@ function getJira(product,feature) {
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             insertBugs(xmlhttp.response);
-        }
         }
     }
 };

@@ -962,3 +962,19 @@ tr.Selected > td:nth-child(1) {
 #RightMenuColumn > table.Gray > tbody > tr:nth-child(2) > td:nth-child(1) {
     text-align: left !important;
 }
+
+/*-------Bug Tables formatting -----------*/
+
+#bugResults td,th{
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+#bugResults td{
+	padding: 8px 10px;
+	font-size: 11px;
+}
+#bugResults td .sorting_1 {
+ font-weight: bold;   
+}
+#bugResults .odd {
+    background-color: #E8E5E5;
+}
