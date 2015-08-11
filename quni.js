@@ -132,7 +132,7 @@ var feature;
 var product;
 function getNewJira(){
     product = document.getElementById('jiraProduct').value;
-    feature =document.getElementById('jiraSearchTerm').value;
+    feature =document.getElementById('jiraSearch').value;
     getJira(product,feature);
 };
 function insertBugs(jiraBugs) {
@@ -223,17 +223,23 @@ changeDialog.onmouseenter = function() {
     cpr.innerHTML = 'Control Panel Reporting(CPR)';
     document.getElementById('JiraProduct').appendChild(cpr);
     }
-    /* ------------- Get JIRA Search -------------------- */
-    if (document.getElementById('Bugs') && !document.getElementById('addedBugs')) {
-    product = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[1];
-    feature = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[2];
-    getJira(product,feature);
-    }
-    /* ------------- Get dynamic QWiki article ---------- */
+    /* ------------- Get dynamic QWiki article and initialize Knowledge Base Tabs (just jira for now)---------- */
     if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
     page = document.getElementById('TopicList').innerHTML.match(/\| ([\w\s]+)/)[1];
     page = page.replace(/\s/, "_");
     getQWiki(page);
+    /* ------------- Prepare for tab clicks on KnowledgeBase -----------*/
+    product = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[1];
+    feature = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[2];
+    if (!document.getElementById('ui-id-13')) {
+    setTimeout(function(){console.log('waiting for dialog to load...')}, 500);
+    };
+    document.getElementById('ui-id-13').onclick = function(){
+        if (!document.getElementById('addedBugs')) {
+        document.getElementById('Bugs').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
+        getJira(product,feature);
+        }
+        }
     }
     /* ------------- List of IDs to autofill ---------- */
     var user
