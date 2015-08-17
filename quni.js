@@ -114,6 +114,16 @@ function addEmailTicket() {
     node.appendChild(emailnode);
 };
 addEmailTicket();
+/* ---- Add Knowledge Base Button ------*/
+var node = document.getElementsByClassName("SearchContainer")[0];
+var kbnode = document.createElement('IMG')
+kbnode.src = "https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0jN6AK9pss9dE2h&V=1439585513";
+kbnode.setAttribute('class','CreateTicketButton');
+    kbnode.setAttribute('style',"border-radius:5px;margin: 0px 5px;float: left;");
+    kbnode.setAttribute('onclick','Dialog("?b=KBPopUpViewer");');
+    kbnode.height = '51';
+    node.insertBefore(kbnode, node.childNodes[0]);
+
 /* ------------- Dynamic Favicons ---------------- */
 document.head || (document.head = document.getElementsByTagName('head')[0]);
 function changeFavicon(src) {
@@ -132,24 +142,46 @@ var feature;
 var product;
 function getNewJira(){
     product = document.getElementById('jiraProduct').value;
-    feature =document.getElementById('jiraSearch').value;
-    getJira(product,feature);
+    feature = document.getElementById('jiraSearch').value;
+    status = document.getElementById('jiraStatus').value;
+    console.log(bug);
+    if (bug) {
+    document.getElementById('bugResults_wrapper').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;padding:10px;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
+    }
+    getJira(product,feature,status);
 };
 function insertBugs(jiraBugs) {
             var odoBugs = document.getElementById('Bugs');
             odoBugs.innerHTML = jiraBugs.getElementsByTagName('body')[0].innerHTML;
             odoBugs.removeAttribute('style'); //removes height limit of content
             document.getElementById('newSearch').addEventListener('click', getNewJira);
+            document.getElementById('jiraSearch').onkeypress = function(event){
+                if(event.keyCode == 13){
+                    getNewJira();
+                }
+            };
             var pageSet = document.createElement('div');
                 pageSet.id = 'addedBugs';
                 odoBugs.appendChild(pageSet); 
             $('#bugResults').DataTable();
+            $('#bugResults tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+    document.getElementById('jiraSearch').value = feature;
+    document.getElementById('jiraProduct').value = product;
+    document.getElementById('jiraStatus').value = status;
 }
-function getJira(product,feature) {
-    var query = "project = '" + product + "' AND issuetype = Bug AND status in (Open,'In Progress', Reopened) AND text ~ " + "'" + feature + "'";
+var bug;
+function getJira(product,feature,status) {
+    bug = feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/);
+    if (bug) {
+    var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + feature;
+        window.open(url);
+    } else { 
+    var query = "project = '" + product + "' AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
     query = query.replace(/ /g,'%20');
     query = query.replace(/'/g,'%27');
-    var url = "https://zachs-webservices.herokuapp.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
+    var url = "http://mcdonnellteach.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
     console.log(url);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET",url,true);
@@ -160,10 +192,12 @@ function getJira(product,feature) {
             insertBugs(xmlhttp.response);
         }
     }
+    }
 };
 /* ------------- Integrate QWiki into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var page;
 function updatelinks(p) {
+    if (p) {
    var q = p.getElementsByTagName('A'); //updates hyperlinks to qwiki
             for (i=0;i<q.length;i++) {
                 var m = q[i].href;
@@ -171,22 +205,52 @@ function updatelinks(p) {
                 q[i].setAttribute('target','_blank');
             }
     return p;
+    }
 }
-function insertArticle(QWiki,nopage) {
-    if (nopage) {
+function insertArticle(QWiki,qPage) {
+    if (qPage=="onlyresults" && QWiki.getElementsByClassName('searchresults')[0]) {
         var QWikiArticle = QWiki.getElementsByClassName('searchresults')[0];
     } else {
         var QWikiArticle = QWiki.getElementById('content');
     }
             QWikiArticle = updatelinks(QWikiArticle);
             var odoArticle = document.getElementById('Articles');
-            odoArticle.innerHTML = QWikiArticle.innerHTML;
+            var searchBar = document.createElement('div');
+            odoArticle.innerHTML = '';
+            searchBar.id = 'qWikiSearchBar';
+            searchBar.innerHTML = 'Search:' + '<input type="text" id="qWikiSearch" name="qWikiSearch"> <button type="button" id="qWikiSearchSubmit">Search</button>' + QWikiArticle.innerHTML;
+            odoArticle.appendChild(searchBar);
+            document.getElementById('qWikiSearch').value = page;
+            document.getElementById('qWikiSearch').onkeypress = function(event){
+                if(event.keyCode == 13){
+                page = document.getElementById('qWikiSearch').value;
+                console.log(page);
+                getQWiki(page);
+                }
+            };
+            document.getElementById('qWikiSearchSubmit').onclick = function(){
+                page = document.getElementById('qWikiSearch').value;
+                console.log(page);
+                getQWiki(page);
+            };
             odoArticle.removeAttribute('style'); //removes height limit of content
+            if (document.getElementById('firstHeading')) { //If page is found it makes the page editable
+                var button = document.createElement('button');
+                button.id = 'qWikiSubmit';
+                button.innerHTML = 'Edit';
+                button.onclick = function() {
+                    var url = 'http://qwiki.dev.qualtrics.com/index.php?action=edit&title=' + page;
+                    var qPage = document.getElementById('mw-content-text');
+                    editQWiki(url,qPage);
+                };
+                document.getElementById('firstHeading').appendChild(button);
+            };
             var pageSet = document.createElement('div');
                 pageSet.id = 'addedArticle';
-                odoArticle.appendChild(pageSet);    
+                odoArticle.appendChild(pageSet);
 }
 function getQWiki(page) {
+    page = page.replace(/\s/g, "_");
     var url = "http://qwiki.dev.qualtrics.com/index.php/" + page;
     console.log(url);
     var xmlhttp = new XMLHttpRequest();
@@ -206,12 +270,101 @@ function getQWiki(page) {
             xmlhttp1.send();
             xmlhttp1.onreadystatechange = function() {
             if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+                console.log("looking for other page");
                 insertArticle(xmlhttp1.response,"onlyresults");
             }
             }
         }
     }
 };
+/* DEV------------- Edit QWiki page ----------- */
+function insertEditor(page,qPage) {
+    var link = document.createElement('link');
+    link.setAttribute('href','http://mcdonnellteach.com/tinyeditor.css');
+    link.setAttribute('rel','stylesheet');
+    link.setAttribute('type','text/css');
+    document.head.appendChild(link);
+    document.getElementById('bodyContent').innerHTML = '';
+    var div = document.createElement('div');
+    div.id = 'qWikiEdit';
+    var button = document.getElementById('qWikiSubmit');
+    button.setAttribute('style','color:red !important;');
+    button.innerHTML = 'Save & Overwrite QWiki Page Formatting';
+    page.getElementById('editpage-copywarn').remove();
+    page.getElementById('wpPreview').remove();
+    page.getElementById('wpDiff').remove();
+    page.getElementById('editform').removeAttribute('method');
+    page.getElementById('editform').removeAttribute('action');
+    page.getElementById('editform').removeAttribute('enctype');
+    page.getElementsByClassName('editOptions')[0].setAttribute('style','display:none;');
+    var pageSet = document.createElement('div');
+    pageSet.id = 'addedArticle';
+    div.appendChild(pageSet);
+    page.getElementById('wpTextbox1').innerHTML = qPage.innerHTML;
+    div.appendChild(page.getElementById('editform'));
+    document.getElementById('bodyContent').appendChild(div);
+    new TINY.editor.edit('editor',{
+	id:'wpTextbox1',
+	width:'100%',
+	height:'400px',
+	cssclass:'te',
+	controlclass:'tecontrol',
+	rowclass:'teheader',
+	dividerclass:'tedivider',
+	controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
+			  'orderedlist','unorderedlist','|','outdent','indent','|','leftalign',
+			  'centeralign','rightalign','blockjustify','|','unformat','|','undo','redo','n',
+			  'font','size','style','|','image','hr','link','unlink','|','cut','copy','paste'],
+	footer:true,
+	fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
+	xhtml:true,
+	cssfile:'http://mcdonnellteach.com/tinyeditor.css',
+	bodyid:'editor',
+	footerclass:'tefooter',
+	toggle:{text:'show source',activetext:'show wysiwyg',cssclass:'toggle'},
+	resize:{cssclass:'resize'}
+});   
+};
+function updateQWiki() { 
+document.getElementById('qWikiSubmit').onclick = function () {
+var wpSection = document.querySelector('[name=wpSection]').value;
+var wpStarttime = document.querySelector('[name=wpStarttime]').value;
+var wpEdittime = document.querySelector('[name=wpEdittime]').value;
+var wpScrolltop = document.querySelector('[name=wpScrolltop]').value;
+var wpAutoSummary = document.querySelector('[name=wpSummary]').value;
+var wpTextbox1 = document.getElementsByTagName('iframe')[0].contentDocument.getElementById('editor').innerHTML;
+var wpSave = document.querySelector('[name=wpSave]').value;
+var wpEditToken = 'f89e4b1877055e8a11a66d63a5b79b37%2B\\';
+var dataString = 'wpSection' + wpSection + '&wpStarttime' + wpStarttime +  '&wpEdittime=' + wpEdittime + '&wpScrolltop=' + wpScrolltop + '&wpAutoSummary=' + wpAutoSummary + '&wpTextbox1=' + wpTextbox1 + '&wpSave=' + wpSave + '&wpEditToken=' + wpEditToken;
+    console.log(dataString);
+    document.getElementById('bodyContent').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
+    var url = "http://qwiki.dev.qualtrics.com/index.php?action=submit&title=" + page;
+    console.log(url);
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('POST',url,true);
+    xmlhttp.responseType = 'document';
+    xmlhttp.setRequestHeader("Content-type",'application/x-www-form-urlencoded');
+    xmlhttp.send(dataString);
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            insertArticle(xmlhttp.response);
+        }
+    }
+    };
+};
+function editQWiki(url,qPage) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET',url,true);
+    xmlhttp.responseType = 'document';
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            insertEditor(xmlhttp.response,qPage);
+            updateQWiki();
+        }
+    }
+};
+
 /* ------------- Autofill dialog box depending on fields present ---------------- */
 var changeDialog = document.getElementById('Dialog');
 changeDialog.onmouseenter = function() {
@@ -225,24 +378,35 @@ changeDialog.onmouseenter = function() {
     }
     /* ------------- Get dynamic QWiki article and initialize Knowledge Base Tabs (just jira for now)---------- */
     if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
+    document.getElementById('Articles').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
+        if(document.getElementById('TopicList')) {
     page = document.getElementById('TopicList').innerHTML.match(/\| ([\w\s]+)/)[1];
-    page = page.replace(/\s/, "_");
+        } else { 
+            page = ''; 
+        };
     getQWiki(page);
     /* ------------- Prepare for tab clicks on KnowledgeBase -----------*/
+        if (document.getElementById('TopicList')) {
     product = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[1];
-    feature = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[2];
-    if (!document.getElementById('ui-id-13')) {
-    setTimeout(function(){console.log('waiting for dialog to load...')}, 500);
+    if (product == 'Genesis') {
+        product = 'CPR';
     };
-    document.getElementById('ui-id-13').onclick = function(){
+    feature = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[2];
+    status = "Open,'In Progress', Reopened";
+        } else {
+        product = '';
+        feature = '';
+        status = "Open,'In Progress', Reopened";
+        }
+    document.querySelectorAll('[aria-controls=Bugs]')[0].onclick = function(){
         if (!document.getElementById('addedBugs')) {
         document.getElementById('Bugs').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
-        getJira(product,feature);
+        getJira(product,feature,status);
         }
-        }
+        };
     }
     /* ------------- List of IDs to autofill ---------- */
-    var user
+    var user;
     if (document.getElementById('to') !== null && document.getElementById('to').value == "") {
         if(urlParams["b"]=="TicketViewer"){
         document.getElementById('to').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
@@ -272,7 +436,7 @@ changeDialog.onmouseenter = function() {
         document.getElementById('DataCenterID').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[3].innerHTML;
         } else {
         user = document.getElementsByClassName('Box')[2].innerHTML;
-    document.getElementById('DataCenterID').value = user.match(/([UCAE][TOZU][1S]?[A]?)/)[1];
+    document.getElementById('DataCenterID').value = user.match(/([UCAE][TOSZU][1I]?[A]?)/)[1];
         }
     }
     if (document.getElementById('UserID') !== null && document.getElementById('UserID').value == "") {

@@ -592,7 +592,7 @@ body > div.PageTitleBar > div.Title {
 }
 
 body > div.SearchBar > div {
-    width: 790px !important;
+    width: 860px !important;
 }
 
 body > div.SearchBar > div > a > img {
@@ -977,4 +977,25 @@ tr.Selected > td:nth-child(1) {
 }
 #bugResults .odd {
     background-color: #E8E5E5;
+}
+
+/* -------- QWiki Edit Styling ----------*/
+.editButtons, .mw-summary, .editOptions {
+    line-height: 1.5em;
+    padding: 5px;
+}
+#wpTextbox1 {
+    width: 100%;
+}
+#editform .te {
+    margin: 25px 0px;
+}
+#qWikiSubmit {
+    float: right;
+}
+#siteSub, #jump-to-nav {
+    display: none;
+}
+#Bugs {
+    min-height: 300px;
 }

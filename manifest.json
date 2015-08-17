@@ -9,14 +9,15 @@
         "https://ajax.googleapis.com/",
         "http://odo.corp.qualtrics.com/*",
         "http://qwiki.dev.qualtrics.com/*",
-        "https://zachs-webservices.herokuapp.com/*"
+        "https://zachs-webservices.herokuapp.com/*",
+        "http://mcdonnellteach.com/*"
     ],
     "icons": { "128": "icon.png"},
     "content_scripts": [
     {
     "matches": ["http://odo.corp.qualtrics.com/*"],
-    "js": ["resources/jquery-1.11.3.min.js","resources/jquery.dataTables.min.js","quni.js"],
-    "css": ["resources/jquery.dataTables.css","odo-enhanced.css"]
+    "js": ["resources/jquery-1.11.3.min.js","resources/jquery.dataTables.min.js","quni.js","resources/tinyeditor/tinyeditor.js"],
+    "css": ["resources/jquery.dataTables.css","odo-enhanced.css","resources/tinyeditor/style.css"]
     }
     ]
 }
