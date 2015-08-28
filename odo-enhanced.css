@@ -39,6 +39,8 @@
 
 #BodyContent > div.clearfix.sp-header > div:nth-child(2) > button:hover, .btn:hover, .btn-default:hover, #notification-subscription-widget > tbody > tr.notify-subscribe > td > button:hover, button:hover, input[type="button"]:hover {
     border: 1px rgb(4, 163, 101) solid !important;
+    background: #007AC0 !important;
+    color: #fff !important;
 }
 
 #BodyContent > div.clearfix.sp-header > div:nth-child(3) > button, #Toolbar- > button, .DiscussionCommentButton {
@@ -965,12 +967,19 @@ tr.Selected > td:nth-child(1) {
 
 /*-------Bug Tables formatting -----------*/
 
+#bugResults tr th:first-child {
+  width: 45px !important;
+}
+#bugResults td:first-child {
+  cursor: pointer;
+}
+
 #bugResults td,th{
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 #bugResults td{
 	padding: 8px 10px;
-	font-size: 11px;
+	font-size: 13px !important;
 }
 #bugResults td .sorting_1 {
  font-weight: bold;   

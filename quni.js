@@ -123,7 +123,6 @@ kbnode.setAttribute('class','CreateTicketButton');
     kbnode.setAttribute('onclick','Dialog("?b=KBPopUpViewer");');
     kbnode.height = '51';
     node.insertBefore(kbnode, node.childNodes[0]);
-
 /* ------------- Dynamic Favicons ---------------- */
 document.head || (document.head = document.getElementsByTagName('head')[0]);
 function changeFavicon(src) {
@@ -145,9 +144,9 @@ function getNewJira(){
     feature = document.getElementById('jiraSearch').value;
     status = document.getElementById('jiraStatus').value;
     console.log(bug);
-    if (bug) {
+  if (document.getElementById('addedBugs') && !feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/)) {
     document.getElementById('bugResults_wrapper').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;padding:10px;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
-    }
+  }
     getJira(product,feature,status);
 };
 function insertBugs(jiraBugs) {
@@ -164,8 +163,13 @@ function insertBugs(jiraBugs) {
                 pageSet.id = 'addedBugs';
                 odoBugs.appendChild(pageSet); 
             $('#bugResults').DataTable();
-            $('#bugResults tbody').on('click', 'tr', function () {
-                $(this).toggleClass('selected');
+            $('#bugResults tbody').on('click', 'tr td:nth-child(1)', function () {
+               console.log(this);
+                var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + $.trim(this.innerHTML);
+        window.open(url);
+            });
+            $('#bugResults tbody').on('click', 'tr td:nth-child(3)', function () {
+                $(this).closest('tr').toggleClass('selected');
             });
     document.getElementById('jiraSearch').value = feature;
     document.getElementById('jiraProduct').value = product;
@@ -177,8 +181,8 @@ function getJira(product,feature,status) {
     if (bug) {
     var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + feature;
         window.open(url);
-    } else { 
-    var query = "project = '" + product + "' AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
+    } else {
+    var query = "project in (" + product + ") AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
     query = query.replace(/ /g,'%20');
     query = query.replace(/'/g,'%27');
     var url = "http://mcdonnellteach.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
@@ -375,6 +379,11 @@ changeDialog.onmouseenter = function() {
     cpr.id = 'addCPR';
     cpr.innerHTML = 'Control Panel Reporting(CPR)';
     document.getElementById('JiraProduct').appendChild(cpr);
+    var rw = document.createElement('option');
+    rw.value = 'RW';
+    rw.id = 'vocal';
+    rw.innerHTML = 'Vocalize';
+    document.getElementById('JiraProduct').appendChild(rw);
     }
     /* ------------- Get dynamic QWiki article and initialize Knowledge Base Tabs (just jira for now)---------- */
     if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
