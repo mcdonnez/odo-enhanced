@@ -238,7 +238,8 @@ function insertArticle(QWiki,qPage) {
                 getQWiki(page);
             };
             odoArticle.removeAttribute('style'); //removes height limit of content
-            if (document.getElementById('firstHeading')) { //If page is found it makes the page editable
+  /* ---------- Rich Text Editor but the world isn't ready for this yet... ------------*/
+            /*if (document.getElementById('firstHeading')) { //If page is found it makes the page editable
                 var button = document.createElement('button');
                 button.id = 'qWikiSubmit';
                 button.innerHTML = 'Edit';
@@ -248,7 +249,7 @@ function insertArticle(QWiki,qPage) {
                     editQWiki(url,qPage);
                 };
                 document.getElementById('firstHeading').appendChild(button);
-            };
+            };*/
             var pageSet = document.createElement('div');
                 pageSet.id = 'addedArticle';
                 odoArticle.appendChild(pageSet);
