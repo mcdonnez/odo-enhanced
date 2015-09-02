@@ -182,7 +182,17 @@ function getJira(product,feature,status) {
     var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + feature;
         window.open(url);
     } else {
-    var query = "project in (" + product + ") AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
+    var query = "";
+    if (feature) {
+      query += "text ~ " + "'" + feature + "'";
+    }
+    if (status) {
+      query += "AND status in (" + status + ")";
+    }
+    if (product != "") {
+      query += "AND project in (" + product + ")";
+    }
+    //query = "project in (" + product + ") AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
     query = query.replace(/ /g,'%20');
     query = query.replace(/'/g,'%27');
     var url = "http://mcdonnellteach.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
