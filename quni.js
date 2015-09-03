@@ -442,6 +442,26 @@ changeDialog.onmouseenter = function() {
         user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('LoginID').value = user.match(/UN: (.*)</)[1];
         }
+      $('#Product').change(function(){
+        var product = document.getElementById("Product").value
+        switch(product){
+          case 'ResearchSuite':
+            product = 'Research Suite';
+            break;
+          case 'ThreeSixty':
+            product = '360';
+            break;
+          case 'TargetAudience':
+            product = 'Target Audience';
+            break;
+          case 'EE':
+            product = 'Employee Engagement';
+            break;
+          default:
+            break;
+        }
+        document.getElementById("Code").value = product + " -> ";
+      });
     }
     if (document.getElementById('UserName') !== null && document.getElementById('UserName').value == "") {
         if(urlParams["b"]=="TicketViewer"){
@@ -494,5 +514,19 @@ changeDialog.onmouseenter = function() {
     }
     if (document.getElementById('ClientID') !== null && document.getElementById('ClientID').value == "") {
     document.getElementById('ClientID').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].href.match(/cid=(.*)/)[1];
+    }
+    if (document.getElementById('FirstName') && document.getElementById('FirstName').value == "" && document.getElementById('LastName') && document.getElementById('LastName').value == "") {
+      var name = document.getElementsByClassName('Header')[0].querySelectorAll('td')[1].innerHTML;
+      var fname = name.split(" ");
+      document.getElementById('FirstName').value = fname[0];
+      document.getElementById('LastName').value = fname[1];
+    }
+    if (document.getElementById('Email') && document.getElementById('Email').value == "") {
+      if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('Email').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
+        } else {
+         user = document.getElementsByClassName('Box')[0].innerHTML;
+    document.getElementById('Email').value = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
+        }
     }
 };
