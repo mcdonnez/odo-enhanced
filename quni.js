@@ -445,11 +445,8 @@ changeDialog.onmouseenter = function() {
       $('#Product').change(function(){
         var product = document.getElementById("Product").value
         switch(product){
-          case 'ResearchSuite':
-            product = 'Research Suite';
-            break;
-          case 'ThreeSixty':
-            product = '360';
+          case 'SiteIntercept':
+            product = 'SiteIntercept';
             break;
           case 'TargetAudience':
             product = 'Target Audience';
@@ -458,9 +455,12 @@ changeDialog.onmouseenter = function() {
             product = 'Employee Engagement';
             break;
           default:
+            product = '';
             break;
         }
+        if (product != '') {
         document.getElementById("Code").value = product + " -> ";
+        }
       });
     }
     if (document.getElementById('UserName') !== null && document.getElementById('UserName').value == "") {
@@ -512,7 +512,7 @@ changeDialog.onmouseenter = function() {
     if (document.getElementById('ClientName') !== null && document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0] !== undefined && document.getElementById('ClientName').value == "") {
     document.getElementById('ClientName').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].innerHTML;
     }
-    if (document.getElementById('ClientID') !== null && document.getElementById('ClientID').value == "") {
+    if (document.getElementById('ClientID') !== null && document.getElementById('ClientID').value == "" && document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0]) {
     document.getElementById('ClientID').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].href.match(/cid=(.*)/)[1];
     }
     if (document.getElementById('FirstName') && document.getElementById('FirstName').value == "" && document.getElementById('LastName') && document.getElementById('LastName').value == "") {
@@ -527,6 +527,14 @@ changeDialog.onmouseenter = function() {
         } else {
          user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('Email').value = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
+        }
+    }
+    if (document.getElementById('PD-Email') && document.getElementById('PD-Email').innerHTML == "") {
+      if(urlParams["b"]=="TicketViewer"){
+        document.getElementById('PD-Email').innerHTML = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
+        } else {
+         user = document.getElementsByClassName('Box')[0].innerHTML;
+    document.getElementById('PD-Email').innerHTML = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
         }
     }
 };
