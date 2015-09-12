@@ -195,7 +195,7 @@ function getJira(product,feature,status) {
     //query = "project in (" + product + ") AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
     query = query.replace(/ /g,'%20');
     query = query.replace(/'/g,'%27');
-    var url = "http://mcdonnellteach.com/jiraIssue.php?startAt=0&maxResults=50&query=" + query;
+    var url = "http://mcdonnellteach.com/jiraIssue.php?startAt=0&maxResults=100&query=" + query;
     console.log(url);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET",url,true);
@@ -466,7 +466,7 @@ changeDialog.onmouseenter = function() {
     if (document.getElementById('UserName') !== null && document.getElementById('UserName').value == "") {
         if(urlParams["b"]=="TicketViewer"){
         document.getElementById('UserName').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/<br>(.*)/)[1];
-        } else {
+        } else if (document.getElementsByClassName('Box')[0]) {
         user = document.getElementsByClassName('Box')[0].innerHTML;
     document.getElementById('UserName').value = user.match(/UN: (.*)</)[1];
         }
@@ -537,4 +537,48 @@ changeDialog.onmouseenter = function() {
     document.getElementById('PD-Email').innerHTML = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
         }
     }
+};
+
+/* ---- Snippets ---- */
+$(function(){
+    if (urlParams["a"] == "Home") {
+        $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);'></table>");
+        $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");  
+    } else if (urlParams["a"] == null) {
+        $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);'></table>");
+        $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> "); 
+    }
+});
+var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
+console.log(url);
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET",url,true);
+xmlhttp.responseType = "document";
+xmlhttp.send();
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var response = xmlhttp.response;
+        console.log(response);
+        var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
+        var snippetSideBar = document.getElementById('SnippetsContainer');
+        snippetSideBar.innerHTML = finalOutput;
+    };
+    var table = document.querySelectorAll('#SnippetsContainer > tbody')[0];
+    for (i = 0; i < table.rows.length; i++ ) {
+        var row = table.rows[i];
+        row.deleteCell(0);
+        row.deleteCell(1);
+    }
+};
+
+/*-- Google Calendar APIs experiment --*/
+function getCal() {
+  $.get( "https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com" )
+  .done(function( data ) {
+    alert( "Data Loaded: " + data );
+  })
+  .fail(function( error ) {
+    alert( "error" + error.responseJSON );
+    console.log(error);
+  });
 };
