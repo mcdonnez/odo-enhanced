@@ -15,6 +15,4 @@ custom css, favicons, autofill tickets, qwiki integration, and more! We're alway
 
 To collaborate feel free to fork the code. To do so go to [Fork a Repo](https://help.github.com/articles/fork-a-repo/) to learn how to fork.
 
-Built by Zach McDonnell feel free to add to this extension. I'll add more comments and features as time goes on.
-
-
+Built by Zach McDonnell
