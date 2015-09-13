@@ -13,6 +13,6 @@ custom css, favicons, autofill tickets, qwiki integration, and more! We're alway
 
 ## Want to Collaborate?
 
-To collaborate feel free to fork the code. To do so go to [Fork a Repo](https://help.github.com/articles/fork-a-repo/) to learn how to fork.
+To collaborate feel free to fork the code. If you are new to github, checkout [Fork a Repo](https://help.github.com/articles/fork-a-repo/) to learn how to fork.
 
 Built by Zach McDonnell
