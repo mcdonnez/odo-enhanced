@@ -542,10 +542,10 @@ changeDialog.onmouseenter = function() {
 /* ---- Snippets ---- */
 $(function(){
     if (urlParams["a"] == "Home") {
-        $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);'></table>");
+        $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
         $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");  
     } else if (urlParams["a"] == null) {
-        $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);'></table>");
+        $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
         $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> "); 
     }
 });
@@ -562,6 +562,7 @@ xmlhttp.onreadystatechange = function() {
         var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
         var snippetSideBar = document.getElementById('SnippetsContainer');
         snippetSideBar.innerHTML = finalOutput;
+        snippetSideBar.setAttribute('onclick',"Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
     };
     var table = document.querySelectorAll('#SnippetsContainer > tbody')[0];
     for (i = 0; i < table.rows.length; i++ ) {
