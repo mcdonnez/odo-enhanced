@@ -400,18 +400,23 @@ function editQWiki(url, qPage) {
 /* ------------- Autofill dialog box depending on fields present ---------------- */
 var changeDialog = document.getElementById('Dialog');
 changeDialog.onmouseenter = function () {
-  /* ------------- This adds CPR to the choices of products for Jira ---------- */
+  /* ------------- Add choices of products for Jira ---------- */
   if (document.getElementById('JiraProduct') && !document.getElementById('addCPR')) {
     var cpr = document.createElement('option');
     cpr.value = 'CPR';
     cpr.id = 'addCPR';
-    cpr.innerHTML = 'Control Panel Reporting(CPR)';
+    cpr.innerHTML = 'Genesis Results (CPR)';
     document.getElementById('JiraProduct').appendChild(cpr);
     var rw = document.createElement('option');
     rw.value = 'RW';
     rw.id = 'vocal';
     rw.innerHTML = 'Vocalize';
     document.getElementById('JiraProduct').appendChild(rw);
+    var res = document.createElement('option');
+    res.value = 'RES';
+    res.id = 'Response';
+    res.innerHTML = 'Genesis Responses (RES)';
+    document.getElementById('JiraProduct').appendChild(res);
   }
   /* ------------- Get dynamic QWiki article and initialize Knowledge Base Tabs (just jira for now)---------- */
   if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
@@ -600,4 +605,28 @@ function getCal() {
       alert("error" + error.responseJSON);
       console.log(error);
     });
+};
+/*--- Easter Eggs ---*/
+
+/*--- Konami Code for Mario Face to Appear ---*/
+// check to make sure that the browser can handle window.addEventListener
+if (window.addEventListener) {
+   // create the keys and konami variables
+   var keys = [],
+       konami = "38,38,40,40,37,39,37,39,66,65";
+
+   // bind the keydown event to the Konami function
+   window.addEventListener("keydown", function(e){
+       // push the keycode to the 'keys' array
+       keys.push(e.keyCode);
+
+       // and check to see if the user has entered the Konami code
+       if (keys.toString().indexOf(konami) >= 0) {
+           var pageLogo = document.querySelector('body > div.SearchBar > div > a > img');
+pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
+
+           // and finally clean up the keys array
+           keys = [];
+       };
+   }, true);
 };
