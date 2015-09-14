@@ -10,6 +10,7 @@ custom css, favicons, autofill tickets, qwiki integration, and more! We're alway
 * Basic QWiki Integration
 * Improved Jira Search
 * Autofill Pulses, Emails, and Phone Tickets
+* Easter Eggs...
 
 ## Want to Collaborate?
 
