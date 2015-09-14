@@ -556,7 +556,7 @@ changeDialog.onmouseenter = function () {
   }
 };
 
-/* ---- Snippets ---- */
+/* ---- Snippets on Home Page ---- */
   if (urlParams["a"] == "Home") {
     $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
     $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
