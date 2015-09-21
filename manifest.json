@@ -11,10 +11,10 @@
         "https://zachs-webservices.herokuapp.com/*",
         "http://mcdonnellteach.com/*"
     ],
-    "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
-    },
+    //"options_ui": {
+    //"page": "options.html",
+    //"chrome_style": true
+    //},
     "icons": { "128": "icon.png"},
     "content_scripts": [
     {

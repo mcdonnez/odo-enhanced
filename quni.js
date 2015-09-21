@@ -509,7 +509,7 @@ changeDialog.onmouseenter = function () {
       document.getElementById('UserID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
     } else {
       user = document.getElementsByClassName('Box')[0].innerHTML;
-      document.getElementById('UserID').value = user.match(/(UR.?_\w{15})/)[1];
+      document.getElementById('UserID').value = user.match(/(UR.?_\w{12,15})/)[1];
     }
   }
   if (document.getElementById('RSUserID') !== null && document.getElementById('RSUserID').value == "") {
@@ -565,16 +565,8 @@ changeDialog.onmouseenter = function () {
 };
 
 /* ---- Snippets on Home Page ---- */
-
-//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
-  if (urlParams["a"] == "Home") {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-  } else if (urlParams["a"] == null) {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-  }
   //RETRIEVE CONTENT FROM SNIPPETS PAGE
+function setSnippetsContainer () {
 var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET", url, true);
@@ -624,8 +616,19 @@ xmlhttp.onreadystatechange = function () {
     snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
   };
 };
+};
+//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
+  if (urlParams["a"] == "Home") {
+    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
+    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+	setSnippetsContainer();
+  } else if (urlParams["a"] == null) {
+    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
+    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+	setSnippetsContainer();
+  }
 
-/*-- Google Calendar APIs experiment --*/
+/*DEV-- Google Calendar APIs experiment --*/
 function getCal() {
   $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
     .done(function (data) {
