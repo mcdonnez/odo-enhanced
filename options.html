@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Odo Enhanced Options</title>
+  <style>
+    body { padding: 10px; font-family: "Helvetica Neue"; font-weight: 200; font-size: 1.2em;}
+    input {
+      margin: 10px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <label>
+    <input type="checkbox" id="theme">
+    Allow new theme
+  </label>
+<br>
+  <label>
+    <input type="checkbox" id="snippet">
+    Turn on Snippet View
+  </label>
+<br>
+  <label>
+    <input type="checkbox" id="snippetFade">
+    Fade Snippets when completed
+  </label>
+<br>
+  <label>
+    <input type="color" id="snippetColor">
+    Color of incomplete Snippets (appears after Wednesday)
+  </label>
+<br>
+  <div id="status"></div>
+  <button id="save">Save</button>
+
+  <script src="options.js"></script>
+</body>
+</html>
+
+<script>
+// Saves options to chrome.storage.sync.
+function save_options() {
+  var snippetAlertColor = document.getElementById('snippetColor').value;
+  console.log(color);
+  var themeOn = document.getElementById('theme').checked;
+  var snippetOn = document.getElementById('snippet').checked;
+  var snippetFadeOn = document.getElementById('snippetFade').checked;
+
+  chrome.storage.sync.set({
+    snippetColor: snippetAlertColor,
+    theme: themeOn,
+    snippets: snippetOn,
+    snippetFade: snippetFadeOn
+  }, function() {
+    // Update status to let user know options were saved.
+    var status = document.getElementById('status');
+    status.textContent = 'Options saved.';
+    setTimeout(function() {
+      status.textContent = '';
+    }, 750);
+  });
+}
+
+// Restores select box and checkbox state using the preferences
+// stored in chrome.storage.
+function restore_options() {
+  // Use default value color = 'red' and likesColor = true.
+  chrome.storage.sync.get({
+    snippetColor: "#ff00000",
+    theme: true,
+    snippets: true,
+    snippetFade: true
+  }, function(items) {
+
+    document.getElementById('snippetColor').value = items.snippetAlertColor;
+    document.getElementById('theme').checked = items.themeOn;
+    document.getElementById('snippet').checked = items.snippetOn;
+    document.getElementById('snippetFade').checked = items.snippetFadeOn;
+  });
+}
+document.addEventListener('DOMContentLoaded', restore_options);
+document.getElementById('save').addEventListener('click',
+    save_options);
+
+</script>
