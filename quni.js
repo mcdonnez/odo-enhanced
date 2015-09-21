@@ -116,15 +116,18 @@ function addEmailTicket() {
   node.appendChild(emailnode);
 };
 addEmailTicket();
+
 /* ---- Add Knowledge Base Button ------*/
 var node = document.getElementsByClassName("SearchContainer")[0];
 var kbnode = document.createElement('IMG')
 kbnode.src = "https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0jN6AK9pss9dE2h&V=1439585513";
 kbnode.setAttribute('class', 'CreateTicketButton');
+kbnode.setAttribute('id', 'KB');
 kbnode.setAttribute('style', "border-radius:5px;margin: 0px 5px;float: left;");
 kbnode.setAttribute('onclick', 'Dialog("?b=KBPopUpViewer");');
 kbnode.height = '51';
 node.insertBefore(kbnode, node.childNodes[0]);
+
 /* ------------- Dynamic Favicons ---------------- */
 document.head || (document.head = document.getElementsByTagName('head')[0]);
 
@@ -562,6 +565,8 @@ changeDialog.onmouseenter = function () {
 };
 
 /* ---- Snippets on Home Page ---- */
+
+//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
   if (urlParams["a"] == "Home") {
     $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
     $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
@@ -569,6 +574,7 @@ changeDialog.onmouseenter = function () {
     $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
     $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
   }
+  //RETRIEVE CONTENT FROM SNIPPETS PAGE
 var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET", url, true);
@@ -577,20 +583,44 @@ xmlhttp.send();
 xmlhttp.onreadystatechange = function () {
   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
     var response = xmlhttp.response;
+    // PLACE SNIPPETS IN CONTAINER
     if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
       var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
       var snippetSideBar = document.getElementById('SnippetsContainer');
       snippetSideBar.innerHTML = finalOutput;
       var table = document.querySelectorAll('#SnippetsContainer > tbody')[0];
+      //CLEAN EACH SNIPPET ONE BY ONE
       for (i = 0; i < table.rows.length; i++) {
         var row = table.rows[i];
+        //COLOR SNIPPETS WHEN COMPLETED
+        var checkBox = row.getElementsByTagName('input')[0];
+        //GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
+        var d = new Date();
+        var n = d.getDay();
+        if (checkBox.checked) {
+          row.style.opacity = ".5";
+        } else if (n >= 4) {
+          row.style.color = "red";
+        }
+        //ELIMINATE X
         row.deleteCell(0);
         row.deleteCell(1);
+        //TRUNCATE LABELS ON SNIPPETS 
+        var length = 40; //LENGTH OF SNIPPET POST TRUNCATION
+        var rowContents = row.getElementsByTagName('td')[0];
+        //VERIFY THAT TRUNCATION IS NECESSARY
+        if ( rowContents.innerHTML.length > length ) {
+          var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
+          rowContents.innerHTML = replaceMe.substring(0, length) + "...";
+        }
+
       }
     } else {
+      //ALERT THAT NO SNIPPETS ARE PRESENT
       var snippetSideBar = document.getElementById('SnippetsContainer');
       snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
     }
+    //ALLOW FOR EDITING OF SNIPPETS
     snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
   };
 };
@@ -630,3 +660,30 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
        };
    }, true);
 };
+
+/*--- Add Playbook to Knowledge Base ---*/
+
+//CHANGE TAB NAME
+/*
+function addPlaybook() {
+  setTimeout(500);
+  var playbookTab = document.getElementById('ui-id-5');
+  playbookTab.innerHTML = "Playbook";
+
+  //SET WINDOW HEIGHT
+  setTimeout(1500);
+  var windowHeight = window.innerHeight;
+  var playbook = document.getElementById('ExternalLinks');
+  if ( windowHeight < 900 ) {
+    playbook.style.height = windowHeight - 100 + "px";
+  } else {
+    playbook.style.height = "1000px";
+  }
+
+  //ADD IFRAME
+  playbook.innerHTML = "<iframe style='border: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
+};
+*/
+
+
+
