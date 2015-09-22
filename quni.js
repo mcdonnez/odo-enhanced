@@ -617,32 +617,10 @@ xmlhttp.onreadystatechange = function () {
   };
 };
 };
-//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
-  if (urlParams["a"] == "Home") {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-	setSnippetsContainer();
-  } else if (urlParams["a"] == null) {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-	setSnippetsContainer();
-  }
-
-/*DEV-- Google Calendar APIs experiment --*/
-function getCal() {
-  $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
-    .done(function (data) {
-      alert("Data Loaded: " + data);
-    })
-    .fail(function (error) {
-      alert("error" + error.responseJSON);
-      console.log(error);
-    });
-};
-/*--- Easter Eggs ---*/
 
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
+function konami() {
 if (window.addEventListener) {
    // create the keys and konami variables
    var keys = [],
@@ -663,6 +641,32 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
        };
    }, true);
 };
+};
+//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
+  if (urlParams["a"] == "Home") {
+    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
+    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+	setSnippetsContainer();
+	  konami();
+  } else if (urlParams["a"] == null) {
+    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
+    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+	setSnippetsContainer();
+	  konami();
+  }
+
+/*DEV-- Google Calendar APIs experiment --*/
+function getCal() {
+  $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
+    .done(function (data) {
+      alert("Data Loaded: " + data);
+    })
+    .fail(function (error) {
+      alert("error" + error.responseJSON);
+      console.log(error);
+    });
+};
+/*--- Easter Eggs ---*/
 
 /*--- Add Playbook to Knowledge Base ---*/
 
