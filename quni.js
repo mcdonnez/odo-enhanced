@@ -429,6 +429,7 @@ changeDialog.onmouseenter = function () {
     } else {
       page = '';
     };
+    addPlaybook(); //FUNCTION AT BOTTOM OF PAGE
     getQWiki(page);
     /* ------------- Prepare for tab clicks on KnowledgeBase -----------*/
     if (document.getElementById('TopicList')) {
@@ -509,7 +510,7 @@ changeDialog.onmouseenter = function () {
       document.getElementById('UserID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
     } else {
       user = document.getElementsByClassName('Box')[0].innerHTML;
-      document.getElementById('UserID').value = user.match(/(UR.?_\w{15})/)[1];
+      document.getElementById('UserID').value = user.match(/(UR.?_\w{12,15})/)[1];
     }
   }
   if (document.getElementById('RSUserID') !== null && document.getElementById('RSUserID').value == "") {
@@ -565,16 +566,8 @@ changeDialog.onmouseenter = function () {
 };
 
 /* ---- Snippets on Home Page ---- */
-
-//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
-  if (urlParams["a"] == "Home") {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-  } else if (urlParams["a"] == null) {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-  }
   //RETRIEVE CONTENT FROM SNIPPETS PAGE
+function setSnippetsContainer () {
 var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.open("GET", url, true);
@@ -624,22 +617,11 @@ xmlhttp.onreadystatechange = function () {
     snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
   };
 };
-
-/*-- Google Calendar APIs experiment --*/
-function getCal() {
-  $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
-    .done(function (data) {
-      alert("Data Loaded: " + data);
-    })
-    .fail(function (error) {
-      alert("error" + error.responseJSON);
-      console.log(error);
-    });
 };
-/*--- Easter Eggs ---*/
 
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
+function konami() {
 if (window.addEventListener) {
    // create the keys and konami variables
    var keys = [],
@@ -660,20 +642,46 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
        };
    }, true);
 };
+};
+//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
+  if (urlParams["a"] == "Home") {
+    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
+    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+	setSnippetsContainer();
+	  konami();
+  } else if (urlParams["a"] == null) {
+    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
+    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+	setSnippetsContainer();
+	  konami();
+  }
 
-/*--- Add Playbook to Knowledge Base ---*/
+/*DEV-- Google Calendar APIs experiment --*/
+function getCal() {
+  $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
+    .done(function (data) {
+      alert("Data Loaded: " + data);
+    })
+    .fail(function (error) {
+      alert("error" + error.responseJSON);
+      console.log(error);
+    });
+};
+/*--- Easter Eggs ---*/
+
+/*--- Add Playbook to Knowledge Base - SEE AUTOFILL FOR TRIGGER---*/
 
 //CHANGE TAB NAME
-/*
+
 function addPlaybook() {
   setTimeout(500);
-  var playbookTab = document.getElementById('ui-id-5');
+  var playbookTab = document.getElementById('ui-id-4');
   playbookTab.innerHTML = "Playbook";
 
   //SET WINDOW HEIGHT
   setTimeout(1500);
   var windowHeight = window.innerHeight;
-  var playbook = document.getElementById('ExternalLinks');
+  var playbook = document.getElementById('CannedResponses');
   if ( windowHeight < 900 ) {
     playbook.style.height = windowHeight - 100 + "px";
   } else {
@@ -683,7 +691,7 @@ function addPlaybook() {
   //ADD IFRAME
   playbook.innerHTML = "<iframe style='border: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
 };
-*/
+
 
 
 
