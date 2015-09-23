@@ -450,6 +450,17 @@ changeDialog.onmouseenter = function () {
       }
     };
   }
+  /*--- Add Confirm to Close on Email Tickets ---*/
+if (document.getElementById('cancel') && !document.getElementById('cancelPrompt')) {
+	$('#cancel').hide();
+	$("<div id='cancelPrompt' class='button'>Close</div>").insertAfter('#cancel');
+	$('.button-group').on('click', '#cancelPrompt', function () {
+		var r = confirm('Are you sure you want to close without saving your work?');
+		if (r == true) {
+			$('#cancel').trigger('click');
+		}
+	});
+	}
   /* ------------- List of IDs to autofill ---------- */
   var user;
   if (document.getElementById('to') !== null && document.getElementById('to').value == "") {
@@ -691,6 +702,3 @@ function addPlaybook() {
   playbook.innerHTML = "<iframe style='border: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
 };
 */
-
-
-
