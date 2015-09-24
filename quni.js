@@ -142,6 +142,13 @@ function changeFavicon(src) {
   }
   document.head.appendChild(link);
 }
+/* --- Dynamic Title --- */
+function changeTitle(){
+	if (document.getElementsByClassName('Title')[1].innerHTML.match(/> (.*)/)[1];){
+		document.head.getElementsByTagName('title')[0].innerHTML = document.getElementsByClassName('Title')[1].innerHTML.match(/> (.*)/)[1];
+	}
+};
+changeTitle();
 /* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var feature;
 var product;
