@@ -104,19 +104,7 @@ case 'CompanyOfficeMaps':
 default:
 }
 changeFavicon(favicon);
-/* ------------- Add Email Button ---------------- REPLACED BY CODE DIRECTLY BELOW COMMENT
-function addEmailTicket() {
-  var node = document.getElementsByClassName("SearchContainer")[0];
-  var emailnode = document.createElement('IMG');
-  emailnode.src = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0Go4xikYP9Ald3L&V=1436994244';
-  emailnode.setAttribute('class', 'CreateTicketButton');
-  emailnode.setAttribute('style', "border-radius:5px;margin: 0px 5px;");
-  emailnode.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
-  emailnode.height = '51';
-  node.appendChild(emailnode);
-};
-addEmailTicket();
-*/
+/* ------------- Add Email Button ---------------- */
 function addEmailTicket() {
   container = document.getElementsByClassName('SectionButtonsContainer')[0];
   var node = document.createElement("A");
