@@ -2,6 +2,9 @@ console.log("Success! Odo Enhanced Works!");
 /* ------------- Built by Zach McDonnell ---------------- */
 /* ------------- Return query string in var urlParams ---------------- */
 var urlParams;
+var product = "RS";
+var feature = "";
+var status = "Open,'In Progress', Reopened";
 (window.onpopstate = function () {
   var match,
     pl = /\+/g, // Regex for replacing addition symbol with a space
@@ -66,6 +69,8 @@ case 'SupportRecommendedTickets':
   break;
 case 'SupportJiraIssues':
   favicon = 'global/template/img/Bug.png';
+		$('#BodyContent').html("<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>");
+        getJira(product, feature, status);
   break;
 case 'SupportAlternateEmailTickets':
   favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
@@ -155,7 +160,7 @@ function changeTitle(){
 };
 changeTitle();
 */
-/* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ----------------
+/* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var feature;
 var product;
 
@@ -163,17 +168,13 @@ function getNewJira() {
   product = document.getElementById('jiraProduct').value;
   feature = document.getElementById('jiraSearch').value;
   status = document.getElementById('jiraStatus').value;
-  console.log(bug);
-  if (document.getElementById('addedBugs') && !feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/)) {
-    document.getElementById('bugResults_wrapper').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;padding:10px;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
-  }
+    $('#BodyContent').html("<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>");
   getJira(product, feature, status);
 };
 
 function insertBugs(jiraBugs) {
-  var odoBugs = document.getElementById('Bugs');
-  odoBugs.innerHTML = jiraBugs.getElementsByTagName('body')[0].innerHTML;
-  odoBugs.removeAttribute('style'); //removes height limit of content
+	$('#BodyContent').html(jiraBugs.getElementsByTagName('body')[0].innerHTML);
+  //odoBugs.removeAttribute('style'); //removes height limit of content
   document.getElementById('newSearch').addEventListener('click', getNewJira);
   document.getElementById('jiraSearch').onkeypress = function (event) {
     if (event.keyCode == 13) {
@@ -181,8 +182,6 @@ function insertBugs(jiraBugs) {
     }
   };
   var pageSet = document.createElement('div');
-  pageSet.id = 'addedBugs';
-  odoBugs.appendChild(pageSet);
   $('#bugResults').DataTable();
   $('#bugResults tbody').on('click', 'tr td:nth-child(1)', function () {
     console.log(this);
@@ -192,9 +191,9 @@ function insertBugs(jiraBugs) {
   $('#bugResults tbody').on('click', 'tr td:nth-child(3)', function () {
     $(this).closest('tr').toggleClass('selected');
   });
-  document.getElementById('jiraSearch').value = feature;
-  document.getElementById('jiraProduct').value = product;
-  document.getElementById('jiraStatus').value = status;
+  $('#jiraSearch').val(feature);
+	$('#jiraProduct').val(product);
+	$('#jiraStatus').val(status);
 }
 var bug;
 
@@ -230,7 +229,7 @@ function getJira(product, feature, status) {
     }
   }
 };
-*/
+
 /* ------------- Integrate QWiki into Odo Dialog (See Auto-fill section for trigger) ----------------
 var page;
 
