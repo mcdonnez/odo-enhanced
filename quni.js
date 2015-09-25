@@ -104,7 +104,7 @@ case 'CompanyOfficeMaps':
 default:
 }
 changeFavicon(favicon);
-/* ------------- Add Email Button ---------------- */
+/* ------------- Add Email Button ----------------
 function addEmailTicket() {
   var node = document.getElementsByClassName("SearchContainer")[0];
   var emailnode = document.createElement('IMG');
@@ -116,8 +116,20 @@ function addEmailTicket() {
   node.appendChild(emailnode);
 };
 addEmailTicket();
+*/
+function addEmailTicket() {
+  container = document.getElementsByClassName('SectionButtonsContainer')[0];
+  var node = document.createElement("A");
+  var textnode = document.createTextNode("Create Email Ticket");
+  node.appendChild(textnode);
+  node.setAttribute("id", "newEmail");
+  node.setAttribute("class", "btn btn-success");
+  node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
+  container.appendChild(node);
+};
+addEmailTicket();
 
-/* ---- Add Knowledge Base Button ------*/
+/* ---- Add Knowledge Base Button ------
 var node = document.getElementsByClassName("SearchContainer")[0];
 var kbnode = document.createElement('IMG')
 kbnode.src = "https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0jN6AK9pss9dE2h&V=1439585513";
@@ -127,10 +139,9 @@ kbnode.setAttribute('style', "border-radius:5px;margin: 0px 5px;float: left;");
 kbnode.setAttribute('onclick', 'Dialog("?b=KBPopUpViewer");');
 kbnode.height = '51';
 node.insertBefore(kbnode, node.childNodes[0]);
-
+*/
 /* ------------- Dynamic Favicons ---------------- */
 document.head || (document.head = document.getElementsByTagName('head')[0]);
-
 function changeFavicon(src) {
   var link = document.createElement('link'),
     oldLink = document.getElementById('dynamic-favicon');
@@ -142,7 +153,22 @@ function changeFavicon(src) {
   }
   document.head.appendChild(link);
 }
-/* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
+/* --- Dynamic Title ---
+function changeTitle(){
+	if (document.getElementsByClassName('Title')[1].innerHTML.match(/> (.*)/)){
+		var title = document.getElementsByClassName('Title')[1].innerHTML.match(/> (.*)/)[1];
+		if (title.match(/Client Pulse/)) {
+			title = title.match(/Client Pulse: (.*)/)[1];
+			changeFavicon("https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173");
+		}
+		document.head.getElementsByTagName('title')[0].innerHTML = 'Odo | ' + title;
+	} else if (urlParams['iid']) {
+		document.head.getElementsByTagName('title')[0].innerHTML = 'Odo | ' + urlParams['iid'];
+	}
+};
+changeTitle();
+*/
+/* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ----------------
 var feature;
 var product;
 
@@ -217,7 +243,8 @@ function getJira(product, feature, status) {
     }
   }
 };
-/* ------------- Integrate QWiki into Odo Dialog (See Auto-fill section for trigger) ---------------- */
+*/
+/* ------------- Integrate QWiki into Odo Dialog (See Auto-fill section for trigger) ----------------
 var page;
 
 function updatelinks(p) {
@@ -270,7 +297,7 @@ function insertArticle(QWiki, qPage) {
           editQWiki(url,qPage);
       };
       document.getElementById('firstHeading').appendChild(button);
-  };*/
+  };
   var pageSet = document.createElement('div');
   pageSet.id = 'addedArticle';
   odoArticle.appendChild(pageSet);
@@ -304,7 +331,8 @@ function getQWiki(page) {
     }
   }
 };
-/* DEV------------- Edit QWiki page ----------- */
+*/
+/* DEV------------- Edit QWiki page -----------
 function insertEditor(page, qPage) {
   var link = document.createElement('link');
   link.setAttribute('href', 'http://mcdonnellteach.com/tinyeditor.css');
@@ -399,7 +427,7 @@ function editQWiki(url, qPage) {
     }
   }
 };
-
+*/
 /* ------------- Autofill dialog box depending on fields present ---------------- */
 var changeDialog = document.getElementById('Dialog');
 changeDialog.onmouseenter = function () {
@@ -429,7 +457,6 @@ changeDialog.onmouseenter = function () {
     } else {
       page = '';
     };
-    addPlaybook(); //FUNCTION AT BOTTOM OF PAGE
     getQWiki(page);
     /* ------------- Prepare for tab clicks on KnowledgeBase -----------*/
     if (document.getElementById('TopicList')) {
@@ -451,6 +478,17 @@ changeDialog.onmouseenter = function () {
       }
     };
   }
+  /*--- Add Confirm to Close on Email Tickets ---*/
+if (document.getElementById('cancel') && !document.getElementById('cancelPrompt')) {
+	$('#cancel').hide();
+	$("<div id='cancelPrompt' class='button'>Close</div>").insertAfter('#cancel');
+	$('.button-group').on('click', '#cancelPrompt', function () {
+		var r = confirm('Are you sure you want to close without saving your work?');
+		if (r == true) {
+			$('#cancel').trigger('click');
+		}
+	});
+	}
   /* ------------- List of IDs to autofill ---------- */
   var user;
   if (document.getElementById('to') !== null && document.getElementById('to').value == "") {
@@ -565,7 +603,7 @@ changeDialog.onmouseenter = function () {
   }
 };
 
-/* ---- Snippets on Home Page ---- */
+/* ---- Snippets on Home Page ----
   //RETRIEVE CONTENT FROM SNIPPETS PAGE
 function setSnippetsContainer () {
 var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
@@ -618,7 +656,7 @@ xmlhttp.onreadystatechange = function () {
   };
 };
 };
-
+*/
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
 function konami() {
@@ -643,6 +681,7 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
    }, true);
 };
 };
+/*
 //BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
   if (urlParams["a"] == "Home") {
     $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
@@ -655,7 +694,7 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
 	setSnippetsContainer();
 	  konami();
   }
-
+*/
 /*DEV-- Google Calendar APIs experiment --*/
 function getCal() {
   $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
@@ -669,19 +708,19 @@ function getCal() {
 };
 /*--- Easter Eggs ---*/
 
-/*--- Add Playbook to Knowledge Base - SEE AUTOFILL FOR TRIGGER---*/
+/*--- Add Playbook to Knowledge Base ---*/
 
 //CHANGE TAB NAME
-
+/*
 function addPlaybook() {
   setTimeout(500);
-  var playbookTab = document.getElementById('ui-id-4');
+  var playbookTab = document.getElementById('ui-id-5');
   playbookTab.innerHTML = "Playbook";
 
   //SET WINDOW HEIGHT
   setTimeout(1500);
   var windowHeight = window.innerHeight;
-  var playbook = document.getElementById('CannedResponses');
+  var playbook = document.getElementById('ExternalLinks');
   if ( windowHeight < 900 ) {
     playbook.style.height = windowHeight - 100 + "px";
   } else {
@@ -691,7 +730,4 @@ function addPlaybook() {
   //ADD IFRAME
   playbook.innerHTML = "<iframe style='border: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
 };
-
-
-
-
+*/
