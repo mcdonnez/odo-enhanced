@@ -104,7 +104,7 @@ case 'CompanyOfficeMaps':
 default:
 }
 changeFavicon(favicon);
-/* ------------- Add Email Button ----------------
+/* ------------- Add Email Button ---------------- REPLACED BY CODE DIRECTLY BELOW COMMENT
 function addEmailTicket() {
   var node = document.getElementsByClassName("SearchContainer")[0];
   var emailnode = document.createElement('IMG');
@@ -117,6 +117,17 @@ function addEmailTicket() {
 };
 addEmailTicket();
 */
+function addEmailTicket() {
+  container = document.getElementsByClassName('SectionButtonsContainer')[0];
+  var node = document.createElement("A");
+  var textnode = document.createTextNode("Create Email Ticket");
+  node.appendChild(textnode);
+  node.setAttribute("id", "newEmail");
+  node.setAttribute("class", "btn btn-success");
+  node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
+  container.appendChild(node);
+};
+addEmailTicket();
 /* ---- Add Knowledge Base Button ------
 var node = document.getElementsByClassName("SearchContainer")[0];
 var kbnode = document.createElement('IMG')
