@@ -588,8 +588,7 @@ if (document.getElementById('cancel') && !document.getElementById('cancelPrompt'
     }
   }
 };
-
-/* ---- Snippets on Home Page ----
+// ---- Snippets on Home Page ----
   //RETRIEVE CONTENT FROM SNIPPETS PAGE
 function setSnippetsContainer () {
 var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
@@ -600,12 +599,14 @@ xmlhttp.send();
 xmlhttp.onreadystatechange = function () {
   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
     var response = xmlhttp.response;
+    //Create Container
+    $('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><table id='snippetsContainer'><tbody></tbody></table>");
     // PLACE SNIPPETS IN CONTAINER
     if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
       var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
-      var snippetSideBar = document.getElementById('SnippetsContainer');
+      var snippetSideBar = document.getElementById('snippetsContainer');
       snippetSideBar.innerHTML = finalOutput;
-      var table = document.querySelectorAll('#SnippetsContainer > tbody')[0];
+      var table = document.getElementById('snippetsContainer');
       //CLEAN EACH SNIPPET ONE BY ONE
       for (i = 0; i < table.rows.length; i++) {
         var row = table.rows[i];
@@ -615,9 +616,9 @@ xmlhttp.onreadystatechange = function () {
         var d = new Date();
         var n = d.getDay();
         if (checkBox.checked) {
-          row.style.opacity = ".5";
+          row.style.opacity = ".3";
         } else if (n >= 4) {
-          row.style.color = "red";
+          row.style.outline = "#04b26e 1px solid";
         }
         //ELIMINATE X
         row.deleteCell(0);
@@ -634,15 +635,18 @@ xmlhttp.onreadystatechange = function () {
       }
     } else {
       //ALERT THAT NO SNIPPETS ARE PRESENT
-      var snippetSideBar = document.getElementById('SnippetsContainer');
+      var snippetSideBar = document.getElementById('snippetsContainer');
       snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
+      snippetSideBar.style.cursor = "pointer";
+      snippetSideBar.style.outline = "1px solid #04a365";
     }
     //ALLOW FOR EDITING OF SNIPPETS
     snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
   };
 };
 };
-*/
+//CLOSE SNIPPETS ON CLICK
+
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
 function konami() {
@@ -667,20 +671,44 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
    }, true);
 };
 };
-/*
+
+/*--- Add Playbook as a tab ---*/
+
+//CHANGE TAB NAME
+function addPlaybook() {
+  var tabList = document.getElementsByClassName('SectionTabsList')[0];
+  $(tabList).append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
+
+
+    //SET WINDOW HEIGHT
+  document.getElementById("playbookTab").addEventListener("click", function(){
+    $(".SectionTabsList > li").removeClass('ActiveTab');
+    $('#playbookTab').addClass(' ActiveTab');
+    $('.SectionButtonsContainer').fadeOut();
+    $('.TimezonesTableContainer').fadeOut();
+    var playbookArea = document.getElementsByClassName('Page')[0];
+    //ADD IFRAME
+    playbookArea.innerHTML = "<iframe style='border: 0; height: 900px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
+  });
+};
+
 //BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
+
+//COMMENTD OUT BUILDING OF SNIPPETS BECAUSE FUNCTION TAKES CARE OF THAT NOW
   if (urlParams["a"] == "Home") {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-	setSnippetsContainer();
-	  konami();
+    //$("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;  '></table>");
+    //$("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+  setSnippetsContainer();
+  addPlaybook();
+    konami();
   } else if (urlParams["a"] == null) {
-    $("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
-    $("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
-	setSnippetsContainer();
-	  konami();
+    //$("#LeftMenuColumn").prepend(" <table id='SnippetsContainer' style='border: 1px solid rgb(4, 163, 101) !important;border-radius: 10px !important;color: rgb(4, 163, 101);cursor:pointer;'></table>");
+    //$("#LeftMenuColumn").prepend(" <div class='Title'>My Snippets</div> ");
+  setSnippetsContainer();
+    konami();
+    addPlaybook();
   }
-*/
+
 /*DEV-- Google Calendar APIs experiment --*/
 function getCal() {
   $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
@@ -693,27 +721,3 @@ function getCal() {
     });
 };
 /*--- Easter Eggs ---*/
-
-/*--- Add Playbook to Knowledge Base ---*/
-
-//CHANGE TAB NAME
-/*
-function addPlaybook() {
-  setTimeout(500);
-  var playbookTab = document.getElementById('ui-id-5');
-  playbookTab.innerHTML = "Playbook";
-
-  //SET WINDOW HEIGHT
-  setTimeout(1500);
-  var windowHeight = window.innerHeight;
-  var playbook = document.getElementById('ExternalLinks');
-  if ( windowHeight < 900 ) {
-    playbook.style.height = windowHeight - 100 + "px";
-  } else {
-    playbook.style.height = "1000px";
-  }
-
-  //ADD IFRAME
-  playbook.innerHTML = "<iframe style='border: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
-};
-*/
