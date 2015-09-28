@@ -721,3 +721,19 @@ function getCal() {
     });
 };
 /*--- Easter Eggs ---*/
+
+/*Add Help Desk Tab to every page */ 
+function addHelpDesk() {
+  var tabList = document.getElementsByClassName('SectionTabsList')[0];
+  $(tabList).append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
+  document.getElementById("helpdeskTab").addEventListener("click", function(){
+    $(".SectionTabsList > li").removeClass('ActiveTab');
+    $('#helpdeskTab').addClass(' ActiveTab');
+    $('.SectionButtonsContainer').fadeOut();
+    $('.TimezonesTableContainer').fadeOut();
+    var helpdeskArea = document.getElementsByClassName('Page')[0];
+    //ADD IFRAME
+    helpdeskArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
+  });
+};
+addHelpDesk();
