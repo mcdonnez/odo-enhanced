@@ -147,8 +147,8 @@ function changeFavicon(src) {
 }
 /* --- Dynamic Title --- */
 function changeTitle(){
-	if (document.getElementsByClassName('Title')[1].innerHTML.match(/> (.*)/)){
-		var title = document.getElementsByClassName('Title')[1].innerHTML.match(/> (.*)/)[1];
+	if (document.getElementsByClassName('PageTitle')[0].innerHTML.match(/span>(.*)/)){
+		var title = document.getElementsByClassName('PageTitle')[0].innerHTML.match(/span>(.*)/)[1];
 		if (title.match(/Client Pulse/)) {
 			title = title.match(/Client Pulse: (.*)/)[1];
 			changeFavicon("https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173");
@@ -722,18 +722,18 @@ function getCal() {
 };
 /*--- Easter Eggs ---*/
 
-/*Add Help Desk Tab to every page */ 
+/*Add Help Desk Tab to every page */
 function addHelpDesk() {
   var tabList = document.getElementsByClassName('SectionTabsList')[0];
   $(tabList).append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
   document.getElementById("helpdeskTab").addEventListener("click", function(){
-    $(".SectionTabsList > li").removeClass('ActiveTab');
-    $('#helpdeskTab').addClass(' ActiveTab');
-    $('.SectionButtonsContainer').fadeOut();
-    $('.TimezonesTableContainer').fadeOut();
-    var helpdeskArea = document.getElementsByClassName('Page')[0];
-    //ADD IFRAME
-    helpdeskArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
+	$(".SectionTabsList > li").removeClass('ActiveTab');
+	$('#helpdeskTab').addClass(' ActiveTab');
+	$('.SectionButtonsContainer').fadeOut();
+	$('.TimezonesTableContainer').fadeOut();
+	var helpdeskArea = document.getElementsByClassName('Page')[0];
+	//ADD IFRAME
+	helpdeskArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
   });
 };
 addHelpDesk();
