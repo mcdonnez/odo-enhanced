@@ -707,7 +707,9 @@ function addPlaybook() {
   setSnippetsContainer();
 	konami();
 	addPlaybook();
-  }
+  } else if (urlParams["TopNav"] == "Tickets") {
+	addPlaybook();
+}
 
 /*DEV-- Google Calendar APIs experiment --*/
 function getCal() {
