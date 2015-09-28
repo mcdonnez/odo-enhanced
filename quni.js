@@ -147,8 +147,8 @@ function changeFavicon(src) {
 }
 /* --- Dynamic Title --- */
 function changeTitle(){
-	if (document.getElementsByClassName('PageTitle')[0].innerHTML.match(/span>(.*)/)){
-		var title = document.getElementsByClassName('PageTitle')[0].innerHTML.match(/span>(.*)/)[1];
+	if ($('.PageTitle')){
+		var title = $('.PageTitle').text().trim();
 		if (title.match(/Client Pulse/)) {
 			title = title.match(/Client Pulse: (.*)/)[1];
 			changeFavicon("https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173");
