@@ -150,12 +150,12 @@ function changeTitle(){
 	if ($('.PageTitle')){
 		var title = $('.PageTitle').text().trim();
 		var pageTitle = document.head.getElementsByTagName('title')[0];
+		if (urlParams['tid'] && !title.match(/Client Pulse/)) {
+			title = $('#BodyContent > div:nth-child(3) > div > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > span').text().trim();
+		}
 		if (title.match(/Client Pulse/)) {
 			title = title.match(/Client Pulse: (.*)/)[1];
 			changeFavicon("https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173");
-		}
-		if (urlParams['tid']) {
-			title = $('#BodyContent > div:nth-child(3) > div > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > span').text().trim();
 		}
 		pageTitle.innerHTML = 'Odo | ' + title;
 	} else if (urlParams['iid']) {
