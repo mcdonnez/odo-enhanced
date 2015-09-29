@@ -158,8 +158,9 @@ function changeTitle(){
 			changeFavicon("https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173");
 		}
 		pageTitle.innerHTML = 'Odo | ' + title;
-	} else if (urlParams['iid']) {
+		if (urlParams['iid']) {
 		pageTitle.innerHTML = 'Odo | ' + urlParams['iid'];
+		}
 	}
 };
 changeTitle();
