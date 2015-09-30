@@ -220,7 +220,7 @@ function getJira(jira) {
 	bug = jira.feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/);
 	}
   if (bug) {
-	var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + feature;
+	var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + jira.feature;
 	window.open(url);
   } else {
 	var query = "";
