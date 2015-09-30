@@ -168,13 +168,15 @@ changeTitle();
 /* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var feature;
 var product;
-
+var type;
+var jira = {};
 function getNewJira() {
-  product = document.getElementById('jiraProduct').value;
-  feature = document.getElementById('jiraSearch').value;
-  status = document.getElementById('jiraStatus').value;
+	jira.product = $('#jiraProduct').val();
+	jira.feature = $('#jiraSearch').val();
+	jira.status = $('#jiraStatus').val();
+	jira.type = $('#jiraType').val();
 	$('#BodyContent').html("<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>");
-  getJira(product, feature, status);
+  getJira(jira);
 };
 
 function insertBugs(jiraBugs) {
@@ -196,27 +198,43 @@ function insertBugs(jiraBugs) {
   $('#bugResults tbody').on('click', 'tr td:nth-child(3)', function () {
 	$(this).closest('tr').toggleClass('selected');
   });
-  $('#jiraSearch').val(feature);
-	$('#jiraProduct').val(product);
-	$('#jiraStatus').val(status);
+	$('#jiraSearch').val(jira.feature);
+	if (jira.product)
+	$('#jiraProduct').val(jira.product);
+	else
+	$('#jiraProduct').val('RS');
+	if (jira.status)
+	$('#jiraStatus').val(jira.status)
+	else
+	$('#jiraProduct').val('Open');
+	if (jira.type)
+	$('#jiraType').val(jira.type);
+	else
+	$('#jiraType').val('Bug');
 }
 var bug;
 
-function getJira(product, feature, status) {
-  bug = feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/);
+function getJira(jira) {
+	console.log(jira);
+	if (jira.feature){
+	bug = jira.feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/);
+	}
   if (bug) {
 	var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + feature;
 	window.open(url);
   } else {
 	var query = "";
-	if (feature) {
-	  query += "text ~ " + "'" + feature + "'";
+	if (jira.feature) {
+	  query += "text ~ " + "'" + jira.feature + "'";
 	}
-	if (status) {
-	  query += "AND status in (" + status + ")";
+	if (jira.type) {
+		query += "AND issuetype in (" + jira.type + ")"
 	}
-	if (product != "") {
-	  query += "AND project in (" + product + ")";
+	if (jira.status) {
+	  query += "AND status in (" + jira.status + ")";
+	}
+	if (jira.product != "") {
+	  query += "AND project in (" + jira.product + ")";
 	}
 	//query = "project in (" + product + ") AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
 	query = query.replace(/ /g, '%20');
