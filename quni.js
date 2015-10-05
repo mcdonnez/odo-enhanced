@@ -150,7 +150,7 @@ function changeTitle(){
 	if ($('.PageTitle')){
 		var title = $('.PageTitle').text().trim();
 		var pageTitle = document.head.getElementsByTagName('title')[0];
-		if (urlParams['tid'] && !title.match(/Client Pulse/) && urlParams['a'] != 'Team') {
+		if (urlParams['tid'] && !title.match(/Client Pulse/) && urlParams['a'] != 'Team' && !title.match(/User Move/)) {
 			title = $('#BodyContent > div:nth-child(3) > div > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > span').text().trim();
 		}
 		if (title.match(/Client Pulse/)) {
