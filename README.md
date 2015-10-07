@@ -3,12 +3,11 @@ custom css, favicons, autofill tickets, qwiki integration, and more! We're alway
 
 ## Features
 
-* Updated Stylsheet
 * Email Ticket Button
 * Snippets Box on Home Page
-* Knowledge Base Button
 * Basic QWiki Integration
-* Improved Jira Search
+* Real Time Jira Search
+* Jira Feature Request Search
 * Autofill Pulses, Emails, and Phone Tickets
 * Easter Eggs...
 
