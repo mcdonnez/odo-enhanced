@@ -5,10 +5,8 @@ custom css, favicons, autofill tickets, qwiki integration, and more! We're alway
 
 * Email Ticket Button
 * Snippets Box on Home Page
-* Basic QWiki Integration
 * Real Time Jira Search
 * Jira Feature Request Search
-* Autofill Pulses, Emails, and Phone Tickets
 * Easter Eggs...
 
 ## Want to Collaborate?
