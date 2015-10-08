@@ -621,50 +621,50 @@ xmlhttp.responseType = "document";
 xmlhttp.send();
 xmlhttp.onreadystatechange = function () {
   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-    var response = xmlhttp.response;
-    //Create Container
-    $('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' onclick='toggleSnippets()' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
-    // PLACE SNIPPETS IN CONTAINER
-    if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
-      var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
-      var snippetSideBar = document.getElementById('snippetsContainer');
-      snippetSideBar.innerHTML = finalOutput;
-      var table = document.getElementById('snippetsContainer');
-      //CLEAN EACH SNIPPET ONE BY ONE
-      for (i = 0; i < table.rows.length; i++) {
-        var row = table.rows[i];
-        //COLOR SNIPPETS WHEN COMPLETED
-        var checkBox = row.getElementsByTagName('input')[0];
-        //GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
-        var d = new Date();
-        var n = d.getDay();
-        if (checkBox.checked) {
-          row.style.opacity = ".3";
-        } else if (n >= 4) {
-          row.style.outline = "#04b26e 1px solid";
-        }
-        //ELIMINATE X
-        row.deleteCell(0);
-        row.deleteCell(1);
-        //TRUNCATE LABELS ON SNIPPETS 
-        var length = 40; //LENGTH OF SNIPPET POST TRUNCATION
-        var rowContents = row.getElementsByTagName('td')[0];
-        //VERIFY THAT TRUNCATION IS NECESSARY
-        if ( rowContents.innerHTML.length > length ) {
-          var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
-          rowContents.innerHTML = replaceMe.substring(0, length) + "...";
-        }
+	var response = xmlhttp.response;
+	//Create Container
+	$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' onclick='toggleSnippets()' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+	// PLACE SNIPPETS IN CONTAINER
+	if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
+	  var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
+	  var snippetSideBar = document.getElementById('snippetsContainer');
+	  snippetSideBar.innerHTML = finalOutput;
+	  var table = document.getElementById('snippetsContainer');
+	  //CLEAN EACH SNIPPET ONE BY ONE
+	  for (i = 0; i < table.rows.length; i++) {
+		var row = table.rows[i];
+		//COLOR SNIPPETS WHEN COMPLETED
+		var checkBox = row.getElementsByTagName('input')[0];
+		//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
+		var d = new Date();
+		var n = d.getDay();
+		if (checkBox.checked) {
+		  row.style.opacity = ".3";
+		} else if (n >= 4) {
+		  row.style.outline = "#04b26e 1px solid";
+		}
+		//ELIMINATE X
+		row.deleteCell(0);
+		row.deleteCell(1);
+		//TRUNCATE LABELS ON SNIPPETS
+		var length = 40; //LENGTH OF SNIPPET POST TRUNCATION
+		var rowContents = row.getElementsByTagName('td')[0];
+		//VERIFY THAT TRUNCATION IS NECESSARY
+		if ( rowContents.innerHTML.length > length ) {
+		  var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
+		  rowContents.innerHTML = replaceMe.substring(0, length) + "...";
+		}
 
-      }
-    } else {
-      //ALERT THAT NO SNIPPETS ARE PRESENT
-      var snippetSideBar = document.getElementById('snippetsContainer');
-      snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
-      snippetSideBar.style.cursor = "pointer";
-      snippetSideBar.style.outline = "1px solid #04a365";
-    }
-    //ALLOW FOR EDITING OF SNIPPETS
-    snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
+	  }
+	} else {
+	  //ALERT THAT NO SNIPPETS ARE PRESENT
+	  var snippetSideBar = document.getElementById('snippetsContainer');
+	  snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
+	  snippetSideBar.style.cursor = "pointer";
+	  snippetSideBar.style.outline = "1px solid #04a365";
+	}
+	//ALLOW FOR EDITING OF SNIPPETS
+	snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
   };
 };
 };
@@ -672,9 +672,9 @@ xmlhttp.onreadystatechange = function () {
 function toggleSnippets() {
   var container = document.getElementById('snippetsContainer');
   if (container.style.display === "none") {
-    container.style.display = "block";
+	container.style.display = "block";
   } else {
-    container.style.display = "none";
+	container.style.display = "none";
   }
 };
 
@@ -684,22 +684,22 @@ function konami() {
 if (window.addEventListener) {
    // create the keys and konami variables
    var keys = [],
-       konami = "38,38,40,40,37,39,37,39,66,65";
+	   konami = "38,38,40,40,37,39,37,39,66,65";
 
    // bind the keydown event to the Konami function
    window.addEventListener("keydown", function(e){
-       // push the keycode to the 'keys' array
-       keys.push(e.keyCode);
+	   // push the keycode to the 'keys' array
+	   keys.push(e.keyCode);
 
-       // and check to see if the user has entered the Konami code
-       if (keys.toString().indexOf(konami) >= 0) {
-           var pageLogo = document.querySelector('body > div.Masthead > a > img');
+	   // and check to see if the user has entered the Konami code
+	   if (keys.toString().indexOf(konami) >= 0) {
+		   var pageLogo = document.querySelector('body > div.Masthead > a > img');
 pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
-            addMario();
+			addMario();
 
-           // and finally clean up the keys array
-           keys = [];
-       };
+		   // and finally clean up the keys array
+		   keys = [];
+	   };
    }, true);
 };
 };
@@ -708,20 +708,20 @@ pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
 function addMario() {
   var tabList = document.getElementsByClassName('SectionTabsList')[0];
   $(tabList).append('<li class="SectionTab" id="marioTab" style="cursor:pointer;">Mario</li>');
-    //SET WINDOW HEIGHT
+	//SET WINDOW HEIGHT
   document.getElementById("marioTab").addEventListener("click", function(){
-    $(".SectionTabsList > li").removeClass('ActiveTab');
-    $('#marioTab').addClass(' ActiveTab');
-    $('.SectionButtonsContainer').fadeOut();
-    $('.TimezonesTableContainer').fadeOut();
-    var marioArea = document.getElementsByClassName('Page')[0];
-    document.getElementsByClassName('Masthead')[0].style.background = "black";
-    //ADD IFRAME
-    marioArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://justiceleague.az1.qualtrics.com/jfe/form/SV_9XpCXziiai5lVDn?23=3'></iframe>";
-    //CHANGE THE PAGE TITLE
-    var pageTitle = document.getElementsByClassName('PageTitle')[0];
-    pageTitle.innerHTML = "Mario Brothers";
-    document.title = "Odo | Important Stuff";
+	$(".SectionTabsList > li").removeClass('ActiveTab');
+	$('#marioTab').addClass(' ActiveTab');
+	$('.SectionButtonsContainer').fadeOut();
+	$('.TimezonesTableContainer').fadeOut();
+	var marioArea = document.getElementsByClassName('Page')[0];
+	document.getElementsByClassName('Masthead')[0].style.background = "black";
+	//ADD IFRAME
+	marioArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://justiceleague.az1.qualtrics.com/jfe/form/SV_9XpCXziiai5lVDn?23=3'></iframe>";
+	//CHANGE THE PAGE TITLE
+	var pageTitle = document.getElementsByClassName('PageTitle')[0];
+	pageTitle.innerHTML = "Mario Brothers";
+	document.title = "Odo | Important Stuff";
   });
 };
 /*--- Add Playbook as a tab ---*/
@@ -730,19 +730,19 @@ function addMario() {
 function addPlaybook() {
   var tabList = document.getElementsByClassName('SectionTabsList')[0];
   $(tabList).append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
-    //SET WINDOW HEIGHT
+	//SET WINDOW HEIGHT
   document.getElementById("playbookTab").addEventListener("click", function(){
-    $(".SectionTabsList > li").removeClass('ActiveTab');
-    $('#playbookTab').addClass(' ActiveTab');
-    $('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-    //$('.TimezonesTableContainer').append('<iframe style="visibility:hidden" width="200" height="113" src="https://www.youtube.com/embed/a5uQMwRMHcs?autoplay=1;rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>'); //ADDS DAFT PUNK
-    var playbookArea = document.getElementsByClassName('Page')[0];
-    //ADD IFRAME
-    playbookArea.innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
-    //CHANGE THE PAGE TITLE
-    var pageTitle = document.getElementsByClassName('PageTitle')[0];
-    pageTitle.innerHTML = "Playbook";
-    document.title = "Odo | Playbook";
+	$(".SectionTabsList > li").removeClass('ActiveTab');
+	$('#playbookTab').addClass(' ActiveTab');
+	$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+	//$('.TimezonesTableContainer').append('<iframe style="visibility:hidden" width="200" height="113" src="https://www.youtube.com/embed/a5uQMwRMHcs?autoplay=1;rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>'); //ADDS DAFT PUNK
+	var playbookArea = document.getElementsByClassName('Page')[0];
+	//ADD IFRAME
+	playbookArea.innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
+	//CHANGE THE PAGE TITLE
+	var pageTitle = document.getElementsByClassName('PageTitle')[0];
+	pageTitle.innerHTML = "Playbook";
+	document.title = "Odo | Playbook";
   });
 };
 
@@ -757,15 +757,14 @@ function addPlaybook() {
 	//ADD IFRAME
 	playbookArea.innerHTML = "<iframe style='border: 0; height: 900px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
   });
-};
 
 //BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
   if ((urlParams["a"] == "Home" && urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
   setSnippetsContainer();
   addPlaybook();
   //addDesignPortal(); THIS MIGHT COME IN LATER VERSION
-    konami();
-  } 
+	konami();
+  }
 
 /*DEV-- Google Calendar APIs experiment --*/
 function getCal() {
@@ -780,23 +779,23 @@ function getCal() {
 };
 /*--- Easter Eggs ---*/
 
-//ADD FILE HELP DESK CLINIC TAB TO EVERY PAGE: 
+//ADD FILE HELP DESK CLINIC TAB TO EVERY PAGE:
 function addHelpDesk() {
   var tabList = document.getElementsByClassName('SectionTabsList')[0];
   $(tabList).append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
-    //SET WINDOW HEIGHT
+	//SET WINDOW HEIGHT
   document.getElementById("helpdeskTab").addEventListener("click", function(){
-    $(".SectionTabsList > li").removeClass('ActiveTab');
-    $('#helpdeskTab').addClass(' ActiveTab');
-    $('.SectionButtonsContainer').fadeOut();
-    $('.TimezonesTableContainer').fadeOut();
-    var helpdeskArea = document.getElementsByClassName('Page')[0];
-    //ADD IFRAME
-    helpdeskArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
-    //CHANGE THE PAGE TITLE
-    var pageTitle = document.getElementsByClassName('PageTitle')[0];
-    pageTitle.innerHTML = "Help Desk Request";
-    document.title = "Odo | Help Desk Request";
+	$(".SectionTabsList > li").removeClass('ActiveTab');
+	$('#helpdeskTab').addClass(' ActiveTab');
+	$('.SectionButtonsContainer').fadeOut();
+	$('.TimezonesTableContainer').fadeOut();
+	var helpdeskArea = document.getElementsByClassName('Page')[0];
+	//ADD IFRAME
+	helpdeskArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
+	//CHANGE THE PAGE TITLE
+	var pageTitle = document.getElementsByClassName('PageTitle')[0];
+	pageTitle.innerHTML = "Help Desk Request";
+	document.title = "Odo | Help Desk Request";
   });
 };
 addHelpDesk();
