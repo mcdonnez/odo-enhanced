@@ -744,8 +744,6 @@ function addPlaybook() {
 	pageTitle.innerHTML = "Playbook";
 	document.title = "Odo | Playbook";
   });
-};
-
 
 	//SET WINDOW HEIGHT
   document.getElementById("playbookTab").addEventListener("click", function(){
@@ -757,6 +755,7 @@ function addPlaybook() {
 	//ADD IFRAME
 	playbookArea.innerHTML = "<iframe style='border: 0; height: 900px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
   });
+};
 
 //BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
   if ((urlParams["a"] == "Home" && urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
