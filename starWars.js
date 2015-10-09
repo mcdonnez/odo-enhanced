@@ -1,6 +1,3 @@
-document.querySelectorAll("a[href$='/wiki/index.php/Main_Page']")[0].innerHTML = 'Jedi Temple Archives';
-document.querySelectorAll("a[href$='/?TopNav=Company']")[0].innerHTML = 'Rebel Contacts';
-
 var starWars = {
 	changeBackground: function () {
 		var background = {
@@ -10,7 +7,12 @@ var starWars = {
 		}
 		var random = Math.floor((Math.random() * 3) + 1);
 		document.body.style.backgroundImage = "url('" + background[random] + "')";
+	},
+	changeText: function() {
+		document.querySelectorAll("a[href$='/wiki/index.php/Main_Page']")[0].innerHTML = 'Jedi Temple Archives';
+		document.querySelectorAll("a[href$='/?TopNav=Company']")[0].innerHTML = 'Rebel Contacts';
 	}
 };
 
 starWars.changeBackground();
+starWars.changeText();
