@@ -8,8 +8,12 @@ div.PageTitle {
 	font-family: star_jedi_hollowregular;
 }
 
-ul.SectionTabsList, .LeftMenuColumn, .RightMenuColumn {
-	background-color: #B4C3d8;
+.LeftMenuColumn, .RightMenuColumn, #BodyContentBackground, .SectionTabsBarContainer {
+	opacity: .8;
+}
+
+ul.SectionTabsList, .SectionTab {
+	opacity: 1;
 }
 
 .SectionTab {
@@ -48,6 +52,10 @@ div.SearchBar {
 .btn.btn-success {
 	background-color: black !important;
 	border-color: #FFEE1C !important;
+}
+
+#BodyContent {
+	background-color: transparent !important;
 }
 
 /*-------Bug Tables formatting -----------*/
