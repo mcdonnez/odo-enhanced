@@ -24,6 +24,10 @@ ul.SectionTabsList, .LeftMenuColumn, .RightMenuColumn {
 	background-color: black;
 }
 
+img[src$="A.png"] {
+	content: url("https://s.qualtrics.com/ControlPanel/File.php?F=F_9BK8qpm1Fhu6J9P") !important;
+};
+
 /*-------Bug Tables formatting -----------*/
 
 #bugResults tr th:first-child {
