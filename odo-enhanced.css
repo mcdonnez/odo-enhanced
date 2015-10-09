@@ -59,6 +59,11 @@ div.SearchBar {
 	background-color: transparent !important;
 }
 
+#EmergencyLoginCheckbox {
+	width: 20px;
+	height: 20px;
+}
+
 /*-------Bug Tables formatting -----------*/
 
 #bugResults tr th:first-child {
