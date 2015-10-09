@@ -26,7 +26,29 @@ ul.SectionTabsList, .LeftMenuColumn, .RightMenuColumn {
 
 img[src$="A.png"] {
 	content: url("https://s.qualtrics.com/ControlPanel/File.php?F=F_9BK8qpm1Fhu6J9P") !important;
-};
+}
+
+html body {
+	background-image: url("http://www.hdwallpaperscool.com/wp-content/uploads/2014/03/gaint-space-station-in-star-war-movie-free-download-fbulous-hd-widescreen-wallpapers-of-star-wars-movie-series.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100%;
+}
+
+div.SearchBar {
+	background-color: transparent !important;
+	border: none !important;
+}
+
+#QualtricsTimezonesTable {
+	background-color: aliceblue;
+	opacity: .7;
+}
+
+.btn.btn-success {
+	background-color: black !important;
+	border-color: #FFEE1C !important;
+}
 
 /*-------Bug Tables formatting -----------*/
 
