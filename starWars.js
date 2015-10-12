@@ -9,7 +9,7 @@ var background = {
 var pageLogo = {
 	1: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2n43aCvxR8EdRUF&V=1444520373", //Darth Vader
 	2: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Dw5zn24UferpIN&V=1444519104" //Bobba Fett
-}
+};
 var starWars = {
 	changeBackground: function(id) {
 		if (!id)
@@ -49,7 +49,7 @@ var starWars = {
 			if (textArea[i].innerHTML === "Popular Links:" ) {
 				textArea[i].innerHTML = "Common Portals:";
 			}
-			
+
 		}
 		//LEFT COLUMN
 		var textArea = document.querySelectorAll('#LeftMenuColumn > div.Title');
@@ -66,7 +66,7 @@ var starWars = {
 			if (textArea[i].innerHTML === "My Dashboard" ) {
 				textArea[i].innerHTML = "Control Panel";
 			}
-			
+
 		}
 	},
 	changeBarnaby: function() {
