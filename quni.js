@@ -40,7 +40,7 @@ case 'QUni':
   favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6RJLiTPRHwyfD7v&V=1437974317';
   break;
 default:
-  favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_bDVm16QoQrNWsx7&V=1436414154';
+  favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2uFeAD2JgW7MunH&V=1444571035';
 }
 switch (urlParams["b"]) {
 case 'TicketViewer':
@@ -623,7 +623,7 @@ xmlhttp.onreadystatechange = function () {
   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	var response = xmlhttp.response;
 	//Create Container
-	$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' onclick='toggleSnippets()' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+	$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' onclick='toggleSnippets()' id='SnippetsHeader'>Task List</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
 	// PLACE SNIPPETS IN CONTAINER
 	if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
 	  var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
@@ -659,9 +659,9 @@ xmlhttp.onreadystatechange = function () {
 	} else {
 	  //ALERT THAT NO SNIPPETS ARE PRESENT
 	  var snippetSideBar = document.getElementById('snippetsContainer');
-	  snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
+	  snippetSideBar.innerHTML = "<div style='background: url(http://img04.deviantart.net/5211/i/2012/300/6/1/render_darth_vader_by_gamazor-d5j3itr.png) no-repeat left top; background-size: contain; height: 70px;'></div><div style='padding:5px;text-align:center;font-size:10pt;'>Admiral, you have not yet set your goals. You have failed me for the last time.</div>";
 	  snippetSideBar.style.cursor = "pointer";
-	  snippetSideBar.style.outline = "1px solid #04a365";
+	  snippetSideBar.style.outline = "1px solid yellow";
 	}
 	//ALLOW FOR EDITING OF SNIPPETS
 	snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
@@ -729,7 +729,7 @@ function addMario() {
 //CHANGE TAB NAME
 function addPlaybook() {
   var tabList = document.getElementsByClassName('SectionTabsList')[0];
-  $(tabList).append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
+  $(tabList).append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Access the Force</li>');
 	//SET WINDOW HEIGHT
   document.getElementById("playbookTab").addEventListener("click", function(){
 	$(".SectionTabsList > li").removeClass('ActiveTab');
@@ -741,8 +741,8 @@ function addPlaybook() {
 	playbookArea.innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
 	//CHANGE THE PAGE TITLE
 	var pageTitle = document.getElementsByClassName('PageTitle')[0];
-	pageTitle.innerHTML = "Playbook";
-	document.title = "Odo | Playbook";
+	pageTitle.innerHTML = "Access the Force";
+	document.title = "Odo | Access the Force";
   });
 
 	//SET WINDOW HEIGHT
@@ -781,7 +781,7 @@ function getCal() {
 //ADD FILE HELP DESK CLINIC TAB TO EVERY PAGE:
 function addHelpDesk() {
   var tabList = document.getElementsByClassName('SectionTabsList')[0];
-  $(tabList).append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
+  $(tabList).append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Ask Yoda</li>');
 	//SET WINDOW HEIGHT
   document.getElementById("helpdeskTab").addEventListener("click", function(){
 	$(".SectionTabsList > li").removeClass('ActiveTab');
@@ -793,8 +793,8 @@ function addHelpDesk() {
 	helpdeskArea.innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
 	//CHANGE THE PAGE TITLE
 	var pageTitle = document.getElementsByClassName('PageTitle')[0];
-	pageTitle.innerHTML = "Help Desk Request";
-	document.title = "Odo | Help Desk Request";
+	pageTitle.innerHTML = "Ask Yoda";
+	document.title = "Odo | Ask Yoda";
   });
 };
 addHelpDesk();

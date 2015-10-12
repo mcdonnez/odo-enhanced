@@ -1,7 +1,37 @@
 div.Masthead {
 	color: #050005;
-	background-color: #000000;
+	background: #000;
 }
+/*CHANGE TOOLS FOR LIGHTSABER*/
+#ToolsMenuButton > span.icon.icon-wrench {
+	background: url(https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_9ttqMrov8UHRm6h&V=1444522528) center no-repeat;
+	background-size: contain;
+}
+.icon-wrench:before {
+    visibility: hidden;
+}
+#AccountMenuButton > span.icon.icon-user-framed {
+	background: url(https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_0UuZh4729BCMNlb&V=1444522410) center no-repeat;
+	background-size: contain;
+}
+.icon-user-framed:before {
+	visibility: hidden;
+}
+/*THIS CHANGES SELECTED STATE TO BE YELLOW*/
+.PageMenuBar .MenuItemSelected a {
+	    color: rgb(255, 238, 28) !important;
+}
+.PageMenuBar .MenuItemSelected {
+	border-color: rgb(255, 238, 28) !important;
+}
+.ActiveTab a {
+    color: #007ac0;
+    font-weight: bold;
+}
+
+
+
+
 
 div.PageTitle {
 	color: #FFEE1C;
@@ -27,11 +57,40 @@ ul.SectionTabsList, .SectionTab {
 .btn {
 	background-color: black;
 }
-
-img[src$="A.png"] {
+/*CHANGE TIERING PICTURES*/
+/*Academic --> Stormtrooper*/
+img[src$="img/A.png"] {
 	content: url("https://s.qualtrics.com/ControlPanel/File.php?F=F_9BK8qpm1Fhu6J9P") !important;
 }
-
+/*Brand Admin --> Yoda*/
+img[src$="img/BA.png"] {
+	content: url("http://www.wired.com/wp-content/uploads/2015/08/Yoda-featured.jpg") !important;
+}
+/*Lion --> Anakin to Darth Vader*/
+img[src$="img/L.png"] {
+	content: url("http://i3.mirror.co.uk/incoming/article5078719.ece/ALTERNATES/s615/Darth-Vader.jpg") !important;
+}
+img[src$="img/LC.png"] {
+	content: url("http://img1.wikia.nocookie.net/__cb20130621175844/starwars/images/6/6f/Anakin_Skywalker_RotS.png") !important;
+}
+/*Tiger --> Palpatine*/
+img[src$="img/T.png"] {
+	content: url("http://schmoesknow.com/wp-content/uploads/2013/08/Dark_Lightning.jpg") !important;
+}
+img[src$="img/TC.png"] {
+	content: url("https://s3-us-west-2.amazonaws.com/filmdispenser/assets/images/Star_Wars_pics/recasting-star-wars/Senator_palpatine.png") !important;
+}
+/*Rhino --> Boba to Jango*/
+img[src$="img/R.png"] {
+	content: url("http://www.previewsworld.com/catalogimages/STK_IMAGES/STK520001-540000/STK529138.jpg") !important;
+}
+img[src$="img/BR.png"] {
+	content: url("http://vignette3.wikia.nocookie.net/disney/images/e/e1/Boba_fett.jpg/revision/latest?cb=20141220140111") !important;
+}
+/*Unknown --> Jar Jar*/
+img[src$="img/Unknown.png"] {
+	content: url("http://media.giphy.com/media/olnuKV0a3Et5C/giphy.gif") !important;
+}
 html body {
 	background-image: url("https://blurppy.files.wordpress.com/2015/09/star-wars-the-force-awakens-hd-wallpaper.png");
 	background-repeat: no-repeat;
