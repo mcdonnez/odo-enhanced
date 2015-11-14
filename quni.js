@@ -570,7 +570,7 @@ function addPlaybook() {
 	$('#playbookTab').addClass(' ActiveTab');
 	$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
 	//ADD IFRAME
-	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
+	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
 	//CHANGE THE PAGE TITLE
 	document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
 	document.title = "Odo | Playbook";
