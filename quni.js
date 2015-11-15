@@ -13,7 +13,6 @@ var SnippetsOn;
 var SnippetsClosed;
 var SnippetsDay;
 var SnippetsColor;
-console.log(HelpDeskTabOn);
 function getVars() {
   chrome.storage.sync.get({
     em: "",
@@ -40,7 +39,6 @@ function getVars() {
   });
 }
 getVars();
-console.log(HelpDeskTabOn);
 var urlParams;
 var product = "RS";
 var feature = "";
@@ -193,7 +191,6 @@ function changeTitle(){
 	}
 };
 changeTitle();
-console.log(HelpDeskTabOn);
 /* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var feature;
 var product;
@@ -242,7 +239,6 @@ function insertBugs(jiraBugs) {
 	$('#jiraType').val('Bug');
 }
 var bug;
-console.log(HelpDeskTabOn);
 function getJira(jira) {
 	console.log(jira);
 	if (jira.feature){
@@ -458,7 +454,6 @@ if (document.getElementById('cancel') && !document.getElementById('cancelPrompt'
 };
 // ---- Snippets on Home Page ----
 
-toggleSnippets();
   //RETRIEVE CONTENT FROM SNIPPETS PAGE
 function setSnippetsContainer () {
 var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
@@ -470,7 +465,7 @@ xmlhttp.onreadystatechange = function () {
   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	var response = xmlhttp.response;
 	//Create Container
-	$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' onclick='toggleSnippets()' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+	$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
 	// PLACE SNIPPETS IN CONTAINER
 	if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
 	  var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
@@ -480,6 +475,7 @@ xmlhttp.onreadystatechange = function () {
 	  //CLEAN EACH SNIPPET ONE BY ONE
 	  for (i = 0; i < table.rows.length; i++) {
 		var row = table.rows[i];
+		row.style.background = "transparent";
 		//COLOR SNIPPETS WHEN COMPLETED
 		var checkBox = row.getElementsByTagName('input')[0];
 		//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
@@ -512,14 +508,33 @@ xmlhttp.onreadystatechange = function () {
 	//ALLOW FOR EDITING OF SNIPPETS
 	snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
 	//CLOSE SNIPPETS
-	/*if (SnippetsClosed) {
+	if (SnippetsClosed) {
 		table.style.display = "none";
-	}*/
+	}
   };
 };
 };
+// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
+$("#LeftMenuColumn").on("click", "#SnippetsHeader", function(){
+    var container = document.getElementById('snippetsContainer');
+	if (container != null) { 
+	  if (container.style.display === "none") {
+		container.style.display = "table";
+		chrome.storage.sync.set({
+		    sc: false
+		  });
+	  } else {
+		container.style.display = "none";
+		chrome.storage.sync.set({
+		    sc: true
+		  });
+	  }
+	}
+});
 
-
+$("h2").on("click", "p.test", function(){
+    alert($(this).text());
+});
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
 function konami() {
@@ -566,11 +581,12 @@ function addPlaybook() {
   $('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
 	//SET WINDOW HEIGHT
   document.getElementById("playbookTab").addEventListener("click", function(){
+  	window.location.hash = "playbook";
 	$(".SectionTabsList > li").removeClass('ActiveTab');
 	$('#playbookTab').addClass(' ActiveTab');
 	$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
 	//ADD IFRAME
-	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWSmk0SW0tN0FrSkU#noHeader'></iframe>";
+	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
 	//CHANGE THE PAGE TITLE
 	document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
 	document.title = "Odo | Playbook";
@@ -587,12 +603,6 @@ function addons() {
 		}
 		//addDesign();
 	}
-
-	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
-		if (SnippetsOn) {
-			setSnippetsContainer();
-		}
-	}
 	if (HelpDeskTabOn) {
 		addHelpDesk();
 	}
@@ -602,7 +612,14 @@ function addons() {
 	if (DesignTabOn) {
 		addDesign();
 	}
-	addChromeOptions();
+	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
+		if (SnippetsOn) {
+			setSnippetsContainer();
+			addChromeOptions();
+		}
+	}
+	
+	
 }
 /*DEV-- Google Calendar APIs experiment --*/
 function getCal() {
@@ -642,8 +659,8 @@ function addChromeOptions() {
 	$('#optionsTab').addClass(' ActiveTab');
 	$('.SectionButtonsContainer, .TimezonesTableContainer').fadeIn();
 	//ADD IFRAME
-	var optionsUrl = "chrome-extension://bkieinbojdflcfobmonadoeodcppdfka/options.html"; //chrome.extension.getURL("src/options/options.html"); 
-	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
+	var optionsUrl = chrome.extension.getURL("options.html"); 
+	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 800px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
 	//CHANGE THE PAGE TITLE
 	document.getElementsByClassName('PageTitle')[0].innerHTML = "Chrome Extension Options";
 	document.title = "Odo | Extension Options";
@@ -664,14 +681,18 @@ function addDesign() {
 	document.title = "Odo | Design";
   });
 }
-// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
-function toggleSnippets() {
-  var container = document.getElementById('snippetsContainer');
-	if (container != null) { 
-	  if (container.style.display === "none") {
-		container.style.display = "block";
-	  } else {
-		container.style.display = "none";
-	  }
-	}
+
+
+
+function checkHash() {
+    if(window.location.hash == "#playbook") {
+        $(".SectionTabsList > li").removeClass('ActiveTab');
+		$('#playbookTab').addClass(' ActiveTab');
+		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+		//ADD IFRAME
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
+		//CHANGE THE PAGE TITLE
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
+		document.title = "Odo | Playbook";
+    }
 }

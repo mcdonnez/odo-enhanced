@@ -12,12 +12,14 @@ function save_options() {
   var snippetsClosed = document.getElementById('CloseSnippets');
   var snippetDay = document.getElementById('ColorSnippets').value;
   var snippetColor = document.getElementById('SnippetColor').value;
+  var theme = document.getElementById('Theme').value;
   chrome.storage.sync.set({
     em: createEmail,
     hd: helpDesk,
     de: design,
     ee: easterEggs,
     pb: playbook,
+    tm: theme,
     s: snippets,
     sc: snippetsClosed,
     sd: snippetDay,
@@ -45,6 +47,7 @@ function restore_options() {
     sc: "",
     sd: 4,
     sl: "#04b26e",
+    tm: ""
   }, function(items) {
     document.getElementById('EmailButton').checked = items.em;
     document.getElementById('HelpDesk').checked = items.hd;
@@ -55,6 +58,7 @@ function restore_options() {
     document.getElementById('CloseSnippets').checked = items.sc;
     document.getElementById('ColorSnippets').value = items.sd;
     document.getElementById('SnippetColor').value = items.sl;
+    document.getElementById('Theme').value = items.tm;
 
   });
 }
