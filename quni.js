@@ -34,7 +34,6 @@ function getVars() {
     SnippetsClosed = items.sc;
     SnippetsDay = items.sd;
     SnippetsColor = items.sl;
-    console.log(items.hd);
     addons();
   });
 }

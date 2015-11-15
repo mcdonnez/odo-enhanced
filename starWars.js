@@ -93,7 +93,10 @@ function changeTheme() {
 		starWars.changeBackground();
 		starWars.changeText();
 		starWars.changeBarnaby();
-		chrome.tabs.insertCSS({file: "starWars.css"});
+		document.head.insertAdjacentHTML('beforeend',
+		    '<link rel="stylesheet" type="text/css" href="' + 
+		           chrome.runtime.getURL("starWars.css") + '">'
+		);
 	}
 }
 

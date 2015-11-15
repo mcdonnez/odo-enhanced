@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Flat Theme, Favicons, Autofill Tickets, QWiki Integration, Improved Jira Integration, Visible Snippets",
-	"version": "1.5.0.0",
+	"version": "1.5.0.3",
 	"permissions": [
 		"activeTab",
 		"https://ajax.googleapis.com/",
@@ -13,7 +13,7 @@
 		"storage",
 		"tabs"
 	],
-	"web_accessible_resources": ["options.html"],
+	"web_accessible_resources": ["options.html", "starWars.css"],
 	"icons": { "128": "icon.png"},
 	"options_page": "options.html",
 	"content_scripts": [
