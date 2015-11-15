@@ -601,7 +601,6 @@ function addons() {
 		if (EasterEggsOn) {
 			konami();
 		}
-		//addDesign();
 	}
 	if (HelpDeskTabOn) {
 		addHelpDesk();
@@ -695,4 +694,15 @@ function checkHash() {
 		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
 		document.title = "Odo | Playbook";
     }
+}
+// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
+function toggleSnippets() {
+  var container = document.getElementById('snippetsContainer');
+	if (container != null) { 
+	  if (container.style.display === "none") {
+		container.style.display = "block";
+	  } else {
+		container.style.display = "none";
+	  }
+	}
 }
