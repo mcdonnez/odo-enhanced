@@ -680,8 +680,9 @@ function addons() {
 	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
 		if (SnippetsOn) {
 			setSnippetsContainer();
-			addChromeOptions();
+			
 		}
+		addChromeOptions();
 	}
 }
 

@@ -47,7 +47,7 @@ function restore_options() {
     sc: "",
     sd: 4,
     sl: "#04b26e",
-    tm: ""
+    tm: null
   }, function(items) {
     document.getElementById('EmailButton').checked = items.em;
     document.getElementById('HelpDesk').checked = items.hd;
@@ -59,13 +59,16 @@ function restore_options() {
     document.getElementById('ColorSnippets').value = items.sd;
     document.getElementById('SnippetColor').value = items.sl;
     document.getElementById('Theme').value = items.tm;
-
+    makeOpaque();
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('Snippets').addEventListener('change', makeOpaque);
 document.getElementById('save').addEventListener('click',
     save_options);
+document.getElementById('Wrapper').addEventListener('change',
+    save_options);
+
+document.getElementById('Snippets').addEventListener('change', makeOpaque);
 
 function makeOpaque() {
   var snipOps = document.getElementsByClassName('SubOption')[0];
@@ -75,4 +78,7 @@ function makeOpaque() {
   } else {
     snipOps.style.opacity = ".2";
   }
+}
+function changeLabel(el) {
+  console.log(el);
 }

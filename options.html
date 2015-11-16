@@ -2,46 +2,57 @@
 Please choose the options that best fit your Odo experience: 
 	<div class='Option'>
 		<div class='OptionSection'>Tabs</br>
-			<label for='HelpDesk'>Add a Help Desk tab to each page
-				<input value='helpdesk' id='HelpDesk' type='checkbox'/>
+			<div class='Description'>Choose the custom tabs you would like to integrate</div>
+			<label class='CheckLabel' for='HelpDesk'>
+				<input class='Check' value='helpdesk' id='HelpDesk' type='checkbox'/>
+				<span>Help Desk Survey</span>
 			</label><br>
-			<label for='Playbook'>Add Playbook to certain pages
-				<input value='playbook' id='Playbook' type='checkbox'/>
+			<label class='CheckLabel' for='Playbook'>
+				<input class='Check' value='playbook' id='Playbook' type='checkbox'/>
+				<span>Playbook</span>
 			</label><br>
-			<label for='Design'>Add tab for Design Resources (Theme Design Only)
-				<input value='design' id='Design' type='checkbox'/>
+			<label class='CheckLabel' for='Design'>
+				<input class='Check' value='design' id='Design' type='checkbox'/>
+				<span>Design Resources (Theme Design Only)</span>
 			</label><br>
 		</div>
 		<div class='OptionSection'>Snippets</br>
-			<label for='Snippets'>Add Snippets to Odo Home page
-				<input value='snippets' id='Snippets' type='checkbox'/>
+			<div class='Description'>The following options all have to do with Snippets</div>
+			<label class='CheckLabel' for='Snippets'>
+				<input class='Check' value='snippets' id='Snippets' type='checkbox'/>
+				<span>Add Snippets to Odo Home page</span>
 			</label><br>
 			<div class='SubOption'>
-				<label class='' for='CloseSnippets'>Close Snippets by Default
-					<input value='closesnippets' id='CloseSnippets' type='checkbox'/>
+				<label class='CheckLabel'  for='CloseSnippets'>
+					<input class='Check' value='closesnippets' id='CloseSnippets' type='checkbox'/>
+					<span>Collapse snippets by default (can be opened by clicking Snippets)</span>
 				</label></br>
-				<label for='ColorSnippets'>Choose which day to begin snippet coloring:
-					<select id='ColorSnippets'>
-						<option value='1'>Monday</option>
-						<option value='2'>Tuesday</option>
-						<option value='3'>Wednesday</option>
-						<option value='4'>Thursday</option>
-						<option value='5'>Friday</option>
-					</select>
-				</label></br>
-				<label for="SnippetColor">Choose color for snippet alerts
-					<input type='color' id='SnippetColor'/>
-				</label>
-				<br><br><br>
+				<div class='OtherType'>
+					<label class='NonCheckLabel' for='ColorSnippets'>On which day should Odo highlight unfinished snippets?<br>
+						<select id='ColorSnippets'>
+							<option value='1'>Monday</option>
+							<option value='2'>Tuesday</option>
+							<option value='3'>Wednesday</option>
+							<option value='4'>Thursday</option>
+							<option value='5'>Friday</option>
+						</select>
+					</label></br>
+					<label class='NonCheckLabel' for="SnippetColor">Choose color for snippet highlights<br>
+						<input type='color' id='SnippetColor'/>
+					</label>
+				</div>
 			</div>
 		</div>
 		<div class='OptionSection'>Buttons</br>
-			<label for='EmailButton'>Add a "Create Email" Button
-				<input value='emailbutton' id='EmailButton' type='checkbox'/>
+			<div class='Description'>Add Custom buttons to Odo</div>
+			<label class='CheckLabel' for='EmailButton'>
+				<input class='Check' value='emailbutton' id='EmailButton' type='checkbox'/>
+				<span>Create Email</span>
 			</label><br>
 		</div>
 		<div class='OptionSection hidden'>Themes</br>
-			<label for='StarWars'>Choose a theme: 
+			<div class='Description'>Choose the themes you want for Odo</div>
+			<label class='NonCheckLabel' for='StarWars'>Choose a theme: <br>
 				<select id='Theme'>
 					<option default value='null'>None</option>
 					<option value='starwars' id='StarWars'>Star Wars</option>
@@ -49,8 +60,10 @@ Please choose the options that best fit your Odo experience:
 			</label><br>
 		</div>
 		<div class='OptionSection'>Misc</br>
-			<label for='EasterEggs'>Allow Easter Eggs (may impact load times)
-				<input value='eastereggs' id='EasterEggs' type='checkbox'/>
+			<div class='Description'>Choose any other options here: </div>
+			<label class='CheckLabel' for='EasterEggs'>
+				<input class='Check' value='eastereggs' id='EasterEggs' type='checkbox'/>
+				<span>Allow Easter Eggs (may impact load times)</span>
 			</label><br>
 		</div>
 		
@@ -62,7 +75,7 @@ Please choose the options that best fit your Odo experience:
 
 <style>
 body {
-
+	font-weight: 200;
 	background: #eaeaea;
 	text-align: center;
 }
@@ -74,29 +87,76 @@ body {
 }
 .Option {
 	margin: 2em auto;
-	text-align: left;
-	max-width: 500px;
+	text-align: center;
+	max-width: 1200px;
 	font-size: 14px;
 }
 .OptionSection {
 	text-transform: uppercase;
 	padding: .6em;
-	display: block;
+	display: inline-block;
 	box-shadow: 0 0 15px #ddd;
 	margin: 2em;
 	border-radius: 15px;
 	background: #fff;
+	font-size: 20px;
+	width: 400px;
+	vertical-align: top;
+	text-align: center;
+}
+.Description {
+	font-size: 15px;
+	color: #aaa;
+	padding: 10px;
+	text-transform: none;
 }
 #status {
 	margin-top: 30px;
 }
 label {
-	padding: 5px 8px;
-	margin: 15px auto;
+	display: inline-block;
+	font-size: 16px;
 	text-transform: none;
+	width: 90%;
 }
-.SubOption {
-	margin-left: 1em;
+.CheckLabel span {
+	padding: 3px 12px;
+	display: inline-block;
+	margin: 3px auto;
+	text-transform: none;
+	border: 2px solid #ddd;
+	border-radius: 15px;
+	width: 350px;
+	transition: .3s;
+	cursor: pointer;
+	background-color: #cacaca;
+}
+.CheckLabel span:hover {
+	background-color: #ddd;
+}
+input[type=checkbox]:checked + span:hover {
+	background-color: #14b375;
+}
+input[type=checkbox]:checked + span {
+	background-color: #04a365;
+	color: #fff;
+	border-color: #14b375;
+}
+.NonCheckLabel {
+}
+input[type=checkbox], select, input[type=color] {
+	float: right;
+}
+input[type=checkbox] {
+	visibility: hidden;
+}
+.OtherType {
+	text-align: left;
+	padding: 5px 12px;
+	display: block;
+}
+select, input[type=color] {
+	display: block;
 }
 .hidden {
 	display:none;
@@ -115,6 +175,7 @@ label {
 #save:hover {
 	background: #7DD45E;
 }
+
 </style>
 
 <script src="options.js"></script>
