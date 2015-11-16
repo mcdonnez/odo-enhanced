@@ -5,38 +5,39 @@ var DesignTabOn;
 var SnippetsOn;
 var PlaybookTabOn;
 var urlParams;
+
 function getVars() {
-  chrome.storage.sync.get({
-    tm: "",
-    em: "",
-    hd: true,
-    de: "",
-    pb: "",
-    s: true
-  }, function(items) {
-    Theme = items.tm;
-    EmailButtonOn = items.em;
-    HelpDeskTabOn = items.hd;
-    DesignTabOn = items.de;
-    PlaybookTabOn = items.pb;
-    SnippetsOn = items.s;
-    changeTheme();
-  });
+	chrome.storage.sync.get({
+		tm: "",
+		em: "",
+		hd: true,
+		de: "",
+		pb: "",
+		s: true
+	}, function (items) {
+		Theme = items.tm;
+		EmailButtonOn = items.em;
+		HelpDeskTabOn = items.hd;
+		DesignTabOn = items.de;
+		PlaybookTabOn = items.pb;
+		SnippetsOn = items.s;
+		changeTheme();
+	});
 }
 getVars();
 //SET URL PARAMS
 (window.onpopstate = function () {
-  var match,
-	pl = /\+/g, // Regex for replacing addition symbol with a space
-	search = /([^&=]+)=?([^&]*)/g,
-	decode = function (s) {
-	  return decodeURIComponent(s.replace(pl, " "));
-	},
-	query = window.location.search.substring(1);
+	var match,
+		pl = /\+/g, // Regex for replacing addition symbol with a space
+		search = /([^&=]+)=?([^&]*)/g,
+		decode = function (s) {
+			return decodeURIComponent(s.replace(pl, " "));
+		},
+		query = window.location.search.substring(1);
 
-  urlParams = {};
-  while (match = search.exec(query))
-	urlParams[decode(match[1])] = decode(match[2]);
+	urlParams = {};
+	while (match = search.exec(query))
+		urlParams[decode(match[1])] = decode(match[2]);
 })();
 
 var background = {
@@ -52,9 +53,9 @@ var pageLogo = {
 	2: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Dw5zn24UferpIN&V=1444519104" //Bobba Fett
 }
 var starWars = {
-	changeBackground: function(id) {
+	changeBackground: function (id) {
 		if (!id)
-		id = Math.floor((Math.random() * Object.keys(background).length) + 1);
+			id = Math.floor((Math.random() * Object.keys(background).length) + 1);
 		document.body.style.backgroundImage = "url('" + background[id] + "')";
 	},
 	changeText: function () {
@@ -65,7 +66,7 @@ var starWars = {
 		document.querySelectorAll("a[href$='/?TopNav=Tickets']")[0].innerHTML = 'Orders';
 		//TAB-LIST
 		var tabList = document.querySelectorAll("body > div.SectionTabsBarContainer > div > ul > li > a");
-		for (i=0; i<tabList.length; i++) {
+		for (i = 0; i < tabList.length; i++) {
 			var s = tabList[i].href;
 			if (s.indexOf("&a=MyProfile") > -1) {
 				tabList[i].innerHTML = 'Identicard';
@@ -77,44 +78,44 @@ var starWars = {
 		}
 		//RIGHT COLUMN
 		var textArea = document.querySelectorAll('#RightMenuColumn > h2');
-		for (i=0; i < textArea.length; i++ ) {
-			if (textArea[i].innerHTML === "My Tickets:" ) {
+		for (i = 0; i < textArea.length; i++) {
+			if (textArea[i].innerHTML === "My Tickets:") {
 				textArea[i].innerHTML = "Orders:";
 			}
-			if (textArea[i].innerHTML === "Wifi Password:" ) {
+			if (textArea[i].innerHTML === "Wifi Password:") {
 				textArea[i].innerHTML = "Slice Central Computer:";
 			}
-			if (textArea[i].innerHTML === "Emergencies:" ) {
+			if (textArea[i].innerHTML === "Emergencies:") {
 				textArea[i].innerHTML = "Emergency Power:";
 			}
-			if (textArea[i].innerHTML === "Popular Links:" ) {
+			if (textArea[i].innerHTML === "Popular Links:") {
 				textArea[i].innerHTML = "Common Portals:";
 			}
-			
+
 		}
 		//LEFT COLUMN
 		var textArea = document.querySelectorAll('#LeftMenuColumn > div.Title');
-		for (i=0; i < textArea.length; i++ ) {
-			if (textArea[i].innerHTML === "Squawkbox" ) {
+		for (i = 0; i < textArea.length; i++) {
+			if (textArea[i].innerHTML === "Squawkbox") {
 				textArea[i].innerHTML = "Comlink";
 			}
-			if (textArea[i].innerHTML === "Location Channels" ) {
+			if (textArea[i].innerHTML === "Location Channels") {
 				textArea[i].innerHTML = "Planet Arrays";
 			}
-			if (textArea[i].innerHTML === "Topic Channels" ) {
+			if (textArea[i].innerHTML === "Topic Channels") {
 				textArea[i].innerHTML = "Frequencies";
 			}
-			if (textArea[i].innerHTML === "My Dashboard" ) {
+			if (textArea[i].innerHTML === "My Dashboard") {
 				textArea[i].innerHTML = "Control Panel";
 			}
-			
+
 		}
 	},
-	changeBarnaby: function() {
+	changeBarnaby: function () {
 		var choice = Math.floor((Math.random() * Object.keys(pageLogo).length) + 1);
 		document.querySelectorAll('body > div.Masthead > a > img')[0].src = pageLogo[choice];
 	},
-	updateHeader: function() {
+	updateHeader: function () {
 		var currentHeader = document.getElementsByClassName('PageTitle')[0];
 		if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
 			currentHeader.innerHTML = "Comlink";
@@ -130,14 +131,14 @@ var starWars = {
 			currentHeader.innerHTML = "Dark Side Legends";
 		}
 	},
-	updateKB: function() {
+	updateKB: function () {
 
 	}
 };
 
 var currentUrl = window.location.href;
-		var usingKB = currentUrl.indexOf("index.php") != -1;
-		console.log(usingKB);
+var usingKB = currentUrl.indexOf("index.php") != -1;
+console.log(usingKB);
 
 function changeTheme() {
 	if (Theme === "starwars") {
@@ -163,10 +164,9 @@ function changeTheme() {
 		}
 		//LOAD ADDITIONAL STYLESHEET
 		document.head.insertAdjacentHTML('beforeend',
-		    '<link rel="stylesheet" type="text/css" href="' + 
-		           chrome.runtime.getURL("starWars.css") + '">'
+			'<link rel="stylesheet" type="text/css" href="' +
+			chrome.runtime.getURL("starWars.css") + '">'
 		);
 		starWars.updateHeader();
 	}
 }
-
