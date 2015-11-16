@@ -9,7 +9,7 @@ function save_options() {
   var easterEggs = document.getElementById('EasterEggs').checked;
   var playbook = document.getElementById('Playbook').checked;
   var snippets = document.getElementById('Snippets').checked;
-  var snippetsClosed = document.getElementById('CloseSnippets');
+  var snippetsClosed = document.getElementById('CloseSnippets').checked;
   var snippetDay = document.getElementById('ColorSnippets').value;
   var snippetColor = document.getElementById('SnippetColor').value;
   var theme = document.getElementById('Theme').value;
