@@ -2,20 +2,24 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Flat Theme, Favicons, Autofill Tickets, QWiki Integration, Improved Jira Integration, Visible Snippets",
-	"version": "1.4.4.8",
+	"version": "1.5.0.3",
 	"permissions": [
 		"activeTab",
 		"https://ajax.googleapis.com/",
 		"http://odo.corp.qualtrics.com/*",
 		"http://qwiki.dev.qualtrics.com/*",
 		"https://zachs-webservices.herokuapp.com/*",
-		"http://mcdonnellteach.com/*"
+		"http://mcdonnellteach.com/*",
+		"storage",
+		"tabs"
 	],
+	"web_accessible_resources": ["options.html", "starWars.css"],
 	"icons": { "128": "icon.png"},
+	"options_page": "options.html",
 	"content_scripts": [
 	{
 	"matches": ["http://odo.corp.qualtrics.com/*"],
-	"js": ["resources/jquery-1.11.3.min.js","resources/jquery.dataTables.min.js","quni.js","resources/tinyeditor/tinyeditor.js"],
+	"js": ["resources/jquery-1.11.3.min.js","resources/jquery.dataTables.min.js","quni.js","resources/tinyeditor/tinyeditor.js", "starWars.js"],
 	"css": ["resources/jquery.dataTables.css","odo-enhanced.css","resources/tinyeditor/style.css"],
 	"run_at": "document_end"
 	}
