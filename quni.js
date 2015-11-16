@@ -13,6 +13,7 @@ var SnippetsOn;
 var SnippetsClosed;
 var SnippetsDay;
 var SnippetsColor;
+var Theme
 function getVars() {
   chrome.storage.sync.get({
     em: "",
@@ -24,6 +25,7 @@ function getVars() {
     sc: "",
     sd: 4,
     sl: "#04b26e",
+    tm: ""
   }, function(items) {
     EmailButtonOn = items.em;
     HelpDeskTabOn = items.hd;
@@ -34,6 +36,7 @@ function getVars() {
     SnippetsClosed = items.sc;
     SnippetsDay = items.sd;
     SnippetsColor = items.sl;
+    Theme = items.tm;
     addons();
   });
 }
@@ -465,6 +468,9 @@ xmlhttp.onreadystatechange = function () {
 	var response = xmlhttp.response;
 	//Create Container
 	$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+	if (Theme === "starwars") {
+			document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
+		}
 	// PLACE SNIPPETS IN CONTAINER
 	if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
 	  var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
@@ -530,10 +536,18 @@ $("#LeftMenuColumn").on("click", "#SnippetsHeader", function(){
 	  }
 	}
 });
-
-$("h2").on("click", "p.test", function(){
-    alert($(this).text());
-});
+/*DEV-- Google Calendar APIs experiment --*/
+function getCal() {
+  $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
+	.done(function (data) {
+	  alert("Data Loaded: " + data);
+	})
+	.fail(function (error) {
+	  alert("error" + error.responseJSON);
+	  console.log(error);
+	});
+};
+/*--- Easter Eggs ---*/
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
 function konami() {
@@ -573,64 +587,9 @@ function addMario() {
 	document.title = "Odo | Important Stuff";
   });
 };
-/*--- Add Playbook as a tab ---*/
 
-//CHANGE TAB NAME
-function addPlaybook() {
-  $('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
-	//SET WINDOW HEIGHT
-  document.getElementById("playbookTab").addEventListener("click", function(){
-  	window.location.hash = "playbook";
-	$(".SectionTabsList > li").removeClass('ActiveTab');
-	$('#playbookTab').addClass(' ActiveTab');
-	$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-	//ADD IFRAME
-	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
-	//CHANGE THE PAGE TITLE
-	document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
-	document.title = "Odo | Playbook";
-  });
-};
-function addons() {
-	//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
-	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
-		if (PlaybookTabOn) {
-			addPlaybook();
-		}
-		if (EasterEggsOn) {
-			konami();
-		}
-	}
-	if (HelpDeskTabOn) {
-		addHelpDesk();
-	}
-	if (EmailButtonOn) {
-		addEmailTicket();
-	}
-	if (DesignTabOn) {
-		addDesign();
-	}
-	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
-		if (SnippetsOn) {
-			setSnippetsContainer();
-			addChromeOptions();
-		}
-	}
-	
-	
-}
-/*DEV-- Google Calendar APIs experiment --*/
-function getCal() {
-  $.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
-	.done(function (data) {
-	  alert("Data Loaded: " + data);
-	})
-	.fail(function (error) {
-	  alert("error" + error.responseJSON);
-	  console.log(error);
-	});
-};
-/*--- Easter Eggs ---*/
+
+//CUSTOM TABS
 
 /*Adds the Help Desk tab to every page*/
 function addHelpDesk() {
@@ -680,28 +639,54 @@ function addDesign() {
   });
 }
 
+/*--- Add Playbook as a tab ---*/
 
+//CHANGE TAB NAME
+function addPlaybook() {
+  $('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
+	//SET WINDOW HEIGHT
+  document.getElementById("playbookTab").addEventListener("click", function(){
+  	window.location.hash = "playbook";
+	$(".SectionTabsList > li").removeClass('ActiveTab');
+	$('#playbookTab').addClass(' ActiveTab');
+	$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+	//ADD IFRAME
+	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
+	//CHANGE THE PAGE TITLE
+	document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
+	document.title = "Odo | Playbook";
+  });
+};
 
-function checkHash() {
-    if(window.location.hash == "#playbook") {
-        $(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#playbookTab').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
-		document.title = "Odo | Playbook";
-    }
-}
-// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
-function toggleSnippets() {
-  var container = document.getElementById('snippetsContainer');
-	if (container != null) { 
-	  if (container.style.display === "none") {
-		container.style.display = "block";
-	  } else {
-		container.style.display = "none";
-	  }
+function addons() {
+	//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
+	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
+		if (PlaybookTabOn) {
+			addPlaybook();
+		}
+		if (EasterEggsOn) {
+			konami();
+		}
+	}
+	if (HelpDeskTabOn) {
+		addHelpDesk();
+	}
+	if (EmailButtonOn) {
+		addEmailTicket();
+	}
+	if (DesignTabOn) {
+		addDesign();
+	}
+	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
+		if (SnippetsOn) {
+			setSnippetsContainer();
+			addChromeOptions();
+		}
 	}
 }
+
+
+
+
+
+

@@ -170,3 +170,14 @@ div.SearchBar {
 	font-size: 0px;
 }
 */
+/* FOR KB*/
+html body .mw-body {
+	background: rgba(255,255,255,.85);
+}
+#mw-page-base {
+	background: transparent;
+}
+#mw-panel {
+	background: rgba(255,255,255,.85);
+	border-radius: 8px;
+}
