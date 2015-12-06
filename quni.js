@@ -72,7 +72,7 @@ var status = "Open,'In Progress', Reopened";
 })();
 
 /*GET EMPLOYEE ID*/
-if (urlParams["eid"] != null) {
+if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
 	console.log("THIS RAN");
 	var intID = urlParams["eid"];
 	chrome.storage.sync.set({
@@ -491,7 +491,7 @@ function setSnippetsContainer () {
 	  if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 		var response = xmlhttp.response;
 		//Create Container
-		$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+		$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
 		if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
 			}
@@ -533,7 +533,11 @@ function setSnippetsContainer () {
 		  if (table.rows.length == numberComplete ) {
 		  	var snippetSideBar = document.getElementById('snippetsContainer');
 		  	snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
+		  	document.getElementById('SnippetsPreview').style.height = "0px";
 		  }
+		  //Add preview bar for when closed
+		  var numberIncomplete = table.rows.length - numberComplete;
+		  document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go"
 		} else {
 		  //ALERT THAT NO SNIPPETS ARE PRESENT
 		  var snippetSideBar = document.getElementById('snippetsContainer');
@@ -556,11 +560,13 @@ $("#LeftMenuColumn").on("click", "#SnippetsHeader", function(){
 	if (container != null) { 
 	  if (container.style.display === "none") {
 		container.style.display = "table";
+		document.getElementById('SnippetsPreview').style.display = "none";
 		chrome.storage.sync.set({
 		    sc: false
 		  });
 	  } else {
 		container.style.display = "none";
+		document.getElementById('SnippetsPreview').style.display = "block";
 		chrome.storage.sync.set({
 		    sc: true
 		  });
