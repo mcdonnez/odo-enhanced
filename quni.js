@@ -5,6 +5,8 @@ console.log("Success! Odo Enhanced Works!");
 /*-----Retrieve variables from Chrome storage--------*/
 
 var EmailButtonOn;
+var ClinicButtonOn;
+var MiniTicketOn;
 var HelpDeskTabOn;
 var DesignTabOn;
 var EasterEggsOn;
@@ -13,11 +15,15 @@ var SnippetsOn;
 var SnippetsClosed;
 var SnippetsDay;
 var SnippetsColor;
+var ShowGradProgressOn;
+var EmpID;
 var Theme
 
 function getVars() {
 	chrome.storage.sync.get({
 		em: "",
+		cl: "",
+		mt: '',
 		hd: true,
 		de: "",
 		ee: "",
@@ -26,9 +32,13 @@ function getVars() {
 		sc: "",
 		sd: 4,
 		sl: "#04b26e",
+		gp: true,
+		eid: "",
 		tm: ""
 	}, function (items) {
 		EmailButtonOn = items.em;
+		ClinicButtonOn = items.cl;
+		MiniTicketOn = items.mt;
 		HelpDeskTabOn = items.hd;
 		DesignTabOn = items.de;
 		EasterEggsOn = items.ee;
@@ -37,6 +47,8 @@ function getVars() {
 		SnippetsClosed = items.sc;
 		SnippetsDay = items.sd;
 		SnippetsColor = items.sl;
+		ShowGradProgressOn = items.gp;
+		EmpID = items.eid;
 		Theme = items.tm;
 		addons();
 	});
@@ -59,6 +71,16 @@ var status = "Open,'In Progress', Reopened";
 	while (match = search.exec(query))
 		urlParams[decode(match[1])] = decode(match[2]);
 })();
+
+/*GET EMPLOYEE ID*/
+if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
+	console.log("THIS RAN");
+	var intID = urlParams["eid"];
+	chrome.storage.sync.set({
+		eid: intID
+	});
+}
+
 /* --------- Sets the appropriate favicon to use (works with the new css by Matt Bloomfield) -------- */
 var favicon;
 switch (urlParams["a"]) {
@@ -152,14 +174,15 @@ default:
 changeFavicon(favicon);
 /* ------------- Add Email Button ---------------- */
 function addEmailTicket() {
-	container = document.getElementsByClassName('SectionButtonsContainer')[0];
-	var node = document.createElement("A");
-	var textnode = document.createTextNode("Create Email Ticket");
-	node.appendChild(textnode);
-	node.setAttribute("id", "newEmail");
-	node.setAttribute("class", "btn btn-success");
-	node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
-	container.appendChild(node);
+container = document.getElementsByClassName('SectionButtonsContainer')[0];
+var node = document.createElement("A");
+var textnode = document.createTextNode("Create Email Ticket");
+node.appendChild(textnode);
+node.setAttribute("id", "newEmail");
+node.setAttribute("class", "btn btn-success");
+node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
+container.appendChild(node);
+document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
 };
 
 /* ------------- Dynamic Favicons ---------------- */
@@ -471,12 +494,13 @@ function setSnippetsContainer() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var response = xmlhttp.response;
 			//Create Container
-			$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+			$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
 			if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
 			}
 			// PLACE SNIPPETS IN CONTAINER
 			if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
+				var numberComplete = 0;
 				var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
 				var snippetSideBar = document.getElementById('snippetsContainer');
 				snippetSideBar.innerHTML = finalOutput;
@@ -492,6 +516,7 @@ function setSnippetsContainer() {
 					var n = d.getDay();
 					if (checkBox.checked) {
 						row.style.display = "none";
+						numberComplete = numberComplete + 1;
 					} else if (n >= SnippetsDay) /*var set in chrome options */ {
 						row.style.outline = "1px solid " + SnippetsColor;
 					}
@@ -499,13 +524,25 @@ function setSnippetsContainer() {
 					row.deleteCell(0);
 					row.deleteCell(1);
 					//TRUNCATE LABELS ON SNIPPETS
-					var length = 40; //LENGTH OF SNIPPET POST TRUNCATION
+					var length = 40; //LENGTH OF SNIPPET POST BEFORE TRUNCATION
 					var rowContents = row.getElementsByTagName('td')[0];
 					//VERIFY THAT TRUNCATION IS NECESSARY
 					if (rowContents.innerHTML.length > length) {
 						var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
 						rowContents.innerHTML = replaceMe.substring(0, length) + "...";
 					}
+				}
+				//Congratulate if Snippets are completed
+				if (table.rows.length == numberComplete) {
+					var snippetSideBar = document.getElementById('snippetsContainer');
+					snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
+					document.getElementById('SnippetsPreview').style.height = "0px";
+				}
+				//Add preview bar for when closed
+				var numberIncomplete = table.rows.length - numberComplete;
+				document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go";
+				if (SnippetsClosed == false) {
+					document.getElementById('SnippetsPreview').style.display = "none";
 				}
 			} else {
 				//ALERT THAT NO SNIPPETS ARE PRESENT
@@ -520,20 +557,22 @@ function setSnippetsContainer() {
 			if (SnippetsClosed) {
 				table.style.display = "none";
 			}
-		};
-	};
-};
+		}
+	}
+}
 // ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
 $("#LeftMenuColumn").on("click", "#SnippetsHeader", function () {
 	var container = document.getElementById('snippetsContainer');
 	if (container != null) {
 		if (container.style.display === "none") {
 			container.style.display = "table";
+			document.getElementById('SnippetsPreview').style.display = "none";
 			chrome.storage.sync.set({
 				sc: false
 			});
 		} else {
 			container.style.display = "none";
+			document.getElementById('SnippetsPreview').style.display = "block";
 			chrome.storage.sync.set({
 				sc: true
 			});
@@ -678,14 +717,98 @@ function addons() {
 	if (EmailButtonOn) {
 		addEmailTicket();
 	}
+	if (ClinicButtonOn) {
+		addClinicTicket();
+	}
+	if (MiniTicketOn) {
+		minimizeTicketButton();
+	}
+	if ((ShowGradProgressOn) && (EmpID != "")) {
+		showQuniProgress();
+	}
 	if (DesignTabOn) {
 		addDesign();
 	}
 	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
 		if (SnippetsOn) {
 			setSnippetsContainer();
-
 		}
 		addChromeOptions();
 	}
 }
+
+function addClinicTicket() {
+	container = document.getElementsByClassName('SectionButtonsContainer')[0];
+	var node = document.createElement("A");
+	var textnode = document.createTextNode("Create Clinic Ticket");
+	node.appendChild(textnode);
+	node.setAttribute("id", "newClinic");
+	node.setAttribute("class", "btn btn-success");
+	node.setAttribute('onclick', 'Dialog("http://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
+	container.appendChild(node);
+	document.getElementById('newClinic').innerHTML = "<span class='icon btn-icon-plus'></span><span>Create Clinic Ticket</span>";
+}
+
+function minimizeTicketButton() {
+	var btnInner = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(3) > span:nth-child(2)');
+	btnInner.remove();
+	var btn = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(3)');
+	btn.parent().prepend(btn);
+}
+
+function showQuniProgress() {
+	var url = "http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&eid=" + EmpID + "&a=MyProfile&b=TicketsMyStats";
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", url, true);
+	xmlhttp.responseType = "document";
+	xmlhttp.send();
+	xmlhttp.onreadystatechange = function () {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var response = xmlhttp.response;
+			//Create Container
+			$('#LeftMenuColumn').prepend("<div class='Title' style='' id='GradProgHeader'>Quni Graduation Progress</div><div style='cursor:pointer' id='GradProgContainer'></div>");
+			if (Theme === "starwars") {
+				document.getElementById('SnippetsHeader').innerHTML = "Wookie Training";
+			}
+			var clinicTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
+			var phoneTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
+			var emailTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
+			clinicTickets = clinicTickets.replace(",", "");
+			phoneTickets = phoneTickets.replace(",", "");
+			emailTickets = emailTickets.replace(",", "");
+			clinicTickets = parseInt(clinicTickets);
+			phoneTickets = parseInt(phoneTickets);
+			emailTickets = parseInt(emailTickets);
+			var goalTickets = 3700;
+			var total = phoneTickets + emailTickets;
+			//var total = 2900; /*FOR TESTING PURPOSES*/
+			var remaining = goalTickets - total;
+			var percentComplete = Math.round((total / goalTickets) * 100);
+			GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to graduate!</div>";
+			if ((percentComplete >= 43) && (percentComplete < 60)) {
+				var percentContainer = document.getElementById("PercentGradComplete");
+				percentContainer.style.color = "#FFF";
+				percentContainer.style.textAlign = "right";
+				percentContainer.style.right = "auto";
+				percentContainer.style.width = percentComplete + "%";
+			} else if (percentComplete >= 60) {
+				var percentContainer = document.getElementById("PercentGradComplete");
+				percentContainer.style.color = "#FFF";
+				percentContainer.style.textAlign = "center";
+				percentContainer.style.right = "0";
+				percentContainer.style.width = "auto";
+			}
+		}
+	}
+}
+
+
+
+
+// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
+$(document).ready(function () {
+	$("#LeftMenuColumn").on("click", "#GradProgContainer", function () {
+		console.log("redirect");
+		window.location.href = 'http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&a=Home&b=TicketsMyStats';
+	});
+});
