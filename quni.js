@@ -479,7 +479,6 @@ if (document.getElementById('cancel') && !document.getElementById('cancelPrompt'
   }
 };
 // ---- Snippets on Home Page ----
-
   //RETRIEVE CONTENT FROM SNIPPETS PAGE
 function setSnippetsContainer () {
 	var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
@@ -488,89 +487,92 @@ function setSnippetsContainer () {
 	xmlhttp.responseType = "document";
 	xmlhttp.send();
 	xmlhttp.onreadystatechange = function () {
-	  if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-		var response = xmlhttp.response;
-		//Create Container
-		$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
-		if (Theme === "starwars") {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var response = xmlhttp.response;
+			//Create Container
+			$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+			if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
 			}
-		// PLACE SNIPPETS IN CONTAINER
-		if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
-			var numberComplete = 0;
-		  var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
-		  var snippetSideBar = document.getElementById('snippetsContainer');
-		  snippetSideBar.innerHTML = finalOutput;
-		  var table = document.getElementById('snippetsContainer');
-		  //CLEAN EACH SNIPPET ONE BY ONE
-		  for (i = 0; i < table.rows.length; i++) {
-			var row = table.rows[i];
-			row.style.background = "transparent";
-			//COLOR SNIPPETS WHEN COMPLETED
-			var checkBox = row.getElementsByTagName('input')[0];
-			//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
-			var d = new Date();
-			var n = d.getDay();
-			if (checkBox.checked) {
-			  row.style.display = "none";
-			  numberComplete = numberComplete + 1;
-			} else if (n >= SnippetsDay) /*var set in chrome options */{
-			  row.style.outline = "1px solid " + SnippetsColor;
+			// PLACE SNIPPETS IN CONTAINER
+			if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
+				var numberComplete = 0;
+				var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
+				var snippetSideBar = document.getElementById('snippetsContainer');
+				snippetSideBar.innerHTML = finalOutput;
+				var table = document.getElementById('snippetsContainer');
+				//CLEAN EACH SNIPPET ONE BY ONE
+				for (i = 0; i < table.rows.length; i++) {
+					var row = table.rows[i];
+					row.style.background = "transparent";
+					//COLOR SNIPPETS WHEN COMPLETED
+					var checkBox = row.getElementsByTagName('input')[0];
+					//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
+					var d = new Date();
+					var n = d.getDay();
+					if (checkBox.checked) {
+						row.style.display = "none";
+						numberComplete = numberComplete + 1;
+					} else if (n >= SnippetsDay) /*var set in chrome options */{
+						row.style.outline = "1px solid " + SnippetsColor;
+					}
+					//ELIMINATE X
+					row.deleteCell(0);
+					row.deleteCell(1);
+					//TRUNCATE LABELS ON SNIPPETS
+					var length = 40; //LENGTH OF SNIPPET POST BEFORE TRUNCATION
+					var rowContents = row.getElementsByTagName('td')[0];
+					//VERIFY THAT TRUNCATION IS NECESSARY
+					if ( rowContents.innerHTML.length > length ) {
+						var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
+						rowContents.innerHTML = replaceMe.substring(0, length) + "...";
+					}
+				}
+				//Congratulate if Snippets are completed
+				if (table.rows.length == numberComplete ) {
+					var snippetSideBar = document.getElementById('snippetsContainer');
+					snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
+					document.getElementById('SnippetsPreview').style.height = "0px";
+				}
+				//Add preview bar for when closed
+				var numberIncomplete = table.rows.length - numberComplete;
+				document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go";
+				if (SnippetsClosed == false) {
+					document.getElementById('SnippetsPreview').style.display = "none";
+				}
+			} else {
+				//ALERT THAT NO SNIPPETS ARE PRESENT
+				var snippetSideBar = document.getElementById('snippetsContainer');
+				snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
+				snippetSideBar.style.cursor = "pointer";
+				snippetSideBar.style.outline = "1px solid " + SnippetsColor;
 			}
-			//ELIMINATE X
-			row.deleteCell(0);
-			row.deleteCell(1);
-			//TRUNCATE LABELS ON SNIPPETS
-			var length = 40; //LENGTH OF SNIPPET POST BEFORE TRUNCATION
-			var rowContents = row.getElementsByTagName('td')[0];
-			//VERIFY THAT TRUNCATION IS NECESSARY
-			if ( rowContents.innerHTML.length > length ) {
-			  var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
-			  rowContents.innerHTML = replaceMe.substring(0, length) + "...";
+			//ALLOW FOR EDITING OF SNIPPETS
+			snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
+			//CLOSE SNIPPETS
+			if (SnippetsClosed) {
+				table.style.display = "none";
 			}
-		  }
-		  //Congratulate if Snippets are completed
-		  if (table.rows.length == numberComplete ) {
-		  	var snippetSideBar = document.getElementById('snippetsContainer');
-		  	snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
-		  	document.getElementById('SnippetsPreview').style.height = "0px";
-		  }
-		  //Add preview bar for when closed
-		  var numberIncomplete = table.rows.length - numberComplete;
-		  document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go"
-		} else {
-		  //ALERT THAT NO SNIPPETS ARE PRESENT
-		  var snippetSideBar = document.getElementById('snippetsContainer');
-		  snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
-		  snippetSideBar.style.cursor = "pointer";
-		  snippetSideBar.style.outline = "1px solid " + SnippetsColor;
 		}
-		//ALLOW FOR EDITING OF SNIPPETS
-		snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
-		//CLOSE SNIPPETS
-		if (SnippetsClosed) {
-			table.style.display = "none";
-		}
-	  };
-	};
-};
+	}
+}
 // ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
 $("#LeftMenuColumn").on("click", "#SnippetsHeader", function(){
-    var container = document.getElementById('snippetsContainer');
-	if (container != null) { 
-	  if (container.style.display === "none") {
-		container.style.display = "table";
-		document.getElementById('SnippetsPreview').style.display = "none";
-		chrome.storage.sync.set({
-		    sc: false
-		  });
-	  } else {
-		container.style.display = "none";
-		document.getElementById('SnippetsPreview').style.display = "block";
-		chrome.storage.sync.set({
-		    sc: true
-		  });
-	  }
+	var container = document.getElementById('snippetsContainer');
+		if (container != null) { 
+			if (container.style.display === "none") {
+				container.style.display = "table";
+				document.getElementById('SnippetsPreview').style.display = "none";
+				chrome.storage.sync.set({
+				sc: false
+			});
+			} else {
+				container.style.display = "none";
+				document.getElementById('SnippetsPreview').style.display = "block";
+				chrome.storage.sync.set({
+				sc: true
+			});
+		}
 	}
 });
 /*DEV-- Google Calendar APIs experiment --*/
@@ -680,19 +682,19 @@ function addDesign() {
 
 //CHANGE TAB NAME
 function addPlaybook() {
-  $('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
+	$('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
 	//SET WINDOW HEIGHT
-  document.getElementById("playbookTab").addEventListener("click", function(){
-  	window.location.hash = "playbook";
-	$(".SectionTabsList > li").removeClass('ActiveTab');
-	$('#playbookTab').addClass(' ActiveTab');
-	$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-	//ADD IFRAME
-	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
-	//CHANGE THE PAGE TITLE
-	document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
-	document.title = "Odo | Playbook";
-  });
+	document.getElementById("playbookTab").addEventListener("click", function(){
+		window.location.hash = "playbook";
+		$(".SectionTabsList > li").removeClass('ActiveTab');
+		$('#playbookTab').addClass(' ActiveTab');
+		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+		//ADD IFRAME
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
+		//CHANGE THE PAGE TITLE
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
+		document.title = "Odo | Playbook";
+	});
 };
 
 function addons() {
@@ -734,15 +736,15 @@ function addons() {
 
 
 function addClinicTicket() {
-  container = document.getElementsByClassName('SectionButtonsContainer')[0];
-  var node = document.createElement("A");
-  var textnode = document.createTextNode("Create Clinic Ticket");
-  node.appendChild(textnode);
-  node.setAttribute("id", "newClinic");
-  node.setAttribute("class", "btn btn-success");
-  node.setAttribute('onclick', 'Dialog("http://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
-  container.appendChild(node);
-  document.getElementById('newClinic').innerHTML = "<span class='icon btn-icon-plus'></span><span>Create Clinic Ticket</span>";
+	container = document.getElementsByClassName('SectionButtonsContainer')[0];
+	var node = document.createElement("A");
+	var textnode = document.createTextNode("Create Clinic Ticket");
+	node.appendChild(textnode);
+	node.setAttribute("id", "newClinic");
+	node.setAttribute("class", "btn btn-success");
+	node.setAttribute('onclick', 'Dialog("http://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
+	container.appendChild(node);
+	document.getElementById('newClinic').innerHTML = "<span class='icon btn-icon-plus'></span><span>Create Clinic Ticket</span>";
 }
 
 function minimizeTicketButton() {
@@ -801,9 +803,13 @@ function showQuniProgress() {
 
 
 
-
-
-
+	// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
+$(document).ready(function(){
+	$("#LeftMenuColumn").on("click", "#GradProgContainer", function(){
+		console.log("redirect");
+		window.location.href = 'http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&a=Home&b=TicketsMyStats';
+	});
+});
 
 
 
