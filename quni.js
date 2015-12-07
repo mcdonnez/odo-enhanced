@@ -768,7 +768,7 @@ function showQuniProgress() {
 			if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Wookie Training";
 			}
-			if (response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML != undefined) {
+			if (response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)') != undefined) {
 				var clinicTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
 				var phoneTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
 				var emailTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
