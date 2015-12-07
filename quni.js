@@ -694,7 +694,7 @@ function addPlaybook() {
 		$('#playbookTab').addClass(' ActiveTab');
 		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
 		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook/index.html#noHeader'></iframe>";
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader'></iframe>";
 		//CHANGE THE PAGE TITLE
 		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
 		document.title = "Odo | Playbook";
@@ -770,9 +770,15 @@ function showQuniProgress() {
 			if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Wookie Training";
 			}
-			var clinicTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
-			var phoneTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
-			var emailTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
+			if (response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML != undefined) {
+				var clinicTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
+				var phoneTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
+				var emailTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
+			} else {
+				var clinicTickets = response.querySelector('#BodyContent > table:nth-child(13) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
+				var phoneTickets = response.querySelector('#BodyContent > table:nth-child(13) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
+				var emailTickets = response.querySelector('#BodyContent > table:nth-child(13) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
+			}
 			clinicTickets = clinicTickets.replace(",", "");
 			phoneTickets = phoneTickets.replace(",", "");
 			emailTickets = emailTickets.replace(",", "");
