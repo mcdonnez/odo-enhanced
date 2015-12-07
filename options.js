@@ -1,5 +1,7 @@
 function save_options() {
 	var createEmail = document.getElementById('EmailButton').checked;
+	var createClinic = document.getElementById('ClinicButton').checked;
+	var minifyTicket = document.getElementById('MiniTicketButton').checked;
 	var helpDesk = document.getElementById('HelpDesk').checked;
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
@@ -8,9 +10,13 @@ function save_options() {
 	var snippetsClosed = document.getElementById('CloseSnippets').checked;
 	var snippetDay = document.getElementById('ColorSnippets').value;
 	var snippetColor = document.getElementById('SnippetColor').value;
+	var employeeID = document.getElementById('EmployeeID').value;
+	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
 	chrome.storage.sync.set({
 		em: createEmail,
+		cl: createClinic,
+		mt: minifyTicket,
 		hd: helpDesk,
 		de: design,
 		ee: easterEggs,
@@ -19,12 +25,14 @@ function save_options() {
 		s: snippets,
 		sc: snippetsClosed,
 		sd: snippetDay,
-		sl: snippetColor
-	}, function () {
+		sl: snippetColor,
+		eid: employeeID,
+		gp: gradProgress
+	}, function() {
 		// Update status to let user know options were saved.
 		var status = document.getElementById('status');
 		status.textContent = 'Options updated.';
-		setTimeout(function () {
+		setTimeout(function() {
 			status.textContent = '';
 		}, 750);
 	});
@@ -35,6 +43,8 @@ function save_options() {
 function restore_options() {
 	chrome.storage.sync.get({
 		em: "",
+		cl: "",
+		mt: "",
 		hd: true,
 		de: false,
 		ee: "",
@@ -43,9 +53,13 @@ function restore_options() {
 		sc: "",
 		sd: 4,
 		sl: "#04b26e",
+		eid: "",
+		gp: true,
 		tm: null
-	}, function (items) {
+	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
+		document.getElementById('ClinicButton').checked = items.cl;
+		document.getElementById('MiniTicketButton').checked = items.mt;
 		document.getElementById('HelpDesk').checked = items.hd;
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
@@ -54,6 +68,8 @@ function restore_options() {
 		document.getElementById('CloseSnippets').checked = items.sc;
 		document.getElementById('ColorSnippets').value = items.sd;
 		document.getElementById('SnippetColor').value = items.sl;
+		document.getElementById('EmployeeID').value = items.eid;
+		document.getElementById('GradProgress').checked = items.gp;
 		document.getElementById('Theme').value = items.tm;
 		makeOpaque();
 	});
@@ -74,8 +90,4 @@ function makeOpaque() {
 	} else {
 		snipOps.style.opacity = ".2";
 	}
-}
-
-function changeLabel(el) {
-	console.log(el);
 }
