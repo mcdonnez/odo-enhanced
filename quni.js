@@ -646,7 +646,7 @@ function addHelpDesk() {
   });
 }
 
-/*Adds the Options tab to every page*/
+/*Adds the Options tab to home page*/
 function addChromeOptions() {
   $('.SectionTabsList').append('<li class="SectionTab" id="optionsTab" style="cursor:pointer;">Extension Options</li>');
 	//SET WINDOW HEIGHT
@@ -656,7 +656,7 @@ function addChromeOptions() {
 	$('.SectionButtonsContainer, .TimezonesTableContainer').fadeIn();
 	//ADD IFRAME
 	var optionsUrl = chrome.extension.getURL("options.html"); 
-	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 800px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
+	document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1200px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
 	//CHANGE THE PAGE TITLE
 	document.getElementsByClassName('PageTitle')[0].innerHTML = "Chrome Extension Options";
 	document.title = "Odo | Extension Options";
