@@ -768,27 +768,43 @@ function showQuniProgress() {
 			if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Wookie Training";
 			}
-			if (response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)') != undefined) {
-				var clinicTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
-				var phoneTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
-				var emailTickets = response.querySelector('#BodyContent > table:nth-child(8) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
-			} else {
-				var clinicTickets = response.querySelector('#BodyContent > table:nth-child(13) > tbody > tr:nth-child(1) > td:nth-child(7)').innerHTML;
-				var phoneTickets = response.querySelector('#BodyContent > table:nth-child(13) > tbody > tr:nth-child(2) > td:nth-child(7)').innerHTML;
-				var emailTickets = response.querySelector('#BodyContent > table:nth-child(13) > tbody > tr:nth-child(3) > td:nth-child(7)').innerHTML;
+			var tds = response.getElementsByTagName('td');
+			//LOOP THROUGH ALL td ELEMENTS TO  FIND THE CORRECT TABLE
+			for (i=0; i<tds.length; i++) {
+				if (tds[i].textContent === "Support Phone Tickets") {
+					var table = tds[i].parentNode.parentNode.parentNode;
+					var thead = tds[i].parentNode.parentNode.parentNode.querySelector('thead');
+					var tbody = tds[i].parentNode.parentNode;
+					var tLength = tbody.rows.length;
+					var headerRow = thead.rows[0].querySelectorAll('th');
+				}
 			}
-			clinicTickets = clinicTickets.replace(",", "");
-			phoneTickets = phoneTickets.replace(",", "");
-			emailTickets = emailTickets.replace(",", "");
-			clinicTickets = parseInt(clinicTickets);
-			phoneTickets = parseInt(phoneTickets);
-			emailTickets = parseInt(emailTickets);
+			// LOOP THROUGH HEADER OF TABLE TO FIND THE RESOLVED COLUMN
+			for (j=0; j<headerRow.length; j++) {
+				if (headerRow[j].textContent === "Resolved") {
+					var resCol = j;
+				}
+			}
+			//LOOP THROUGH THE TABLE BODY TO FIND THE PHONE/EMAIL ROWS, THEN COLLECT VALUES IF THEY EXIST
+			for (k=0; k<tbody.querySelectorAll('td').length; k++) {
+				if (tbody.querySelectorAll('td')[k].textContent === "Support Phone Tickets") {
+					var phoneRow = tbody.querySelectorAll('td')[k].parentNode;
+					var phoneValue = phoneRow.querySelectorAll('td:last-child')[0].innerHTML.replace(",", "");
+					phoneValue = parseInt(phoneValue);
+				}
+				if (tbody.querySelectorAll('td')[k].textContent === "Support Email Tickets") {
+					var emailRow = tbody.querySelectorAll('td')[k].parentNode;
+					var emailValue = emailRow.querySelectorAll('td:last-child')[0].innerHTML.replace(",", "");
+					emailValue = parseInt(emailValue);
+				}
+			}
+			//CALCULATE VISIBLE VALUES
 			var goalTickets = 3700;
-			var total = phoneTickets + emailTickets;
-			//var total = 2900; /*FOR TESTING PURPOSES*/
+			var total = phoneValue + emailValue;
 			var remaining = goalTickets - total;
 			var percentComplete = Math.round((total / goalTickets)*100);
 			GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to graduate!</div>";
+			//DEPENDING ON THE PROGRESS, CHANGE THE LOCATION AND COLOR OF THE PERCENT SYMBOL WITHIN THE GRADPROGRESS BAR
 			if ((percentComplete >= 43) && (percentComplete < 60)) {
 				var percentContainer = document.getElementById("PercentGradComplete");
 				percentContainer.style.color = "#FFF";
@@ -809,7 +825,7 @@ function showQuniProgress() {
 
 
 
-	// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
+	// REDIRECT TO TICKET PAGE ON CLICK
 $(document).ready(function(){
 	$("#LeftMenuColumn").on("click", "#GradProgContainer", function(){
 		console.log("redirect");
