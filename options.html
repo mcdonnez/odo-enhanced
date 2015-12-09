@@ -1,3 +1,10 @@
+<div id='Overlay'>
+		<div id='IframeContainer'>
+		<div id='Exit'>X</div>
+				<iframe id='Iframe' src=''></iframe>
+		</div>
+</div>
+<div style='cursor: pointer' id='FeedbackLink'>F<br>e<br>e<br>d<br>b<br>a<br>c<br>k</div>
 <div id='Wrapper'>
 	Please choose the options that best fit your Odo experience:
 	<div class='Option'>
@@ -87,7 +94,7 @@
 			</label><br>
 			<label class='CheckLabel' for='GradProgress'>
 				<input class='Check' value='gradview' id='GradProgress' type='checkbox'/>
-				<span>Show Progress Toward Quni Graduation</span>
+				<span>Show Progress Toward Quni Ticket Goal of 3700</span>
 			</label><br>
 			<div class='Description'>Verify your EmployeeID (i.e. "MATTHEWB"): </div>
 				<input class='textbox' value='employeeid' id='EmployeeID' type='text'/>
@@ -101,127 +108,162 @@
 </div>
 
 <style>
-	body {
-		font-weight: 200;
-		background: #eaeaea;
-		text-align: center;
-	}
-
-	#Wrapper {
-		font-size: 16px;
-		font-family: "Helvetica Neue", Helvetica, Arial;
-		text-align: center;
-		margin: 3em;
-	}
-
-	.Option {
-		margin: 2em auto;
-		text-align: center;
-		max-width: 1200px;
-		font-size: 14px;
-	}
-
-	.OptionSection {
-		text-transform: uppercase;
-		padding: .6em;
-		display: inline-block;
-		box-shadow: 0 0 15px #ddd;
-		margin: 2em;
-		border-radius: 15px;
-		background: #fff;
-		font-size: 20px;
-		width: 400px;
-		vertical-align: top;
-		text-align: center;
-	}
-
-	.Description {
-		font-size: 15px;
-		color: #aaa;
-		padding: 10px;
-		text-transform: none;
-	}
-
-	#status {
-		margin-top: 30px;
-	}
-
-	label {
-		display: inline-block;
-		font-size: 16px;
-		text-transform: none;
-		width: 90%;
-	}
-
-	.CheckLabel span {
-		padding: 3px 12px;
-		display: inline-block;
-		margin: 3px auto;
-		text-transform: none;
-		border: 2px solid #ddd;
-		border-radius: 15px;
-		width: 350px;
-		transition: .3s;
-		cursor: pointer;
-		background-color: #cacaca;
-	}
-
-	.CheckLabel span:hover {
-		background-color: #ddd;
-	}
-
-	input[type=checkbox]:checked + span:hover {
-		background-color: #14b375;
-	}
-
-	input[type=checkbox]:checked + span {
-		background-color: #04a365;
-		color: #fff;
-		border-color: #14b375;
-	}
-
-	.NonCheckLabel {}
-
-	input[type=checkbox],
-	select,
-	input[type=color] {
-		float: right;
-	}
-
-	input[type=checkbox] {
-		visibility: hidden;
-	}
-
-	.OtherType {
-		text-align: left;
-		padding: 5px 12px;
-		display: block;
-	}
-
-	select,
-	input[type=color] {
-		display: block;
-	}
-
-	.hidden {
+body {
+	font-weight: 200;
+	background: #eaeaea;
+	text-align: center;
+}
+#Wrapper {
+	font-size: 16px;
+	font-family: "Helvetica Neue", Helvetica, Arial;
+	text-align: center;
+	margin: 3em;
+}
+.Option {
+	margin: 2em auto;
+	text-align: center;
+	max-width: 1200px;
+	font-size: 14px;
+}
+.OptionSection {
+	text-transform: uppercase;
+	padding: .6em;
+	display: inline-block;
+	box-shadow: 0 0 15px #ddd;
+	margin: 2em;
+	border-radius: 15px;
+	background: #fff;
+	font-size: 20px;
+	width: 400px;
+	vertical-align: top;
+	text-align: center;
+}
+.Description {
+	font-size: 15px;
+	color: #aaa;
+	padding: 10px;
+	text-transform: none;
+}
+#status {
+	margin-top: 30px;
+}
+label {
+	display: inline-block;
+	font-size: 16px;
+	text-transform: none;
+	width: 90%;
+}
+.CheckLabel span {
+	padding: 3px 12px;
+	display: inline-block;
+	margin: 3px auto;
+	text-transform: none;
+	border: 2px solid #ddd;
+	border-radius: 15px;
+	width: 350px;
+	transition: .3s;
+	cursor: pointer;
+	background-color: #cacaca;
+}
+.CheckLabel span:hover {
+	background-color: #ddd;
+}
+input[type=checkbox]:checked + span:hover {
+	background-color: #14b375;
+}
+input[type=checkbox]:checked + span {
+	background-color: #04a365;
+	color: #fff;
+	border-color: #14b375;
+}
+.NonCheckLabel {
+}
+input[type=checkbox], select, input[type=color] {
+	float: right;
+}
+input[type=checkbox] {
+	visibility: hidden;
+}
+.OtherType {
+	text-align: left;
+	padding: 5px 12px;
+	display: block;
+}
+select, input[type=color] {
+	display: block;
+}
+.hidden {
+	display:none;
+}
+#save {
+	border: 0;
+	color: #fff;
+	background: #6DC44E;
+	font-size: 15px;
+	padding: 8px 10px;
+	border-radius: 5px;
+	transition: .2s;
+	cursor: pointer;
+	margin: 0 auto;
+}
+#save:hover {
+	background: #7DD45E;
+}
+/*FOR IFRAME*/
+#Overlay {
+		background: rgba(0,0,0,.5);
+		position: fixed;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		z-index: 999;
 		display: none;
-	}
-
-	#save {
-		border: 0;
-		color: #fff;
-		background: #6DC44E;
-		font-size: 15px;
-		padding: 8px 10px;
-		border-radius: 5px;
-		transition: .2s;
+}
+#Exit {
+		top: 5px;
+		right: 10px;
+		position: absolute;
 		cursor: pointer;
-		margin: 0 auto;
-	}
-
-	#save:hover {
-		background: #7DD45E;
-	}
+}
+#IframeContainer {
+		margin: 3em auto;
+		padding: 1em;
+		background: #fff;
+		z-index: 9999;
+		border-radius: 10px;
+		height: 80%;
+		width: 90%;
+		position: relative;
+}
+#Iframe {
+		width: 100%;
+		height: 100%;
+		border: none;
+		border-radius: 10px;
+}
+#FeedbackLink {
+		position: fixed;
+		background: #fff;
+		border: 1px solid #bbb;
+		width: 40px;
+		text-align: center;
+		top: 90px;
+		left: 0px;
+		cursor: pointer;
+		border-radius: 0 5px 5px 0;
+		transition: .2s ease-in-out;
+		text-decoration: none;
+		font-size: 12px;
+		padding: 10px 0;
+		border-left: 0;
+		line-height: 13px;
+}
+#FeedbackLink:hover {
+		background: #007ac0;
+		width: 50px;
+		color: #fff;
+}
 </style>
 
 <script src="options.js"></script>

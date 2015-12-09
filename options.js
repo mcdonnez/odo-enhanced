@@ -1,3 +1,15 @@
+function loadFeedback() {
+	document.getElementById('Overlay').style.display = "block";
+	document.getElementById('Iframe').src='https://survey.qualtrics.com/SE/?SID=SV_3OT1mMS5wBagn8p';
+}
+function closeFeedback() {
+	document.getElementById('Overlay').style.display = "none";
+	document.getElementById('Iframe').src='';
+}
+document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
+document.getElementById("Exit").addEventListener("click", closeFeedback);
+document.getElementById("Overlay").addEventListener("click", closeFeedback);
+
 function save_options() {
 	var createEmail = document.getElementById('EmailButton').checked;
 	var createClinic = document.getElementById('ClinicButton').checked;

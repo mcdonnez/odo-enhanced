@@ -650,7 +650,7 @@ function addHelpDesk() {
 	});
 }
 
-/*Adds the Options tab to every page*/
+/*Adds the Options tab to home page*/
 function addChromeOptions() {
 	$('.SectionTabsList').append('<li class="SectionTab" id="optionsTab" style="cursor:pointer;">Extension Options</li>');
 	//SET WINDOW HEIGHT
@@ -694,7 +694,7 @@ function addPlaybook() {
 		$('#playbookTab').addClass(' ActiveTab');
 		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
 		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader'></iframe>";
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook#noHeader'></iframe>";
 		//CHANGE THE PAGE TITLE
 		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
 		document.title = "Odo | Playbook";
@@ -766,7 +766,7 @@ function showQuniProgress() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var response = xmlhttp.response;
 			//Create Container
-			$('#LeftMenuColumn').prepend("<div class='Title' style='' id='GradProgHeader'>Quni Graduation Progress</div><div style='cursor:pointer' id='GradProgContainer'></div>");
+			$('#LeftMenuColumn').prepend("<div class='Title' style='' id='GradProgHeader'>Ticket Milestone Progress</div><div style='cursor:pointer' id='GradProgContainer'></div>");
 			if (Theme === "starwars") {
 				document.getElementById('SnippetsHeader').innerHTML = "Wookie Training";
 			}
@@ -791,15 +791,20 @@ function showQuniProgress() {
 			for (k=0; k<tbody.querySelectorAll('td').length; k++) {
 				if (tbody.querySelectorAll('td')[k].textContent === "Support Phone Tickets") {
 					var phoneRow = tbody.querySelectorAll('td')[k].parentNode;
-					var phoneValue = phoneRow.querySelectorAll('td:last-child')[0].innerHTML.replace(",", "");
+					var phoneValue = phoneRow.cells[resCol].innerHTML.replace(",", "");
 					phoneValue = parseInt(phoneValue);
+				} else {
+					//phoneValue = 0;
 				}
 				if (tbody.querySelectorAll('td')[k].textContent === "Support Email Tickets") {
 					var emailRow = tbody.querySelectorAll('td')[k].parentNode;
-					var emailValue = emailRow.querySelectorAll('td:last-child')[0].innerHTML.replace(",", "");
+					var emailValue = emailRow.cells[resCol].innerHTML.replace(",", "");
 					emailValue = parseInt(emailValue);
+				} else {
+					//emailValue = 0;
 				}
 			}
+
 			//CALCULATE VISIBLE VALUES
 			var goalTickets = 3700;
 			var total = phoneValue + emailValue;
@@ -820,10 +825,40 @@ function showQuniProgress() {
 				percentContainer.style.right = "0";
 				percentContainer.style.width = "auto";
 			}
+			calculateTicketTotals(phoneValue,emailValue);
 		}
 	}
 }
 
+
+function calculateTicketTotals(phoneValue,emailValue) {
+	//CALCULATE VISIBLE VALUES
+	if ((phoneValue > 0) && (emailValue > 0)) {
+		var goalTickets = 3700;
+		var total = phoneValue + emailValue;
+		var remaining = goalTickets - total;
+		var percentComplete = Math.round((total / goalTickets)*100);
+		GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to hit the milestone!</div>";
+		//DEPENDING ON THE PROGRESS, CHANGE THE LOCATION AND COLOR OF THE PERCENT SYMBOL WITHIN THE GRADPROGRESS BAR
+		if ((percentComplete >= 43) && (percentComplete < 60)) {
+			var percentContainer = document.getElementById("PercentGradComplete");
+			percentContainer.style.color = "#FFF";
+			percentContainer.style.textAlign = "right";
+			percentContainer.style.right = "auto";
+			percentContainer.style.width = percentComplete + "%";
+		} else if (percentComplete >= 60) {
+			var percentContainer = document.getElementById("PercentGradComplete");
+			percentContainer.style.color = "#FFF";
+			percentContainer.style.textAlign = "center";
+			percentContainer.style.right = "0";
+			percentContainer.style.width = "auto";
+		}
+	} else {
+		GradProgContainer.innerHTML = "<div style='text-align: center;'>Hmmmm... Doesn't look like you have any tickets!</div>";
+
+	}
+
+}
 
 
 
