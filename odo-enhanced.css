@@ -25,3 +25,23 @@ th {
 #bugResults .odd {
 	background-color: #E8E5E5;
 }
+.EmailContainer {
+    outline: 2px solid green;
+}
+
+.EmailContainer:last-of-type {
+    box-shadow: 0px 0px 25px green;
+}
+
+body > div.PageTitleBar > div {
+    color: #fff;
+}
+
+div.DiscussionSummary {
+    display: none;
+}
+
+div.PageTitleBar {
+    background: #333;
+}
+
