@@ -5,6 +5,7 @@ var DesignTabOn;
 var SnippetsOn;
 var PlaybookTabOn;
 var urlParams;
+var ClinicButtonOn;
 
 function getVars() {
 	chrome.storage.sync.get({
@@ -12,19 +13,22 @@ function getVars() {
 		em: "",
 		hd: true,
 		de: "",
+		cl: "",
 		pb: "",
 		s: true
 	}, function (items) {
 		Theme = items.tm;
 		EmailButtonOn = items.em;
 		HelpDeskTabOn = items.hd;
+		ClinicButtonOn = items.cl;
 		DesignTabOn = items.de;
 		PlaybookTabOn = items.pb;
 		SnippetsOn = items.s;
-		changeTheme();
+		changeThemes();
+		console.log('star wars js page loaded' + Theme);
 	});
 }
-getVars();
+
 //SET URL PARAMS
 (window.onpopstate = function () {
 	var match,
@@ -40,7 +44,7 @@ getVars();
 		urlParams[decode(match[1])] = decode(match[2]);
 })();
 
-var background = {
+var swBackground = {
 	1: "https://blurppy.files.wordpress.com/2015/09/star-wars-the-force-awakens-hd-wallpaper.png",
 	2: "http://www.hdwallpaperscool.com/wp-content/uploads/2014/03/gaint-space-station-in-star-war-movie-free-download-fbulous-hd-widescreen-wallpapers-of-star-wars-movie-series.jpg",
 	3: "http://www.thestoryoftexas.com/upload/images/events/movies/millennium-falcom-star-wars.jpg",
@@ -48,15 +52,15 @@ var background = {
 	5: "http://i1.wp.com/www.thehappiestblogonearth.net/wp-content/uploads/2015/04/Star-Wars-The-Force-Awakens-Teaser-2-23.png?resize=1920%2C1080",
 	6: "http://cdn.wonderfulengineering.com/wp-content/uploads/2014/09/star-wars-wallpaper-9.jpg"
 };
-var pageLogo = {
+var swPageLogo = {
 	1: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2n43aCvxR8EdRUF&V=1444520373", //Darth Vader
 	2: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Dw5zn24UferpIN&V=1444519104" //Bobba Fett
 }
 var starWars = {
 	changeBackground: function (id) {
 		if (!id)
-			id = Math.floor((Math.random() * Object.keys(background).length) + 1);
-		document.body.style.backgroundImage = "url('" + background[id] + "')";
+			id = Math.floor((Math.random() * Object.keys(swBackground).length) + 1);
+		document.body.style.swBackgroundImage = "url('" + swBackground[id] + "')";
 	},
 	changeText: function () {
 		document.querySelectorAll("a[href$='/wiki/index.php/Main_Page']")[0].innerHTML = 'Jedi Temple Archives';
@@ -112,8 +116,8 @@ var starWars = {
 		}
 	},
 	changeBarnaby: function () {
-		var choice = Math.floor((Math.random() * Object.keys(pageLogo).length) + 1);
-		document.querySelectorAll('body > div.Masthead > a > img')[0].src = pageLogo[choice];
+		var choice = Math.floor((Math.random() * Object.keys(swPageLogo).length) + 1);
+		document.querySelectorAll('body > div.Masthead > a > img')[0].src = swPageLogo[choice];
 	},
 	updateHeader: function () {
 		var currentHeader = document.getElementsByClassName('PageTitle')[0];
@@ -140,7 +144,8 @@ var currentUrl = window.location.href;
 var usingKB = currentUrl.indexOf("index.php") != -1;
 console.log(usingKB);
 
-function changeTheme() {
+function changeThemes() {
+	console.log("Attempting Theme Change");
 	if (Theme === "starwars") {
 		console.log("Star Wars loading now");
 		starWars.changeBackground();
@@ -148,10 +153,13 @@ function changeTheme() {
 		starWars.changeBarnaby();
 		//USE VAR SET TO CHANGE CUSTOM TABS
 		if (EmailButtonOn && usingKB != true) {
-			document.getElementById('newEmail').innerHTML = "Ask Darth Sidious";
+			document.getElementById('newEmail').querySelectorAll('span')[1].innerHTML = "Send Communique";
+		}
+		if (ClinicButtonOn && usingKB != true) {
+			document.getElementById('newClinic').querySelectorAll('span')[1].innerHTML = "R2D2 Assistance";
 		}
 		if (HelpDeskTabOn && usingKB != true) {
-			document.getElementById('helpdeskTab').innerHTML = "Ask Sidious";
+			document.getElementById('helpdeskTab').innerHTML = "Ask Darth Sidious";
 		}
 		if (DesignTabOn && usingKB != true) {
 			document.getElementById('designTab').innerHTML = "Droid Factory";
@@ -168,5 +176,8 @@ function changeTheme() {
 			chrome.runtime.getURL("starWars.css") + '">'
 		);
 		starWars.updateHeader();
+	} else {
+		console.log("Failed Theme Change");
 	}
 }
+getVars();

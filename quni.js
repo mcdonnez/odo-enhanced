@@ -702,6 +702,7 @@ function addPlaybook() {
 };
 
 function addons() {
+	console.log("Current Theme is: " + Theme);
 	//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
 	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
 		if (PlaybookTabOn) {
@@ -768,7 +769,7 @@ function showQuniProgress() {
 			//Create Container
 			$('#LeftMenuColumn').prepend("<div class='Title' style='' id='GradProgHeader'>Ticket Milestone Progress</div><div style='cursor:pointer' id='GradProgContainer'></div>");
 			if (Theme === "starwars") {
-				document.getElementById('SnippetsHeader').innerHTML = "Wookie Training";
+				document.getElementById('GradProgHeader').innerHTML = "Wookie Training";
 			}
 			var tds = response.getElementsByTagName('td');
 			//LOOP THROUGH ALL td ELEMENTS TO  FIND THE CORRECT TABLE
