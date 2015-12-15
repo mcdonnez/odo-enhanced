@@ -11,6 +11,7 @@ var HelpDeskTabOn;
 var DesignTabOn;
 var EasterEggsOn;
 var PlaybookTabOn;
+var SummitTriggerOn;
 var SnippetsOn;
 var SnippetsClosed;
 var SnippetsDay;
@@ -28,6 +29,7 @@ function getVars() {
 		de: "",
 		ee: "",
 		pb: "",
+		st: true,
 		s: true,
 		sc: "",
 		sd: 4,
@@ -43,6 +45,7 @@ function getVars() {
 		DesignTabOn = items.de;
 		EasterEggsOn = items.ee;
 		PlaybookTabOn = items.pb;
+		SummitTriggerOn = items.st;
 		SnippetsOn = items.s;
 		SnippetsClosed = items.sc;
 		SnippetsDay = items.sd;
@@ -701,6 +704,22 @@ function addPlaybook() {
 	});
 };
 
+function addSummitTrigger() {
+	$('.SectionTabsList').append('<li class="SectionTab" id="summitTrigger" style="cursor:pointer;">Summit Trigger</li>');
+	//SET WINDOW HEIGHT
+	document.getElementById("summitTrigger").addEventListener("click", function () {
+		window.location.hash = "SummitTrigger";
+		$(".SectionTabsList > li").removeClass('ActiveTab');
+		$('#summitTrigger').addClass(' ActiveTab');
+		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+		//ADD IFRAME
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='//genesisqcorput1.qualtrics.com/SE/?SID=SV_5jZmbyiuIfBis8B'></iframe>";
+		//CHANGE THE PAGE TITLE
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "Summit Trigger";
+		document.title = "Odo | Summit Trigger";
+	});
+};
+
 function addons() {
 	console.log("Current Theme is: " + Theme);
 	//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
@@ -714,6 +733,9 @@ function addons() {
 	}
 	if (HelpDeskTabOn) {
 		addHelpDesk();
+	}
+	if (SummitTriggerOn){
+		addSummitTrigger();
 	}
 	if (EmailButtonOn) {
 		addEmailTicket();

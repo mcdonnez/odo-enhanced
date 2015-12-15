@@ -21,7 +21,7 @@
 	"content_scripts": [
 		{
 			"matches": ["http://odo.corp.qualtrics.com/*"],
-			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "quni.js", "resources/tinyeditor/tinyeditor.js", "starWars.js", "christmas.js"],
+			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "quni.js", "resources/tinyeditor/tinyeditor.js", "starWars.js"],
 			"css": ["resources/jquery.dataTables.css", "odo-enhanced.css", "resources/tinyeditor/style.css"],
 			"run_at": "document_end"
 	}
