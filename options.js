@@ -24,6 +24,8 @@ function save_options() {
 	var snippetDay = document.getElementById('ColorSnippets').value;
 	var snippetColor = document.getElementById('SnippetColor').value;
 	var ticketGoal = document.getElementById('TicketGoal').value;
+	var ticketDate = document.getElementById('TicketDate').value;
+	var goalDate = new Date(ticketDate);
 	var employeeID = document.getElementById('EmployeeID').value;
 	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
@@ -43,7 +45,8 @@ function save_options() {
 		sl: snippetColor,
 		eid: employeeID,
 		gp: gradProgress,
-		tg: ticketGoal
+		tg: ticketGoal, 
+		td: ticketDate
 	}, function() {
 		// Update status to let user know options were saved.
 		var status = document.getElementById('status');
@@ -74,6 +77,7 @@ function restore_options() {
 		gp: true,
 		tm: null,
 		tg: 3700,
+		td: ""
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -91,7 +95,9 @@ function restore_options() {
 		document.getElementById('GradProgress').checked = items.gp;
 		document.getElementById('Theme').value = items.tm;
 		document.getElementById('TicketGoal').value = items.tg;
+		document.getElementById('TicketDate').value = items.td;
 		makeOpaque();
+
 	});
 }
 document.addEventListener('DOMContentLoaded', restore_options);
@@ -111,3 +117,4 @@ function makeOpaque() {
 		snipOps.style.opacity = ".2";
 	}
 }
+
