@@ -18,7 +18,7 @@ function save_options() {
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
 	var playbook = document.getElementById('Playbook').checked;
-	var summitTrigger = document.getElementById('summitTrigger').checked;
+	var summitTrigger = document.getElementById('SummitTrigger').checked;
 	var snippets = document.getElementById('Snippets').checked;
 	var snippetsClosed = document.getElementById('CloseSnippets').checked;
 	var snippetDay = document.getElementById('ColorSnippets').value;
@@ -64,6 +64,7 @@ function restore_options() {
 		ee: "",
 		pb: "",
 		s: true,
+		st: true,
 		sc: "",
 		sd: 4,
 		sl: "#04b26e",
@@ -78,7 +79,7 @@ function restore_options() {
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
 		document.getElementById('Playbook').checked = items.pb;
-		document.getElementById('summitTrigger').checked = items.st;
+		document.getElementById('SummitTrigger').checked = items.st;
 		document.getElementById('Snippets').checked = items.s;
 		document.getElementById('CloseSnippets').checked = items.sc;
 		document.getElementById('ColorSnippets').value = items.sd;
