@@ -77,7 +77,7 @@ function restore_options() {
 		gp: true,
 		tm: null,
 		tg: 3700,
-		td: ""
+		td: "2016-12-12"
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
