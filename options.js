@@ -23,6 +23,7 @@ function save_options() {
 	var snippetsClosed = document.getElementById('CloseSnippets').checked;
 	var snippetDay = document.getElementById('ColorSnippets').value;
 	var snippetColor = document.getElementById('SnippetColor').value;
+	var ticketGoal = document.getElementById('TicketGoal').value;
 	var employeeID = document.getElementById('EmployeeID').value;
 	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
@@ -41,7 +42,8 @@ function save_options() {
 		sd: snippetDay,
 		sl: snippetColor,
 		eid: employeeID,
-		gp: gradProgress
+		gp: gradProgress,
+		tg: ticketGoal
 	}, function() {
 		// Update status to let user know options were saved.
 		var status = document.getElementById('status');
@@ -70,7 +72,8 @@ function restore_options() {
 		sl: "#04b26e",
 		eid: "",
 		gp: true,
-		tm: null
+		tm: null,
+		tg: 3700,
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -87,6 +90,7 @@ function restore_options() {
 		document.getElementById('EmployeeID').value = items.eid;
 		document.getElementById('GradProgress').checked = items.gp;
 		document.getElementById('Theme').value = items.tm;
+		document.getElementById('TicketGoal').value = items.tg;
 		makeOpaque();
 	});
 }

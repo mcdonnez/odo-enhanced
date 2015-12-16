@@ -18,7 +18,8 @@ var SnippetsDay;
 var SnippetsColor;
 var ShowGradProgressOn;
 var EmpID;
-var Theme
+var Theme;
+var TicketGoal;
 
 function getVars() {
 	chrome.storage.sync.get({
@@ -36,7 +37,8 @@ function getVars() {
 		sl: "#04b26e", // Snippets Color
 		gp: true, // Grad Progress Tracker
 		eid: "", // Employee ID
-		tm: "" // Current Theme
+		tm: "", // Current Theme
+		tg: 3700 //Ticket Goal
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -53,6 +55,7 @@ function getVars() {
 		ShowGradProgressOn = items.gp;
 		EmpID = items.eid;
 		Theme = items.tm;
+		TicketGoal = items.tg;
 		addons();
 	});
 }
@@ -829,6 +832,7 @@ function showQuniProgress() {
 			}
 
 			//CALCULATE VISIBLE VALUES
+			/*
 			var goalTickets = 3700;
 			var total = phoneValue + emailValue;
 			var remaining = goalTickets - total;
@@ -847,7 +851,7 @@ function showQuniProgress() {
 				percentContainer.style.textAlign = "center";
 				percentContainer.style.right = "0";
 				percentContainer.style.width = "auto";
-			}
+			}*/
 			calculateTicketTotals(phoneValue,emailValue);
 		}
 	}
@@ -855,7 +859,7 @@ function showQuniProgress() {
 function calculateTicketTotals(phoneValue,emailValue) {
 	//CALCULATE VISIBLE VALUES
 	if ((phoneValue > 0) && (emailValue > 0)) {
-		var goalTickets = 3700;
+		var goalTickets = TicketGoal;
 		var total = phoneValue + emailValue;
 		var remaining = goalTickets - total;
 		var percentComplete = Math.round((total / goalTickets)*100);
