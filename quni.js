@@ -18,25 +18,29 @@ var SnippetsDay;
 var SnippetsColor;
 var ShowGradProgressOn;
 var EmpID;
-var Theme
+var Theme;
+var TicketGoal;
+var GoalDate;
 
 function getVars() {
 	chrome.storage.sync.get({
-		em: "",
-		cl: "",
-		mt: '',
-		hd: true,
-		de: "",
-		ee: "",
-		pb: "",
-		st: true,
-		s: true,
-		sc: "",
-		sd: 4,
-		sl: "#04b26e",
-		gp: true,
-		eid: "",
-		tm: ""
+		em: "", //email button
+		cl: "", // clinic button 
+		mt: '', // minify the ticket button
+		hd: true, // Help Desk Tab
+		de: "", // Design Tab
+		ee: "", // Easter Eggs
+		pb: "", // Playbook Tab
+		st: true, // Summit Trigger
+		s: true, //Snippets 
+		sc: "", // Snippets Closed 
+		sd: 4, // Snippets Day
+		sl: "#04b26e", // Snippets Color
+		gp: true, // Grad Progress Tracker
+		eid: "", // Employee ID
+		tm: "", // Current Theme
+		tg: 3700, //Ticket Goal
+		td: ""//Ticket Goal Date
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -53,6 +57,8 @@ function getVars() {
 		ShowGradProgressOn = items.gp;
 		EmpID = items.eid;
 		Theme = items.tm;
+		TicketGoal = items.tg;
+		GoalDate = items.td;
 		addons();
 	});
 }
@@ -827,41 +833,27 @@ function showQuniProgress() {
 					//emailValue = 0;
 				}
 			}
-
-			//CALCULATE VISIBLE VALUES
-			var goalTickets = 3700;
-			var total = phoneValue + emailValue;
-			var remaining = goalTickets - total;
-			var percentComplete = Math.round((total / goalTickets) * 100);
-			GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to graduate!</div>";
-			//DEPENDING ON THE PROGRESS, CHANGE THE LOCATION AND COLOR OF THE PERCENT SYMBOL WITHIN THE GRADPROGRESS BAR
-			if ((percentComplete >= 43) && (percentComplete < 60)) {
-				var percentContainer = document.getElementById("PercentGradComplete");
-				percentContainer.style.color = "#FFF";
-				percentContainer.style.textAlign = "right";
-				percentContainer.style.right = "auto";
-				percentContainer.style.width = percentComplete + "%";
-			} else if (percentComplete >= 60) {
-				var percentContainer = document.getElementById("PercentGradComplete");
-				percentContainer.style.color = "#FFF";
-				percentContainer.style.textAlign = "center";
-				percentContainer.style.right = "0";
-				percentContainer.style.width = "auto";
-			}
 			calculateTicketTotals(phoneValue,emailValue);
 		}
 	}
 }
-
-
 function calculateTicketTotals(phoneValue,emailValue) {
 	//CALCULATE VISIBLE VALUES
 	if ((phoneValue > 0) && (emailValue > 0)) {
-		var goalTickets = 3700;
+		var goalTickets = TicketGoal;
 		var total = phoneValue + emailValue;
 		var remaining = goalTickets - total;
 		var percentComplete = Math.round((total / goalTickets)*100);
-		GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to hit the milestone!</div>";
+		var goal = new Date(GoalDate);
+		console.log(goal);
+		var msDay = 60*60*24*1000;
+		var today = new Date();
+		console.log(today);
+		var daysTillGoal = (( goal - today ) / msDay) + 1;
+		var estWeekends = ( daysTillGoal / 7 ) * 2;
+		var ticketsPerDay = Math.round(remaining / ( daysTillGoal - estWeekends));
+		console.log(daysTillGoal);
+		GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to hit the milestone! That means about " + ticketsPerDay + " tickets per day!</div>";
 		//DEPENDING ON THE PROGRESS, CHANGE THE LOCATION AND COLOR OF THE PERCENT SYMBOL WITHIN THE GRADPROGRESS BAR
 		if ((percentComplete >= 43) && (percentComplete < 60)) {
 			var percentContainer = document.getElementById("PercentGradComplete");
@@ -882,9 +874,6 @@ function calculateTicketTotals(phoneValue,emailValue) {
 	}
 
 }
-
-
-
 	// REDIRECT TO TICKET PAGE ON CLICK
 $(document).ready(function(){
 	$("#LeftMenuColumn").on("click", "#GradProgContainer", function(){
@@ -892,3 +881,20 @@ $(document).ready(function(){
 		window.location.href = 'http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&a=Home&b=TicketsMyStats';
 	});
 });
+function addTicketSearch() {
+	$('#LeftMenuColumn').append("<div class='PageFrameLeftMenuItem' style='cursor:pointer' id='TicketSearch'>Ticket Search</div>");
+}
+	// REDIRECT TO TICKET PAGE ON CLICK
+$(document).ready(function(){
+	$("#LeftMenuColumn").on("click", "#TicketSearch", function(){
+		$("#LeftMenuColumn > a > div").removeClass('PageFrameLeftMenuItemSelected');
+		$("#LeftMenuColumn > a > div").addClass('PageFrameLeftMenuItem');
+		$('#TicketSearch').addClass(' PageFrameLeftMenuItemSelected');
+		//ADD IFRAME
+		document.getElementById('BodyContent').innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/ticketSearch.html'></iframe>";
+
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "Ticket Search";
+		document.title = "Odo | Ticket Search";
+	});
+});
+

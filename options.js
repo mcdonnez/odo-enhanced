@@ -18,11 +18,14 @@ function save_options() {
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
 	var playbook = document.getElementById('Playbook').checked;
-	var summitTrigger = document.getElementById('summitTrigger').checked;
+	var summitTrigger = document.getElementById('SummitTrigger').checked;
 	var snippets = document.getElementById('Snippets').checked;
 	var snippetsClosed = document.getElementById('CloseSnippets').checked;
 	var snippetDay = document.getElementById('ColorSnippets').value;
 	var snippetColor = document.getElementById('SnippetColor').value;
+	var ticketGoal = document.getElementById('TicketGoal').value;
+	var ticketDate = document.getElementById('TicketDate').value;
+	var goalDate = new Date(ticketDate);
 	var employeeID = document.getElementById('EmployeeID').value;
 	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
@@ -41,7 +44,9 @@ function save_options() {
 		sd: snippetDay,
 		sl: snippetColor,
 		eid: employeeID,
-		gp: gradProgress
+		gp: gradProgress,
+		tg: ticketGoal, 
+		td: ticketDate
 	}, function() {
 		// Update status to let user know options were saved.
 		var status = document.getElementById('status');
@@ -64,12 +69,15 @@ function restore_options() {
 		ee: "",
 		pb: "",
 		s: true,
+		st: true,
 		sc: "",
 		sd: 4,
 		sl: "#04b26e",
 		eid: "",
 		gp: true,
-		tm: null
+		tm: null,
+		tg: 3700,
+		td: "2016-12-12"
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -78,7 +86,7 @@ function restore_options() {
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
 		document.getElementById('Playbook').checked = items.pb;
-		document.getElementById('summitTrigger').checked = items.st;
+		document.getElementById('SummitTrigger').checked = items.st;
 		document.getElementById('Snippets').checked = items.s;
 		document.getElementById('CloseSnippets').checked = items.sc;
 		document.getElementById('ColorSnippets').value = items.sd;
@@ -86,7 +94,10 @@ function restore_options() {
 		document.getElementById('EmployeeID').value = items.eid;
 		document.getElementById('GradProgress').checked = items.gp;
 		document.getElementById('Theme').value = items.tm;
+		document.getElementById('TicketGoal').value = items.tg;
+		document.getElementById('TicketDate').value = items.td;
 		makeOpaque();
+
 	});
 }
 document.addEventListener('DOMContentLoaded', restore_options);
@@ -106,3 +117,4 @@ function makeOpaque() {
 		snipOps.style.opacity = ".2";
 	}
 }
+
