@@ -13,6 +13,9 @@ document.getElementById("Overlay").addEventListener("click", closeFeedback);
 function save_options() {
 	var createEmail = document.getElementById('EmailButton').checked;
 	var createClinic = document.getElementById('ClinicButton').checked;
+	var clinicStartTime = document.getElementById('StartClinicTime').value;
+	var clinicEndTime = document.getElementById('EndClinicTime').value;
+	var clinicDay = document.getElementById('ClinicDayNumber').value;
 	var minifyTicket = document.getElementById('MiniTicketButton').checked;
 	var helpDesk = document.getElementById('HelpDesk').checked;
 	var design = document.getElementById('Design').checked;
@@ -33,6 +36,9 @@ function save_options() {
 		em: createEmail,
 		cl: createClinic,
 		mt: minifyTicket,
+		sct: clinicStartTime,
+		ect: clinicEndTime,
+		cdn: clinicDay,
 		hd: helpDesk,
 		de: design,
 		ee: easterEggs,
@@ -63,6 +69,9 @@ function restore_options() {
 	chrome.storage.sync.get({
 		em: "",
 		cl: "",
+		sct: "",
+		ect: "",
+		cdn: "",
 		mt: "",
 		hd: true,
 		de: false,
@@ -81,6 +90,9 @@ function restore_options() {
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
+		document.getElementById('StartClinicTime').value = items.sct;
+		document.getElementById('EndClinicTime').value = items.ect;
+		document.getElementById('ClinicDayNumber').value = items.cdn;
 		document.getElementById('MiniTicketButton').checked = items.mt;
 		document.getElementById('HelpDesk').checked = items.hd;
 		document.getElementById('Design').checked = items.de;
@@ -107,14 +119,23 @@ document.getElementById('Wrapper').addEventListener('change',
 	save_options);
 
 document.getElementById('Snippets').addEventListener('change', makeOpaque);
+document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
 
 function makeOpaque() {
 	var snipOps = document.getElementsByClassName('SubOption')[0];
 	var snipToggle = document.getElementById('Snippets').checked;
 	if (snipToggle) {
-		snipOps.style.opacity = "1";
+		snipOps.style.display = "block";
 	} else {
-		snipOps.style.opacity = ".2";
+		snipOps.style.display = "none";
+	}
+	var clinOps = document.getElementById('ClinicOptions');
+	var clinToggle = document.getElementById('ClinicButton').checked;
+	if (clinToggle) {
+		clinOps.style.display = "block";
+	} else {
+		clinOps.style.display = "none";
 	}
 }
+
 

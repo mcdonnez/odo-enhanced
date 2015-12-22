@@ -73,6 +73,25 @@
 				<input class='Check' value='clinicbutton' id='ClinicButton' type='checkbox'/>
 				<span>Create Clinic Ticket</span>
 			</label><br>
+			<div id='ClinicOptions'>
+				<div class='Description'>What time do you have Clinic/Help Desk Shift? <br>
+					From: <input class='textbox' value=''id='StartClinicTime' type='time'/><br>
+					To: <input class='textbox' value=''id='EndClinicTime' type='time'/>
+					</div>
+				<br>
+				<label class='Description' for='DayNumber'>On which day?
+					<br>
+					<select id='ClinicDayNumber'>
+						<option default value='null'></option>
+						<option value='1' id=''>Monday</option>
+						<option value='2' id=''>Tuesday</option>
+						<option value='3' id=''>Wednesday</option>
+						<option value='4' id=''>Thursday</option>
+						<option value='5' id=''>Friday</option>
+
+					</select>
+				</label>
+			</div>
 			<label class='CheckLabel' for='MiniTicketButton'>
 				<input class='Check' value='minibutton' id='MiniTicketButton' type='checkbox'/>
 				<span>Minify "Create Ticket" Button</span>
@@ -86,7 +105,7 @@
 				<select id='Theme'>
 					<option default value='null'>None</option>
 					<option value='starwars' id='StarWars'>Star Wars</option>
-					<option value='christmas' id='Christmas'>Holiday</option>
+					<option value='christmas' class='hidden' id='Christmas'>Holiday</option>
 				</select>
 			</label>
 			<br>

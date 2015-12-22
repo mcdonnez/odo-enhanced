@@ -34,14 +34,14 @@ th {
 }
 
 body > div.PageTitleBar > div {
-    color: #fff;
+    color: #fff !important;
 }
 
 div.DiscussionSummary {
-    display: none;
+    display: none !important;
 }
 
 div.PageTitleBar {
-    background: #333;
+    background: #333 !important;
 }
 

@@ -6,6 +6,9 @@ console.log("Success! Odo Enhanced Works!");
 
 var EmailButtonOn;
 var ClinicButtonOn;
+var ClinicStartTime;
+var ClinicEndTime;
+var ClinicDay
 var MiniTicketOn;
 var HelpDeskTabOn;
 var DesignTabOn;
@@ -21,11 +24,19 @@ var EmpID;
 var Theme;
 var TicketGoal;
 var GoalDate;
+var CurrentDate = new Date();
+var currentDay = CurrentDate.getDay();
+var currentHour = CurrentDate.getHours();
+var currentMinutes = CurrentDate.getMinutes();
+
 
 function getVars() {
 	chrome.storage.sync.get({
 		em: "", //email button
 		cl: "", // clinic button 
+		sct: "", //Clinic start time
+		ect: "", // Clinic End Time
+		cdn: "", // Clinic Day
 		mt: '', // minify the ticket button
 		hd: true, // Help Desk Tab
 		de: "", // Design Tab
@@ -44,6 +55,9 @@ function getVars() {
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
+		ClinicStartTime = items.sct;
+		ClinicEndTime = items.ect;
+		ClinicDay  = items.cdn;
 		MiniTicketOn = items.mt;
 		HelpDeskTabOn = items.hd;
 		DesignTabOn = items.de;
@@ -747,7 +761,11 @@ function addons() {
 		addEmailTicket();
 	}
 	if (ClinicButtonOn) {
-		addClinicTicket();
+		if (currentDay == ClinicDay) {
+			if ( (currentHour >= ClinicStartTime.split(":")[0]) && (currentHour <= ClinicEndTime.split(":")[1]) ) {
+				addClinicTicket();
+			}
+		}
 	}
 	if (MiniTicketOn) {
 		minimizeTicketButton();
@@ -779,10 +797,11 @@ function addClinicTicket() {
 }
 
 function minimizeTicketButton() {
-	var btnInner = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(3) > span:nth-child(2)');
+	var btnInner = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5) > span:nth-child(2)');
 	btnInner.remove();
-	var btn = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(3)');
+	var btn = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5)');
 	btn.parent().prepend(btn);
+
 }
 
 function showQuniProgress() {
