@@ -917,3 +917,147 @@ $(document).ready(function(){
 	});
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+function addCalculator() {
+	var table = document.getElementById('Tags');
+	var tbody = table.querySelectorAll('tbody')[0];
+	$("#RightMenuColumn").append("<div id='CalculatorContainer' class='Blue'><div id='CalcArea' style='display:none;'><table id='CalcTable'><tr><th>Date</th><th>Time</th><th>Include?</th></tr></table></div><div id='CalcButtonContainer' style='text-align: right;'><button id='CalcButton'>Open Calculator</button></div></div>");
+}
+addCalculator();
+
+$("#CalcButtonContainer").on("click", "#CalcButton", function () {
+	toggleCalc();
+});
+$("#CalculatorContainer").on("click", "#getTotal", function () {
+	makeCalculation();
+});
+function toggleCalc() {
+	var table = document.getElementById('Tags');
+	var calcArea = document.getElementById('CalcArea');
+	if (calcArea.style.display != "block") {
+		document.getElementById('CalcButton').innerHTML = "Close Calculator";
+		calcArea.style.display = "block";
+		prepareCalc(calcArea);
+	} else {
+		document.getElementById('CalcButton').innerHTML = "Open Calculator";
+		calcArea.style.display = "none";
+	}
+}
+function prepareCalc(calcArea) {
+	if (document.getElementById('getTotal')) {
+	} else {
+		var tbody = document.getElementById('Tags').querySelectorAll('tbody')[0];
+		var rows = tbody.querySelectorAll('tr');
+		var times = [];
+		var dates = [];
+		for (i=0; i<rows.length; i++) {
+			var rawTime = rows[i].querySelectorAll('td')[3].innerHTML;
+			var h = 0;
+			var m = 0;
+			var s = 0;
+			if (rawTime.length > 8) { //WORKED AT LEAST ONE HOUR
+				console.log(rawTime.length);
+				h = rawTime.split('h', 1)[0];
+				var rest = rawTime.split('h', 2)[1];
+				m = rest.split('m', 1)[0];
+				rest = rawTime.split('m', 2)[1];
+				s = rest.split('s', 1)[0];
+			} else { // DIDN'T WORK A FULL HOUR. HOUR NOT SHOWN IN STRING
+				m = rawTime.split('m', 1)[0];
+				var rest = rawTime.split('m', 2)[1];
+				s = rest.split('s', 1)[0];
+			}
+			h = parseInt(h);
+			m = parseInt(m);
+			s = parseInt(s);
+			var time = h + ( m / 60 ) + ( s / 3600 );
+			var time = parseFloat(time).toFixed(2);
+			console.log(h);
+			console.log(m);
+			console.log(s);
+			times.push(time);
+			//GET DATE AND STORE IN ARRAY
+			var rawDate = rows[i].querySelectorAll('td')[1].innerHTML;
+			var date = rawDate.split(' ', 1)[0];
+			dates.push(date);
+		}
+		var calcTable = document.getElementById('CalcTable');
+		for (i=1; i<times.length; i++) {
+			var row = calcTable.insertRow(i);
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			cell1.innerHTML = dates[i];
+			cell2.innerHTML = times[i];
+			cell3.innerHTML = "<input type='checkbox'/>";
+		}
+		$(calcTable).append("<button id='getTotal'>See Total</button>");
+		$(calcTable).append("<div id='TOTAL'></div>");
+		var totalBoxStyle = document.getElementById('TOTAL').style;
+		totalBoxStyle.background = "#fff";
+		totalBoxStyle.border = "#bbb solid 2px";
+		totalBoxStyle.textAlign = "center";
+		totalBoxStyle.margin = "10px auto";
+	}
+}
+
+
+function makeCalculation() {
+	var timesTable = document.getElementById('CalcTable');
+	var rows = timesTable.querySelectorAll('tr');
+	var sumTimes = [];
+	for (i=1; i<rows.length; i++) {
+		var cells = rows[i].querySelectorAll('td');
+		var cell2 = cells[1].innerHTML;
+		var cell2Value = Number(cell2);
+		var cell3 = cells[2];
+		var checked = cell3.querySelectorAll('input')[0].checked;
+		if (checked) {
+			sumTimes.push(cell2Value);
+		}
+	}
+	var rawSum = sumTimes.reduce(add, 0);
+	function add(a, b) {
+	    return a + b;
+	}
+	rawSum = rawSum.toString();
+	if (rawSum.indexOf('.') != -1) {
+		var hours = rawSum.split('.',2)[0];
+		var minutes = Math.round(((rawSum.split('.',2)[1]) * 60)/100);
+	} else {
+		var hours = rawSum.split('.',2)[0];
+		var minutes = "00";
+	}
+	
+	var totalSpot = document.getElementById('TOTAL');
+	totalSpot.innerHTML = "You've worked " + hours + ":" + minutes;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
