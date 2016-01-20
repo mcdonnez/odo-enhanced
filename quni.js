@@ -28,6 +28,8 @@ var CurrentDate = new Date();
 var currentDay = CurrentDate.getDay();
 var currentHour = CurrentDate.getHours();
 var currentMinutes = CurrentDate.getMinutes();
+var TipsOn;
+var myName;
 
 
 function getVars() {
@@ -51,7 +53,9 @@ function getVars() {
 		eid: "", // Employee ID
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
-		td: ""//Ticket Goal Date
+		td: "",//Ticket Goal Date
+		tips: true, 
+		ename: ""
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -73,6 +77,9 @@ function getVars() {
 		Theme = items.tm;
 		TicketGoal = items.tg;
 		GoalDate = items.td;
+		TipsOn = items.tips;
+		myName = items.ename;
+		console.log(myName);
 		addons();
 	});
 }
@@ -97,7 +104,6 @@ var status = "Open,'In Progress', Reopened";
 
 /*GET EMPLOYEE ID*/
 if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
-	console.log("THIS RAN");
 	var intID = urlParams["eid"];
 	chrome.storage.sync.set({
 		eid: intID
@@ -698,13 +704,27 @@ function addDesign() {
 		$('#designTab').addClass(' ActiveTab');
 		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
 		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWM25wdWloalc2Ujg#noHeader'></iframe>";
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader'></iframe>";
 		//CHANGE THE PAGE TITLE
 		document.getElementsByClassName('PageTitle')[0].innerHTML = "Design";
 		document.title = "Odo | Design";
 	});
 }
-
+//Adding Panels Tab to each page
+function addPanels() {
+	$('.SectionTabsList').append('<li class="SectionTab" id="panelsTab" style="cursor:pointer;">Panels Playbook</li>');
+	//SET WINDOW HEIGHT
+	document.getElementById("panelsTab").addEventListener("click", function () {
+		$(".SectionTabsList > li").removeClass('ActiveTab');
+		$('#panelsTab').addClass(' ActiveTab');
+		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+		//ADD IFRAME
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/panels#noHeader'></iframe>";
+		//CHANGE THE PAGE TITLE
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "Panels";
+		document.title = "Odo | Panels Resources";
+	});
+}
 /*--- Add Playbook as a tab ---*/
 
 //CHANGE TAB NAME
@@ -757,6 +777,9 @@ function addons() {
 	if (SummitTriggerOn){
 		addSummitTrigger();
 	}
+	if (TipsOn){
+		addHelpMessages();
+	}
 	if (EmailButtonOn) {
 		addEmailTicket();
 	}
@@ -776,11 +799,31 @@ function addons() {
 	if (DesignTabOn) {
 		addDesign();
 	}
+	if (PanelsTabOn) {
+		addPanels();
+	}
 	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
 		if (SnippetsOn) {
 			setSnippetsContainer();
 		}
 		addChromeOptions();
+	}
+	if (urlParams["b"] == "TicketViewer") {
+		if (document.getElementsByClassName('SectionHeaderText')[0].innerHTML === "Client Pulse") {
+			addPulseButtons();
+		} else {
+			console.log("not a pulse");
+		}
+	}
+	if (urlParams["b"] == "EmployeeTimeClock") {
+		addCalculator();
+	}
+	if (urlParams["a"] == "QUni") {
+		addJiraSearch();
+		addTicketSearch();
+	}
+	if ((urlParams["a"] == "QUniReports") && (urlParams["TopNav"] == "Reports")) {
+		reportsObject.addFindMeButton();
 	}
 }
 
@@ -916,8 +959,21 @@ $(document).ready(function(){
 		document.title = "Odo | Ticket Search";
 	});
 });
-
-
+function addJiraSearch() {
+	console.log("Adding JIRA");
+	$('#LeftMenuColumn').append("<div class='PageFrameLeftMenuItem' style='cursor:pointer' id='JiraSearch'>JIRA Bug Search</div>");
+}
+// USED FOR JIRA TICKET SEARCH
+$(document).ready(function(){
+	$("#LeftMenuColumn").on("click", "#JiraSearch", function(){
+		$("#LeftMenuColumn > a > div").removeClass('PageFrameLeftMenuItemSelected');
+		$("#LeftMenuColumn > a > div").addClass('PageFrameLeftMenuItem');
+		$('#JiraSearch').addClass(' PageFrameLeftMenuItemSelected');
+		window.location = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=SupportJiraIssues";
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "JIRA Search";
+		document.title = "Odo | JIRA Search";
+	});
+});
 
 
 
@@ -934,7 +990,7 @@ function addCalculator() {
 	var tbody = table.querySelectorAll('tbody')[0];
 	$("#RightMenuColumn").append("<div id='CalculatorContainer' class='Blue'><div id='CalcArea' style='display:none;'><table id='CalcTable'><tr><th>Date</th><th>Time</th><th>Include?</th></tr></table></div><div id='CalcButtonContainer' style='text-align: right;'><button id='CalcButton'>Open Calculator</button></div></div>");
 }
-addCalculator();
+
 
 $("#CalcButtonContainer").on("click", "#CalcButton", function () {
 	toggleCalc();
@@ -943,24 +999,28 @@ $("#CalculatorContainer").on("click", "#getTotal", function () {
 	makeCalculation();
 });
 function toggleCalc() {
+	console.log("Toggling Calculator");
 	var table = document.getElementById('Tags');
 	var calcArea = document.getElementById('CalcArea');
 	if (calcArea.style.display != "block") {
 		document.getElementById('CalcButton').innerHTML = "Close Calculator";
 		calcArea.style.display = "block";
 		prepareCalc(calcArea);
+		document.getElementById('CalculatorContainer').style.border = "#bbb 2px solid";
+		document.getElementById('CalculatorContainer').style.padding = "9px 3px";
+
 	} else {
 		document.getElementById('CalcButton').innerHTML = "Open Calculator";
 		calcArea.style.display = "none";
 	}
 }
+var times = [];
+var dates = [];
 function prepareCalc(calcArea) {
 	if (document.getElementById('getTotal')) {
 	} else {
 		var tbody = document.getElementById('Tags').querySelectorAll('tbody')[0];
 		var rows = tbody.querySelectorAll('tr');
-		var times = [];
-		var dates = [];
 		for (i=0; i<rows.length; i++) {
 			var rawTime = rows[i].querySelectorAll('td')[3].innerHTML;
 			var h = 0;
@@ -978,14 +1038,10 @@ function prepareCalc(calcArea) {
 				var rest = rawTime.split('m', 2)[1];
 				s = rest.split('s', 1)[0];
 			}
-			h = parseInt(h);
-			m = parseInt(m);
-			s = parseInt(s);
+			h = Number(h);
+			m = Number(m);
+			s = Number(s);
 			var time = h + ( m / 60 ) + ( s / 3600 );
-			var time = parseFloat(time).toFixed(2);
-			console.log(h);
-			console.log(m);
-			console.log(s);
 			times.push(time);
 			//GET DATE AND STORE IN ARRAY
 			var rawDate = rows[i].querySelectorAll('td')[1].innerHTML;
@@ -999,7 +1055,7 @@ function prepareCalc(calcArea) {
 			var cell2 = row.insertCell(1);
 			var cell3 = row.insertCell(2);
 			cell1.innerHTML = dates[i];
-			cell2.innerHTML = times[i];
+			cell2.innerHTML = parseFloat(times[i]).toFixed(2);
 			cell3.innerHTML = "<input type='checkbox'/>";
 		}
 		$(calcTable).append("<button id='getTotal'>See Total</button>");
@@ -1024,22 +1080,28 @@ function makeCalculation() {
 		var cell3 = cells[2];
 		var checked = cell3.querySelectorAll('input')[0].checked;
 		if (checked) {
-			sumTimes.push(cell2Value);
+			sumTimes.push(times[i]);
 		}
 	}
 	var rawSum = sumTimes.reduce(add, 0);
 	function add(a, b) {
 	    return a + b;
 	}
+	console.log(sumTimes);
 	rawSum = rawSum.toString();
 	if (rawSum.indexOf('.') != -1) {
 		var hours = rawSum.split('.',2)[0];
-		var minutes = Math.round(((rawSum.split('.',2)[1]) * 60)/100);
+		console.log(rawSum);
+		var rawMin = (rawSum.split('.',2)[1]).toString();
+		rawMin = Number(rawMin.substring(0,2));
+		var minutes = Math.round(((rawMin) * 60)/100);
+		console.log(rawSum.split('.',2)[1]);
+		console.log(minutes);
 	} else {
 		var hours = rawSum.split('.',2)[0];
 		var minutes = "00";
 	}
-	
+
 	var totalSpot = document.getElementById('TOTAL');
 	totalSpot.innerHTML = "You've worked " + hours + ":" + minutes;
 }
@@ -1048,13 +1110,152 @@ function makeCalculation() {
 
 
 
+function addPulseButtons() {
+	/*
+	var container = document.getElementById('CPbuttons');
+	console.log(container);
+	var button1Text = "<button class='ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left' role='button' aria-disabled='false'><span class='ui-button-text'><a href='https://service.sumologic.com/ui/' target='_blank' style='color: #007ac0; font-weight: normal;'>Check SumoLogic</a></span></button>";
+	$(container).append(button1Text);
+	*/
+	var placer = $('.SectionHeader');
+	$("<div id='NewButtonContainer'></div>").insertAfter(placer);
+	var container = $('#NewButtonContainer');
+	$(container).append("<h3>Resources</h3>");
+	$(container).append("<a href='https://service.sumologic.com/ui/' target='_blank' class='pulse-helpers'>Check SumoLogic</a>");
+	$(container).append("<a href='https://qualtrics.atlassian.net/secure/Dashboard.jspa' target='_blank' class='pulse-helpers'>Check JIRA</a>");
+}
 
 
+if (document.getElementById('EmergencyLoginCheckbox')) {
+	var loginCheckbox = document.getElementById('EmergencyLoginCheckbox');
+	window.addEventListener("click", addResTeamBit);
+}
 
+function addResTeamBit() {
+	var textarea = document.querySelectorAll('#EmergencyLoginForm > textarea')[0];
+	textarea.innerHTML = "Resolution Team logging in for more information about a pulse";
+}
 
+//ADD MESSAGING TO THE APP
 
+	var messages = [
+		"Brush your teeth before you come to work...",
+		"Never eat with your mouth open",
+		"If you're going to talk, make sure it's enriching the silence"
+	]
 
+	function addHelpMessages() {
+		var container = $('.SectionTabsList');
+		var unreadCount = 0;
+		chrome.storage.sync.get({
+			cm: null
+		}, function (items) {
+			currentMessage = items.cm;
+			console.log(items.cm);
+			if (currentMessage == null) {
+				unreadCount += 1;
+			} else {
+				unreadCount = 0;
+			}
+			console.log(unreadCount);
+			chrome.storage.sync.set({
+				uc: unreadCount
+			});
+			chrome.storage.sync.get({
+				uc: 0
+			}, function (items) {
+				console.log(items.uc);
+				unreadCount = items.uc;
+			});
+			if (unreadCount > 0) {
+				var messageCounter = '<div id="MessageCount" style="display: inline; border-radius: 100%; background: #04a365; color: #fff; padding: 5px 10px; margin 5px;">'+ unreadCount +'</div>';
+			} else {
+				var messageCounter = '';
+			}
+			var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks' + messageCounter + '</li>';
+			container.append(innerTab);
+		});
 
+	}
+	var currentMessage;
+	var lastWeeksMessage;
+	chrome.storage.sync.get({
+		cm: null,
+		lwm: null
+	}, function (items) {
+		currentMessage = items.cm;
+		lastWeeksMessage = items.lwm;
+		console.log(items.cm);
+		console.log(lastWeeksMessage);
+	});
+
+	function toggleMessages(refresh) {
+		if ((currentMessage == null) || (refresh)) {
+			var max = messages.length;
+			var rand = Math.floor(Math.random() * max) + 0
+			currentMessage = rand;
+			chrome.storage.sync.set({
+				cm: currentMessage,
+				lwm: lastWeeksMessage
+			});
+		}
+		replaceCenterContent(currentMessage);
+	}
+	$(".SectionTabsList").on("click", "#MessagesTab", function () {
+		console.log("Show me a message");
+		toggleMessages(false);
+	});
+
+	function replaceCenterContent(id) {
+		document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='NewTip'>Give me a new tip</button><div id='TipList'></div></div></div>";
+		document.getElementById('TipContent').innerHTML = messages[id];
+		document.getElementById('TipHeader').innerHTML = "Your tip is: ";
+		document.getElementById('TipList').innerHTML = "To see the whole list, <a href='#' target='_blank'>click here</a>.";
+
+	}
+	$("#BodyContent").on("click", "#NewTip", function () {
+		console.log("Show me a new message");
+		toggleMessages(true);
+	});
+	function addFindMeButton() {
+		$("#RightMenuColumn").append("<div id='FindMeButtonContainer' style='text-align: right;'><button id='FindMeButton'>Find Myself in the Report</button></div>");
+	}
+	$("#RightMenuColumn").on("click", "#FindMeButton", function () {
+		findMe(myName);
+	});
+
+//ALLOW FOR FINDING ONESELF ON THE ODO REPORTS PAGE FOR QUNI
+	function findMe(nameInput) {
+		console.log(nameInput);
+		if ((nameInput == "") || (nameInput == undefined)) {
+			var nameInput = prompt("Please enter your name", "");
+			chrome.storage.sync.set({
+				name: nameInput
+			});
+			var allEmployees = document.querySelectorAll('#Rankings > a > div');
+			for (i=0; i<allEmployees.length; i++) {
+				var name = allEmployees[i].querySelector('div.rank-text > b').innerHTML;
+				console.log(name[i]);
+				if (name.toLowerCase().indexOf(nameInput.toLowerCase()) != -1) {
+					console.log("Found you!");
+					allEmployees[i].style.background = "#fff";
+					allEmployees[i].style.outline = "5px solid red";
+				}
+			}
+		} else {
+			console.log("Running Else Function");
+			var allEmployees = document.querySelectorAll('#Rankings > a > div');
+		for (i=0; i<allEmployees.length; i++) {
+			var name = allEmployees[i].querySelector('div.rank-text > b').innerHTML;
+			console.log(name[i]);
+			if (name.toLowerCase().indexOf(nameInput.toLowerCase()) != -1) {
+				console.log("Found you!");
+				allEmployees[i].style.background = "#fff";
+				allEmployees[i].style.outline = "5px solid red";
+			}
+		}
+		}
+	}
 
 
 

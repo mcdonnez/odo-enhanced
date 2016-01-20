@@ -32,6 +32,8 @@ function save_options() {
 	var employeeID = document.getElementById('EmployeeID').value;
 	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
+	var tips = document.getElementById('Tips').checked;
+	var myName = document.getElementById('Name').value;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -52,7 +54,9 @@ function save_options() {
 		eid: employeeID,
 		gp: gradProgress,
 		tg: ticketGoal, 
-		td: ticketDate
+		td: ticketDate,
+		tips: tips,
+		ename: myName
 	}, function() {
 		// Update status to let user know options were saved.
 		var status = document.getElementById('status');
@@ -86,7 +90,9 @@ function restore_options() {
 		gp: true,
 		tm: null,
 		tg: 3700,
-		td: "2016-12-12"
+		td: "2016-12-12",
+		tips: true,
+		ename: ""
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -108,6 +114,8 @@ function restore_options() {
 		document.getElementById('Theme').value = items.tm;
 		document.getElementById('TicketGoal').value = items.tg;
 		document.getElementById('TicketDate').value = items.td;
+		document.getElementById('Tips').checked = items.tips;
+		document.getElementById('Name').value = items.ename;
 		makeOpaque();
 
 	});
