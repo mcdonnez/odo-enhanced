@@ -20,9 +20,11 @@ function save_options() {
 	var employeeID = document.getElementById('EmployeeID').value;
 	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
-	var tips = document.getElementById('Tips').checked;
+	//var tips = document.getElementById('Tips').checked;
 	var myName = document.getElementById('Name').value;
 	var panels = document.getElementById('Panels').checked;
+	//var alerts = document.getElementById('greyAlerts').checked;
+	//var smallPosts = document.getElementById('shrinkPosts').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -44,9 +46,11 @@ function save_options() {
 		gp: gradProgress,
 		tg: ticketGoal,
 		td: ticketDate,
-		tips: tips,
+		//tips: tips,
 		ename: myName,
-		panels: panels
+		panels: panels//,
+		//calmAlerts: alerts,
+		//minPosts: smallPosts
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -81,10 +85,13 @@ function restore_options() {
 		tm: null,
 		tg: 3700,
 		td: "2016-12-12",
-		tips: true,
+		//tips: true,
 		ename: "",
-		panels: false
+		panels: false//,
+		//calmAlerts: true,
+		//minPosts: true
 	}, function(items) {
+		console.log(items.gp);
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
 		document.getElementById('StartClinicTime').value = items.sct;
@@ -105,9 +112,11 @@ function restore_options() {
 		document.getElementById('Theme').value = items.tm;
 		document.getElementById('TicketGoal').value = items.tg;
 		document.getElementById('TicketDate').value = items.td;
-		document.getElementById('Tips').checked = items.tips;
+		//document.getElementById('Tips').checked = items.tips;
 		document.getElementById('Name').value = items.ename;
 		document.getElementById('Panels').checked = items.panels;
+		//document.getElementById('greyAlerts').checked = items.calmAlerts;
+		//document.getElementById('shrinkPosts').checked = items.minPosts;
 		modifiers.makeOpaque();
 
 	});
