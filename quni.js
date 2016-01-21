@@ -28,12 +28,15 @@ var CurrentDate = new Date();
 var currentDay = CurrentDate.getDay();
 var currentHour = CurrentDate.getHours();
 var currentMinutes = CurrentDate.getMinutes();
+var TipsOn;
+var myName;
+var panelsTabOn;
 
 
 function getVars() {
 	chrome.storage.sync.get({
 		em: "", //email button
-		cl: "", // clinic button 
+		cl: "", // clinic button
 		sct: "", //Clinic start time
 		ect: "", // Clinic End Time
 		cdn: "", // Clinic Day
@@ -43,15 +46,18 @@ function getVars() {
 		ee: "", // Easter Eggs
 		pb: "", // Playbook Tab
 		st: true, // Summit Trigger
-		s: true, //Snippets 
-		sc: "", // Snippets Closed 
+		s: true, //Snippets
+		sc: "", // Snippets Closed
 		sd: 4, // Snippets Day
 		sl: "#04b26e", // Snippets Color
 		gp: true, // Grad Progress Tracker
 		eid: "", // Employee ID
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
-		td: ""//Ticket Goal Date
+		td: "",//Ticket Goal Date
+		tips: true,
+		ename: "",
+		panels: false
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -73,6 +79,10 @@ function getVars() {
 		Theme = items.tm;
 		TicketGoal = items.tg;
 		GoalDate = items.td;
+		TipsOn = items.tips;
+		PanelsTabOn = items.panels;
+		myName = items.ename;
+		console.log(myName);
 		addons();
 	});
 }
@@ -96,8 +106,7 @@ var status = "Open,'In Progress', Reopened";
 })();
 
 /*GET EMPLOYEE ID*/
-if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
-	console.log("THIS RAN");
+var getEID = function() {
 	var intID = urlParams["eid"];
 	chrome.storage.sync.set({
 		eid: intID
@@ -194,7 +203,7 @@ case 'CompanyOfficeMaps':
 	break;
 default:
 }
-changeFavicon(favicon);
+
 /* ------------- Add Email Button ---------------- */
 function addEmailTicket() {
 container = document.getElementsByClassName('SectionButtonsContainer')[0];
@@ -240,7 +249,7 @@ function changeTitle() {
 		}
 	}
 };
-changeTitle();
+
 /* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
 var feature;
 var product;
@@ -504,85 +513,86 @@ changeDialog.onmouseenter = function () {
 		}
 	}
 };
-// ---- Snippets on Home Page ----
-
-//RETRIEVE CONTENT FROM SNIPPETS PAGE
-function setSnippetsContainer() {
-	var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", url, true);
-	xmlhttp.responseType = "document";
-	xmlhttp.send();
-	xmlhttp.onreadystatechange = function () {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			var response = xmlhttp.response;
-			//Create Container
-			$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
-			if (Theme === "starwars") {
-				document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
-			}
-			// PLACE SNIPPETS IN CONTAINER
-			if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
-				var numberComplete = 0;
-				var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
-				var snippetSideBar = document.getElementById('snippetsContainer');
-				snippetSideBar.innerHTML = finalOutput;
-				var table = document.getElementById('snippetsContainer');
-				//CLEAN EACH SNIPPET ONE BY ONE
-				for (i = 0; i < table.rows.length; i++) {
-					var row = table.rows[i];
-					row.style.background = "transparent";
-					//COLOR SNIPPETS WHEN COMPLETED
-					var checkBox = row.getElementsByTagName('input')[0];
-					//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
-					var d = new Date();
-					var n = d.getDay();
-					if (checkBox.checked) {
-						row.style.display = "none";
-						numberComplete = numberComplete + 1;
-					} else if (n >= SnippetsDay) /*var set in chrome options */ {
-						row.style.outline = "1px solid " + SnippetsColor;
-					}
-					//ELIMINATE X
-					row.deleteCell(0);
-					row.deleteCell(1);
-					//TRUNCATE LABELS ON SNIPPETS
-					var length = 40; //LENGTH OF SNIPPET POST BEFORE TRUNCATION
-					var rowContents = row.getElementsByTagName('td')[0];
-					//VERIFY THAT TRUNCATION IS NECESSARY
-					if (rowContents.innerHTML.length > length) {
-						var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
-						rowContents.innerHTML = replaceMe.substring(0, length) + "...";
-					}
+	// ---- Snippets on Home Page ----
+var snippetsMods = {
+	//RETRIEVE CONTENT FROM SNIPPETS PAGE
+	setSnippetsContainer: function () {
+		var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", url, true);
+		xmlhttp.responseType = "document";
+		xmlhttp.send();
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var response = xmlhttp.response;
+				//Create Container
+				$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
+				if (Theme === "starwars") {
+					document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
 				}
-				//Congratulate if Snippets are completed
-				if (table.rows.length == numberComplete) {
+				// PLACE SNIPPETS IN CONTAINER
+				if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
+					var numberComplete = 0;
+					var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
 					var snippetSideBar = document.getElementById('snippetsContainer');
-					snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
-					document.getElementById('SnippetsPreview').style.height = "0px";
+					snippetSideBar.innerHTML = finalOutput;
+					var table = document.getElementById('snippetsContainer');
+					//CLEAN EACH SNIPPET ONE BY ONE
+					for (i = 0; i < table.rows.length; i++) {
+						var row = table.rows[i];
+						row.style.background = "transparent";
+						//COLOR SNIPPETS WHEN COMPLETED
+						var checkBox = row.getElementsByTagName('input')[0];
+						//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
+						var d = new Date();
+						var n = d.getDay();
+						if (checkBox.checked) {
+							row.style.display = "none";
+							numberComplete = numberComplete + 1;
+						} else if (n >= SnippetsDay) /*var set in chrome options */ {
+							row.style.outline = "1px solid " + SnippetsColor;
+						}
+						//ELIMINATE X
+						row.deleteCell(0);
+						row.deleteCell(1);
+						//TRUNCATE LABELS ON SNIPPETS
+						var length = 40; //LENGTH OF SNIPPET POST BEFORE TRUNCATION
+						var rowContents = row.getElementsByTagName('td')[0];
+						//VERIFY THAT TRUNCATION IS NECESSARY
+						if (rowContents.innerHTML.length > length) {
+							var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
+							rowContents.innerHTML = replaceMe.substring(0, length) + "...";
+						}
+					}
+					//Congratulate if Snippets are completed
+					if (table.rows.length == numberComplete) {
+						var snippetSideBar = document.getElementById('snippetsContainer');
+						snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
+						document.getElementById('SnippetsPreview').style.height = "0px";
+					}
+					//Add preview bar for when closed
+					var numberIncomplete = table.rows.length - numberComplete;
+					document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go";
+					if (SnippetsClosed == false) {
+						document.getElementById('SnippetsPreview').style.display = "none";
+					}
+				} else {
+					//ALERT THAT NO SNIPPETS ARE PRESENT
+					var snippetSideBar = document.getElementById('snippetsContainer');
+					snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
+					snippetSideBar.style.cursor = "pointer";
+					snippetSideBar.style.outline = "1px solid " + SnippetsColor;
 				}
-				//Add preview bar for when closed
-				var numberIncomplete = table.rows.length - numberComplete;
-				document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go";
-				if (SnippetsClosed == false) {
-					document.getElementById('SnippetsPreview').style.display = "none";
+				//ALLOW FOR EDITING OF SNIPPETS
+				snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
+				//CLOSE SNIPPETS
+				if (SnippetsClosed) {
+					table.style.display = "none";
 				}
-			} else {
-				//ALERT THAT NO SNIPPETS ARE PRESENT
-				var snippetSideBar = document.getElementById('snippetsContainer');
-				snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
-				snippetSideBar.style.cursor = "pointer";
-				snippetSideBar.style.outline = "1px solid " + SnippetsColor;
-			}
-			//ALLOW FOR EDITING OF SNIPPETS
-			snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
-			//CLOSE SNIPPETS
-			if (SnippetsClosed) {
-				table.style.display = "none";
 			}
 		}
 	}
-}
+};
 // ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
 $("#LeftMenuColumn").on("click", "#SnippetsHeader", function () {
 	var container = document.getElementById('snippetsContainer');
@@ -602,18 +612,7 @@ $("#LeftMenuColumn").on("click", "#SnippetsHeader", function () {
 		}
 	}
 });
-/*DEV-- Google Calendar APIs experiment --*/
-function getCal() {
-	$.get("https://www.googleapis.com/calendar/v3/calendars/zachm%40qualtrics.com")
-		.done(function (data) {
-			alert("Data Loaded: " + data);
-		})
-		.fail(function (error) {
-			alert("error" + error.responseJSON);
-			console.log(error);
-		});
-};
-/*--- Easter Eggs ---*/
+
 /*--- Konami Code for Mario Face to Appear ---*/
 // check to make sure that the browser can handle window.addEventListener
 function konami() {
@@ -656,107 +655,185 @@ function addMario() {
 
 
 //CUSTOM TABS
+var customTabs = {
+	/*Adds the Help Desk tab to every page*/
+	addHelpDesk: function () {
+		$('.SectionTabsList').append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById("helpdeskTab").addEventListener("click", function () {
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			$('#helpdeskTab').addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
+			//ADD IFRAME
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = "Help Desk Request";
+			document.title = "Odo | Help Desk Request";
+		});
+	},
+	/*Adds the Options tab to home page*/
+	addChromeOptions: function () {
+		$('.SectionTabsList').append('<li class="SectionTab" id="optionsTab" style="cursor:pointer;">Extension Options</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById("optionsTab").addEventListener("click", function () {
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			$('#optionsTab').addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .TimezonesTableContainer').fadeIn();
+			//ADD IFRAME
+			var optionsUrl = chrome.extension.getURL("options.html");
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 800px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = "Chrome Extension Options";
+			document.title = "Odo | Extension Options";
+		});
+	},
+	//Adding Design Tab to each page
+	addDesign: function () {
+		$('.SectionTabsList').append('<li class="SectionTab" id="designTab" style="cursor:pointer;">Design</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById("designTab").addEventListener("click", function () {
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			$('#designTab').addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+			//ADD IFRAME
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = "Design";
+			document.title = "Odo | Design";
+		});
+	},
+	//Adding Panels Tab to each page
+	addPanels: function () {
+		$('.SectionTabsList').append('<li class="SectionTab" id="panelsTab" style="cursor:pointer;">Panels Playbook</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById("panelsTab").addEventListener("click", function () {
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			$('#panelsTab').addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+			//ADD IFRAME
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/panels#noHeader'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = "Panels";
+			document.title = "Odo | Panels Resources";
+		});
+	},
+	/*--- Add Playbook as a tab ---*/
 
-/*Adds the Help Desk tab to every page*/
-function addHelpDesk() {
-	$('.SectionTabsList').append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById("helpdeskTab").addEventListener("click", function () {
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#helpdeskTab').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Help Desk Request";
-		document.title = "Odo | Help Desk Request";
-	});
-}
+	//CHANGE TAB NAME
+	addPlaybook: function () {
+		$('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById("playbookTab").addEventListener("click", function () {
+			window.location.hash = "playbook";
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			$('#playbookTab').addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+			//ADD IFRAME
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook#noHeader'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
+			document.title = "Odo | Playbook";
+		});
+	},
+	addSummitTrigger: function () {
+		$('.SectionTabsList').append('<li class="SectionTab" id="summitTrigger" style="cursor:pointer;">Summit Trigger</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById("summitTrigger").addEventListener("click", function () {
+			window.location.hash = "SummitTrigger";
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			$('#summitTrigger').addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
+			//ADD IFRAME
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='//genesisqcorput1.qualtrics.com/SE/?SID=SV_5jZmbyiuIfBis8B'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = "Summit Trigger";
+			document.title = "Odo | Summit Trigger";
+		});
+	},
+	addHelpMessages: function () {
+		var container = $('.SectionTabsList');
+		var unreadCount = 0;
+		chrome.storage.sync.get({
+			cm: null
+		}, function (items) {
+			currentMessage = items.cm;
+			console.log(items.cm);
+			if (currentMessage == null) {
+				unreadCount += 1;
+			} else {
+				unreadCount = 0;
+			}
+			console.log(unreadCount);
+			chrome.storage.sync.set({
+				uc: unreadCount
+			});
+			chrome.storage.sync.get({
+				uc: 0
+			}, function (items) {
+				console.log(items.uc);
+				unreadCount = items.uc;
+			});
+			if (unreadCount > 0) {
+				var messageCounter = '<div id="MessageCount" style="display: inline; border-radius: 100%; background: #04a365; color: #fff; padding: 5px 10px; margin 5px;">'+ unreadCount +'</div>';
+			} else {
+				var messageCounter = '';
+			}
+			var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks' + messageCounter + '</li>';
+			container.append(innerTab);
+		});
 
-/*Adds the Options tab to home page*/
-function addChromeOptions() {
-	$('.SectionTabsList').append('<li class="SectionTab" id="optionsTab" style="cursor:pointer;">Extension Options</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById("optionsTab").addEventListener("click", function () {
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#optionsTab').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .TimezonesTableContainer').fadeIn();
-		//ADD IFRAME
-		var optionsUrl = chrome.extension.getURL("options.html");
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 800px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Chrome Extension Options";
-		document.title = "Odo | Extension Options";
-	});
-}
-//Adding Design Tab to each page
-function addDesign() {
-	$('.SectionTabsList').append('<li class="SectionTab" id="designTab" style="cursor:pointer;">Design</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById("designTab").addEventListener("click", function () {
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#designTab').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://googledrive.com/host/0Bywaj8lsBBrWM25wdWloalc2Ujg#noHeader'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Design";
-		document.title = "Odo | Design";
-	});
-}
-
-/*--- Add Playbook as a tab ---*/
-
-//CHANGE TAB NAME
-function addPlaybook() {
-	$('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById("playbookTab").addEventListener("click", function () {
-		window.location.hash = "playbook";
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#playbookTab').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook#noHeader'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
-		document.title = "Odo | Playbook";
-	});
+	}
 };
 
-function addSummitTrigger() {
-	$('.SectionTabsList').append('<li class="SectionTab" id="summitTrigger" style="cursor:pointer;">Summit Trigger</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById("summitTrigger").addEventListener("click", function () {
-		window.location.hash = "SummitTrigger";
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#summitTrigger').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='//genesisqcorput1.qualtrics.com/SE/?SID=SV_5jZmbyiuIfBis8B'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Summit Trigger";
-		document.title = "Odo | Summit Trigger";
-	});
-};
+
+
+
+
+
+
+
 
 function addons() {
+	//GENERAL GRABBING
+	if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
+		getEID();
+	}
+	changeTitle();
+	changeFavicon(favicon);
+	//APPLY A THEME
 	console.log("Current Theme is: " + Theme);
-	//BE SURE THAT SNIPPETS ONLY SHOW ON HOME PAGE BASED OFF URLPARAMS FOR FAVICON PLACEMENT
+	//ADD YOUR TABS
 	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
 		if (PlaybookTabOn) {
-			addPlaybook();
+			customTabs.addPlaybook();
 		}
 		if (EasterEggsOn) {
 			konami();
 		}
 	}
 	if (HelpDeskTabOn) {
-		addHelpDesk();
+		customTabs.addHelpDesk();
 	}
 	if (SummitTriggerOn){
-		addSummitTrigger();
+		customTabs.addSummitTrigger();
 	}
+	if (TipsOn){
+		//customTabs.addHelpMessages();
+	}
+	if (DesignTabOn) {
+		customTabs.addDesign();
+	}
+	if (PanelsTabOn) {
+		customTabs.addPanels();
+	}
+	//SNIPPETS AND CHROME OPTIONS
+	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
+		if (SnippetsOn) {
+			snippetsMods.setSnippetsContainer();
+		}
+		customTabs.addChromeOptions();
+	}
+	//CUSTOM BUTTONS
 	if (EmailButtonOn) {
 		addEmailTicket();
 	}
@@ -773,14 +850,24 @@ function addons() {
 	if ((ShowGradProgressOn) && (EmpID != "")) {
 		showQuniProgress();
 	}
-	if (DesignTabOn) {
-		addDesign();
+	if (urlParams["a"] == "QUni") {
+		addJiraSearch();
+		addTicketSearch();
 	}
-	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
-		if (SnippetsOn) {
-			setSnippetsContainer();
+	if ((urlParams["a"] == "QUniReports") && (urlParams["TopNav"] == "Reports")) {
+		reportsObject.addFindMeButton();
+	}
+	//PULSE MODIFICATIONS
+	if (urlParams["b"] == "TicketViewer") {
+		if (document.getElementsByClassName('SectionHeaderText')[0].innerHTML === "Client Pulse") {
+			pulseMods.addPulseButtons();
+		} else {
+			console.log("not a pulse");
 		}
-		addChromeOptions();
+	}
+	if (document.getElementById('EmergencyLoginCheckbox')) {
+		var loginCheckbox = document.getElementById('EmergencyLoginCheckbox');
+		window.addEventListener("click", pulseMods.addResTeamBit);
 	}
 }
 
@@ -872,7 +959,7 @@ function calculateTicketTotals(phoneValue,emailValue) {
 		var estWeekends = ( daysTillGoal / 7 ) * 2;
 		var ticketsPerDay = Math.round(remaining / ( daysTillGoal - estWeekends));
 		console.log(daysTillGoal);
-		GradProgContainer.innerHTML = "<div style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to hit the milestone! That means about " + ticketsPerDay + " tickets per day!</div>";
+		GradProgContainer.innerHTML = "<div id='TicketCounterInner' style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to hit the milestone! That means about " + ticketsPerDay + " tickets per day!</div>";
 		//DEPENDING ON THE PROGRESS, CHANGE THE LOCATION AND COLOR OF THE PERCENT SYMBOL WITHIN THE GRADPROGRESS BAR
 		if ((percentComplete >= 43) && (percentComplete < 60)) {
 			var percentContainer = document.getElementById("PercentGradComplete");
@@ -886,6 +973,9 @@ function calculateTicketTotals(phoneValue,emailValue) {
 			percentContainer.style.textAlign = "center";
 			percentContainer.style.right = "0";
 			percentContainer.style.width = "auto";
+		}
+		if (percentComplete >= 100) {
+			GradProgContainer.innerHTML = "Congrats! You've finished!"
 		}
 	} else {
 		GradProgContainer.innerHTML = "<div style='text-align: center;'>Hmmmm... Doesn't look like you have any tickets!</div>";
@@ -916,4 +1006,137 @@ $(document).ready(function(){
 		document.title = "Odo | Ticket Search";
 	});
 });
+function addJiraSearch() {
+	console.log("Adding JIRA");
+	$('#LeftMenuColumn').append("<div class='PageFrameLeftMenuItem' style='cursor:pointer' id='JiraSearch'>JIRA Bug Search</div>");
+}
+// USED FOR JIRA TICKET SEARCH
+$(document).ready(function(){
+	$("#LeftMenuColumn").on("click", "#JiraSearch", function(){
+		$("#LeftMenuColumn > a > div").removeClass('PageFrameLeftMenuItemSelected');
+		$("#LeftMenuColumn > a > div").addClass('PageFrameLeftMenuItem');
+		$('#JiraSearch').addClass(' PageFrameLeftMenuItemSelected');
+		window.location = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=SupportJiraIssues";
+		document.getElementsByClassName('PageTitle')[0].innerHTML = "JIRA Search";
+		document.title = "Odo | JIRA Search";
+	});
+});
+var pulseMods  = {
+	addPulseButtons: function () {
+		/*
+		var container = document.getElementById('CPbuttons');
+		console.log(container);
+		var button1Text = "<button class='ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left' role='button' aria-disabled='false'><span class='ui-button-text'><a href='https://service.sumologic.com/ui/' target='_blank' style='color: #007ac0; font-weight: normal;'>Check SumoLogic</a></span></button>";
+		$(container).append(button1Text);
+		*/
+		var placer = $('.SectionHeader');
+		$("<div id='NewButtonContainer'></div>").insertAfter(placer);
+		var container = $('#NewButtonContainer');
+		$(container).append("<h3>Resources</h3>");
+		$(container).append("<a href='https://service.sumologic.com/ui/' target='_blank' class='pulse-helpers'>Check SumoLogic</a>");
+		$(container).append("<a href='https://qualtrics.atlassian.net/secure/Dashboard.jspa' target='_blank' class='pulse-helpers'>Check JIRA</a>");
+	},
+	addResTeamBit: function () {
+		var textarea = document.querySelectorAll('#EmergencyLoginForm > textarea')[0];
+		textarea.innerHTML = "Resolution Team logging in for more information about a pulse";
+	}
+}
+
+
+
+
+
+
+
+//ADD MESSAGING TO THE APP
+
+	var messages = [
+		"Brush your teeth before you come to work...",
+		"Never eat with your mouth open",
+		"If you're going to talk, make sure it's enriching the silence"
+	]
+	var currentMessage;
+	var lastWeeksMessage;
+	chrome.storage.sync.get({
+		cm: null,
+		lwm: null
+	}, function (items) {
+		currentMessage = items.cm;
+		lastWeeksMessage = items.lwm;
+		console.log(items.cm);
+		console.log(lastWeeksMessage);
+	});
+
+	function toggleMessages(refresh) {
+		if ((currentMessage == null) || (refresh)) {
+			var max = messages.length;
+			var rand = Math.floor(Math.random() * max) + 0
+			currentMessage = rand;
+			chrome.storage.sync.set({
+				cm: currentMessage,
+				lwm: lastWeeksMessage
+			});
+		}
+		replaceCenterContent(currentMessage);
+	}
+	$(".SectionTabsList").on("click", "#MessagesTab", function () {
+		console.log("Show me a message");
+		toggleMessages(false);
+	});
+
+	function replaceCenterContent(id) {
+		document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='NewTip'>Give me a new tip</button><div id='TipList'></div></div></div>";
+		document.getElementById('TipContent').innerHTML = messages[id];
+		document.getElementById('TipHeader').innerHTML = "Your tip is: ";
+		document.getElementById('TipList').innerHTML = "To see the whole list, <a href='#' target='_blank'>click here</a>.";
+
+	}
+	$("#BodyContent").on("click", "#NewTip", function () {
+		console.log("Show me a new message");
+		toggleMessages(true);
+	});
+	function addFindMeButton() {
+		$("#RightMenuColumn").append("<div id='FindMeButtonContainer' style='text-align: right;'><button id='FindMeButton'>Find Myself in the Report</button></div>");
+	}
+	$("#RightMenuColumn").on("click", "#FindMeButton", function () {
+		findMe(myName);
+	});
+
+//ALLOW FOR FINDING ONESELF ON THE ODO REPORTS PAGE FOR QUNI
+	function findMe(nameInput) {
+		console.log(nameInput);
+		if ((nameInput == "") || (nameInput == undefined)) {
+			var nameInput = prompt("Please enter your name", "");
+			chrome.storage.sync.set({
+				name: nameInput
+			});
+			var allEmployees = document.querySelectorAll('#Rankings > a > div');
+			for (i=0; i<allEmployees.length; i++) {
+				var name = allEmployees[i].querySelector('div.rank-text > b').innerHTML;
+				console.log(name[i]);
+				if (name.toLowerCase().indexOf(nameInput.toLowerCase()) != -1) {
+					console.log("Found you!");
+					allEmployees[i].style.background = "#fff";
+					allEmployees[i].style.outline = "5px solid red";
+				}
+			}
+		} else {
+			console.log("Running Else Function");
+			var allEmployees = document.querySelectorAll('#Rankings > a > div');
+		for (i=0; i<allEmployees.length; i++) {
+			var name = allEmployees[i].querySelector('div.rank-text > b').innerHTML;
+			console.log(name[i]);
+			if (name.toLowerCase().indexOf(nameInput.toLowerCase()) != -1) {
+				console.log("Found you!");
+				allEmployees[i].style.background = "#fff";
+				allEmployees[i].style.outline = "5px solid red";
+			}
+		}
+		}
+	}
+
+
+
+
+
 
