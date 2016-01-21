@@ -1,15 +1,3 @@
-function loadFeedback() {
-	document.getElementById('Overlay').style.display = "block";
-	document.getElementById('Iframe').src='https://survey.qualtrics.com/SE/?SID=SV_3OT1mMS5wBagn8p';
-}
-function closeFeedback() {
-	document.getElementById('Overlay').style.display = "none";
-	document.getElementById('Iframe').src='';
-}
-document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
-document.getElementById("Exit").addEventListener("click", closeFeedback);
-document.getElementById("Overlay").addEventListener("click", closeFeedback);
-
 function save_options() {
 	var createEmail = document.getElementById('EmailButton').checked;
 	var createClinic = document.getElementById('ClinicButton').checked;
@@ -34,6 +22,7 @@ function save_options() {
 	var theme = document.getElementById('Theme').value;
 	var tips = document.getElementById('Tips').checked;
 	var myName = document.getElementById('Name').value;
+	var panels = document.getElementById('Panels').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -53,12 +42,13 @@ function save_options() {
 		sl: snippetColor,
 		eid: employeeID,
 		gp: gradProgress,
-		tg: ticketGoal, 
+		tg: ticketGoal,
 		td: ticketDate,
 		tips: tips,
-		ename: myName
+		ename: myName,
+		panels: panels
 	}, function() {
-		// Update status to let user know options were saved.
+		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
 		status.textContent = 'Options updated.';
 		setTimeout(function() {
@@ -92,7 +82,8 @@ function restore_options() {
 		tg: 3700,
 		td: "2016-12-12",
 		tips: true,
-		ename: ""
+		ename: "",
+		panels: false
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -116,33 +107,46 @@ function restore_options() {
 		document.getElementById('TicketDate').value = items.td;
 		document.getElementById('Tips').checked = items.tips;
 		document.getElementById('Name').value = items.ename;
-		makeOpaque();
+		document.getElementById('Panels').checked = items.panels;
+		modifiers.makeOpaque();
 
 	});
 }
+//EVENT LISTENERS
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click',
 	save_options);
 document.getElementById('Wrapper').addEventListener('change',
 	save_options);
-
-document.getElementById('Snippets').addEventListener('change', makeOpaque);
-document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
-
-function makeOpaque() {
-	var snipOps = document.getElementsByClassName('SubOption')[0];
-	var snipToggle = document.getElementById('Snippets').checked;
-	if (snipToggle) {
-		snipOps.style.display = "block";
-	} else {
-		snipOps.style.display = "none";
-	}
-	var clinOps = document.getElementById('ClinicOptions');
-	var clinToggle = document.getElementById('ClinicButton').checked;
-	if (clinToggle) {
-		clinOps.style.display = "block";
-	} else {
-		clinOps.style.display = "none";
+document.getElementById('Snippets').addEventListener('change', modifiers.makeOpaque);
+document.getElementById('ClinicButton').addEventListener('change', modifiers.makeOpaque);
+document.getElementById("FeedbackLink").addEventListener("click", modifiers.loadFeedback);
+document.getElementById("Exit").addEventListener("click", modifiers.closeFeedback);
+document.getElementById("Overlay").addEventListener("click", modifiers.closeFeedback);
+var modifiers = {
+	makeOpaque: function() {
+		var snipOps = document.getElementsByClassName('SubOption')[0];
+		var snipToggle = document.getElementById('Snippets').checked;
+		if (snipToggle) {
+			snipOps.style.display = "block";
+		} else {
+			snipOps.style.display = "none";
+		}
+		var clinOps = document.getElementById('ClinicOptions');
+		var clinToggle = document.getElementById('ClinicButton').checked;
+		if (clinToggle) {
+			clinOps.style.display = "block";
+		} else {
+			clinOps.style.display = "none";
+		}
+	},
+	loadFeedback: function () {
+		document.getElementById('Overlay').style.display = "block";
+		document.getElementById('Iframe').src='https://survey.qualtrics.com/SE/?SID=SV_3OT1mMS5wBagn8p';
+	},
+	closeFeedback: function () {
+		document.getElementById('Overlay').style.display = "none";
+		document.getElementById('Iframe').src='';
 	}
 }
 
