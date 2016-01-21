@@ -33,17 +33,6 @@ th {
     box-shadow: 0px 0px 25px green;
 }
 
-body > div.PageTitleBar > div {
-    color: #fff !important;
-}
-
-div.DiscussionSummary {
-    display: none !important;
-}
-
-div.PageTitleBar {
-    background: #333 !important;
-}
 
 
 /*FOR PULSES*/
