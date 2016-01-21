@@ -31,6 +31,7 @@ var currentMinutes = CurrentDate.getMinutes();
 var TipsOn;
 var myName;
 var panelsTabOn;
+var loginText;
 
 
 function getVars() {
@@ -55,9 +56,10 @@ function getVars() {
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
 		td: "",//Ticket Goal Date
-		tips: true,
+		tips: false,
 		ename: "",
-		panels: false
+		panels: false,
+		ltxt: ""
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -82,7 +84,7 @@ function getVars() {
 		TipsOn = items.tips;
 		PanelsTabOn = items.panels;
 		myName = items.ename;
-		console.log(myName);
+		loginText = items.ltxt;
 		addons();
 	});
 }
@@ -818,7 +820,7 @@ function addons() {
 		customTabs.addSummitTrigger();
 	}
 	if (TipsOn){
-		//customTabs.addHelpMessages();
+		customTabs.addHelpMessages();
 	}
 	if (DesignTabOn) {
 		customTabs.addDesign();
@@ -1038,7 +1040,7 @@ var pulseMods  = {
 	},
 	addResTeamBit: function () {
 		var textarea = document.querySelectorAll('#EmergencyLoginForm > textarea')[0];
-		textarea.innerHTML = "Resolution Team logging in for more information about a pulse";
+		textarea.innerHTML = loginText;
 	}
 }
 
