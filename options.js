@@ -20,11 +20,12 @@ function save_options() {
 	var employeeID = document.getElementById('EmployeeID').value;
 	var gradProgress = document.getElementById('GradProgress').checked;
 	var theme = document.getElementById('Theme').value;
-	//var tips = document.getElementById('Tips').checked;
+	var tips = document.getElementById('Tips').checked;
 	var myName = document.getElementById('Name').value;
+	var loginText = document.getElementById('LoginText').value;
 	var panels = document.getElementById('Panels').checked;
-	//var alerts = document.getElementById('greyAlerts').checked;
-	//var smallPosts = document.getElementById('shrinkPosts').checked;
+	var alerts = document.getElementById('greyAlerts').checked;
+	var smallPosts = document.getElementById('shrinkPosts').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -46,11 +47,12 @@ function save_options() {
 		gp: gradProgress,
 		tg: ticketGoal,
 		td: ticketDate,
-		//tips: tips,
+		tips: tips,
 		ename: myName,
-		panels: panels//,
-		//calmAlerts: alerts,
-		//minPosts: smallPosts
+		panels: panels,
+		calmAlerts: alerts,
+		minPosts: smallPosts,
+		ltxt: loginText
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -85,11 +87,12 @@ function restore_options() {
 		tm: null,
 		tg: 3700,
 		td: "2016-12-12",
-		//tips: true,
+		tips: false,
 		ename: "",
-		panels: false//,
-		//calmAlerts: true,
-		//minPosts: true
+		panels: false,
+		calmAlerts: true,
+		minPosts: true,
+		ltxt: ""
 	}, function(items) {
 		console.log(items.gp);
 		document.getElementById('EmailButton').checked = items.em;
@@ -112,11 +115,12 @@ function restore_options() {
 		document.getElementById('Theme').value = items.tm;
 		document.getElementById('TicketGoal').value = items.tg;
 		document.getElementById('TicketDate').value = items.td;
-		//document.getElementById('Tips').checked = items.tips;
+		document.getElementById('Tips').checked = items.tips;
 		document.getElementById('Name').value = items.ename;
+		document.getElementById('LoginText').value = items.ltxt;
 		document.getElementById('Panels').checked = items.panels;
-		//document.getElementById('greyAlerts').checked = items.calmAlerts;
-		//document.getElementById('shrinkPosts').checked = items.minPosts;
+		document.getElementById('greyAlerts').checked = items.calmAlerts;
+		document.getElementById('shrinkPosts').checked = items.minPosts;
 		modifiers.makeOpaque();
 
 	});

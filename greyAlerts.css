@@ -1,0 +1,7 @@
+
+body > div.PageTitleBar > div {
+    color: #fff !important;
+}
+div.PageTitleBar {
+    background: #333 !important;
+}

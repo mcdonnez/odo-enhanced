@@ -31,6 +31,9 @@ var currentMinutes = CurrentDate.getMinutes();
 var TipsOn;
 var myName;
 var panelsTabOn;
+var loginText;
+var calmAlertsOn;
+var minimalPostsOn;
 
 
 function getVars() {
@@ -55,9 +58,12 @@ function getVars() {
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
 		td: "",//Ticket Goal Date
-		tips: true,
+		tips: false,
 		ename: "",
-		panels: false
+		panels: false,
+		ltxt: "",
+		calmAlerts: false,
+		minPosts:false
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -82,7 +88,9 @@ function getVars() {
 		TipsOn = items.tips;
 		PanelsTabOn = items.panels;
 		myName = items.ename;
-		console.log(myName);
+		loginText = items.ltxt;
+		calmAlertsOn = items.calmAlerts;
+		minimalPostsOn = items.minPosts;
 		addons();
 	});
 }
@@ -818,7 +826,7 @@ function addons() {
 		customTabs.addSummitTrigger();
 	}
 	if (TipsOn){
-		//customTabs.addHelpMessages();
+		customTabs.addHelpMessages();
 	}
 	if (DesignTabOn) {
 		customTabs.addDesign();
@@ -868,6 +876,13 @@ function addons() {
 	if (document.getElementById('EmergencyLoginCheckbox')) {
 		var loginCheckbox = document.getElementById('EmergencyLoginCheckbox');
 		window.addEventListener("click", pulseMods.addResTeamBit);
+	}
+	//CUSTOM STYLESHEETS
+	if(minimalPostsOn) {
+		customStylesheets.shrinkPosts();
+	}
+	if(calmAlertsOn) {
+		customStylesheets.greyAlerts();
 	}
 }
 
@@ -1038,7 +1053,7 @@ var pulseMods  = {
 	},
 	addResTeamBit: function () {
 		var textarea = document.querySelectorAll('#EmergencyLoginForm > textarea')[0];
-		textarea.innerHTML = "Resolution Team logging in for more information about a pulse";
+		textarea.innerHTML = loginText;
 	}
 }
 
@@ -1134,6 +1149,20 @@ var pulseMods  = {
 		}
 		}
 	}
+var customStylesheets = {
+	shrinkPosts: function() {
+		document.head.insertAdjacentHTML('beforeend',
+			'<link rel="stylesheet" type="text/css" href="' +
+			chrome.runtime.getURL("squawkPosts.css") + '">'
+		);
+	},
+	greyAlerts: function() {
+		document.head.insertAdjacentHTML('beforeend',
+			'<link rel="stylesheet" type="text/css" href="' +
+			chrome.runtime.getURL("greyAlerts.css") + '">'
+		);
+	}
+};
 
 
 
