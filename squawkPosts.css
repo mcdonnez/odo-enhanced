@@ -1,12 +1,5 @@
 
-body > div.PageTitleBar > div {
-    color: #fff !important;
-}
-
 div.DiscussionSummary {
     display: none !important;
 }
 
-div.PageTitleBar {
-    background: #333 !important;
-}

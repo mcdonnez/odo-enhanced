@@ -32,6 +32,8 @@ var TipsOn;
 var myName;
 var panelsTabOn;
 var loginText;
+var calmAlertsOn;
+var minimalPostsOn;
 
 
 function getVars() {
@@ -59,7 +61,9 @@ function getVars() {
 		tips: false,
 		ename: "",
 		panels: false,
-		ltxt: ""
+		ltxt: "",
+		calmAlerts: false,
+		minPosts:false
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -85,6 +89,8 @@ function getVars() {
 		PanelsTabOn = items.panels;
 		myName = items.ename;
 		loginText = items.ltxt;
+		calmAlertsOn = items.calmAlerts;
+		minimalPostsOn = items.minPosts;
 		addons();
 	});
 }
@@ -871,6 +877,13 @@ function addons() {
 		var loginCheckbox = document.getElementById('EmergencyLoginCheckbox');
 		window.addEventListener("click", pulseMods.addResTeamBit);
 	}
+	//CUSTOM STYLESHEETS
+	if(minimalPostsOn) {
+		customStylesheets.shrinkPosts();
+	}
+	if(calmAlertsOn) {
+		customStylesheets.greyAlerts();
+	}
 }
 
 function addClinicTicket() {
@@ -1136,6 +1149,20 @@ var pulseMods  = {
 		}
 		}
 	}
+var customStylesheets = {
+	shrinkPosts: function() {
+		document.head.insertAdjacentHTML('beforeend',
+			'<link rel="stylesheet" type="text/css" href="' +
+			chrome.runtime.getURL("squawkPosts.css") + '">'
+		);
+	},
+	greyAlerts: function() {
+		document.head.insertAdjacentHTML('beforeend',
+			'<link rel="stylesheet" type="text/css" href="' +
+			chrome.runtime.getURL("greyAlerts.css") + '">'
+		);
+	}
+};
 
 
 
