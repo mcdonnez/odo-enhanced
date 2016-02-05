@@ -782,11 +782,10 @@ var customTabs = {
 				unreadCount = items.uc;
 			});
 			if (unreadCount > 0) {
-				var messageCounter = '<div id="MessageCount" style="display: inline; border-radius: 100%; background: #04a365; color: #fff; padding: 5px 10px; margin 5px;">'+ unreadCount +'</div>';
+				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer; color: #04a365; border-top: #04a365 4px solid">Tips & Tricks</li>';
 			} else {
-				var messageCounter = '';
+				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks</li>';
 			}
-			var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks' + messageCounter + '</li>';
 			container.append(innerTab);
 		});
 
@@ -1066,9 +1065,9 @@ var pulseMods  = {
 //ADD MESSAGING TO THE APP
 
 	var messages = [
-		"Brush your teeth before you come to work...",
-		"Never eat with your mouth open",
-		"If you're going to talk, make sure it's enriching the silence"
+		"Bookmark each data center login page and personal ODO pages to make the granting MBA process faster.",
+		"When troubleshooting in a long block, add skip logic to the question before the one you need.",
+		"In user moves 'notes', add the ODO ticket URL, usernames, and branded login page so that when you go back to it, you don't waste any more time searching for it."
 	]
 	var currentMessage;
 	var lastWeeksMessage;
@@ -1100,10 +1099,11 @@ var pulseMods  = {
 	});
 
 	function replaceCenterContent(id) {
-		document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='NewTip'>Give me a new tip</button><div id='TipList'></div></div></div>";
+		document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='NewTip'>Give me a new tip</button><div id='TipList'></div></div><div style='margin-top: 50px; display:inline-block;' id='TipSurvey'></div></div>";
 		document.getElementById('TipContent').innerHTML = messages[id];
-		document.getElementById('TipHeader').innerHTML = "Your tip is: ";
+		document.getElementById('TipHeader').innerHTML = "To be more productive this week...";
 		document.getElementById('TipList').innerHTML = "To see the whole list, <a href='#' target='_blank'>click here</a>.";
+		document.getElementById('TipSurvey').innerHTML = "<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>Was this Helpful?      </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>     Suggest a New Tip</a>";
 
 	}
 	$("#BodyContent").on("click", "#NewTip", function () {
@@ -1164,8 +1164,27 @@ var customStylesheets = {
 	}
 };
 
-
-
+function hideSquawkPosts() {
+	console.log("hiding posts");
+	var postArea = $('#DiscussionWrapper');
+	if (!document.getElementById("SquawkToggle")) {
+		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
+	}
+	if (postArea.is(":visible") == false) {
+		postArea.show();
+		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
+		document.getElementById('SquawkToggle').style.padding = "5px 10px";
+	} else {
+		document.getElementById('DiscussionWrapper').style.display = "none";
+		postArea.hide();
+		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
+		document.getElementById('SquawkToggle').style.padding = "60px 10px";
+	}
+}
+$('#BodyContent').on('click', '#SquawkToggle', function () {
+	hideSquawkPosts();
+});
+hideSquawkPosts();
 
 
 
