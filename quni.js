@@ -883,6 +883,10 @@ function addons() {
 	if(calmAlertsOn) {
 		customStylesheets.greyAlerts();
 	}
+	if (urlParams["b"] == "RSUserAccountAccess") {
+		var labelContainer = $('#BodyContent > div:nth-child(7)');
+		labelContainer.append("<label style='font-size: 3em; cursor:pointer;' for='EmergencyLoginCheckbox'>CLICK ME TO LOGIN </label>" );
+	}
 }
 
 function addClinicTicket() {
@@ -1185,6 +1189,8 @@ $('#BodyContent').on('click', '#SquawkToggle', function () {
 	hideSquawkPosts();
 });
 hideSquawkPosts();
+
+
 
 
 
