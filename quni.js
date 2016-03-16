@@ -14,7 +14,6 @@ var HelpDeskTabOn;
 var DesignTabOn;
 var EasterEggsOn;
 var PlaybookTabOn;
-var SummitTriggerOn;
 var SnippetsOn;
 var SnippetsClosed;
 var SnippetsDay;
@@ -34,6 +33,7 @@ var panelsTabOn;
 var loginText;
 var calmAlertsOn;
 var minimalPostsOn;
+var hidePosts;
 
 
 function getVars() {
@@ -48,7 +48,6 @@ function getVars() {
 		de: "", // Design Tab
 		ee: "", // Easter Eggs
 		pb: "", // Playbook Tab
-		st: true, // Summit Trigger
 		s: true, //Snippets
 		sc: "", // Snippets Closed
 		sd: 4, // Snippets Day
@@ -58,12 +57,13 @@ function getVars() {
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
 		td: "",//Ticket Goal Date
-		tips: false,
+		tips: true,
 		ename: "",
 		panels: false,
 		ltxt: "",
 		calmAlerts: false,
-		minPosts:false
+		minPosts:false,
+		hidePosts: false
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -75,7 +75,6 @@ function getVars() {
 		DesignTabOn = items.de;
 		EasterEggsOn = items.ee;
 		PlaybookTabOn = items.pb;
-		SummitTriggerOn = items.st;
 		SnippetsOn = items.s;
 		SnippetsClosed = items.sc;
 		SnippetsDay = items.sd;
@@ -91,6 +90,7 @@ function getVars() {
 		loginText = items.ltxt;
 		calmAlertsOn = items.calmAlerts;
 		minimalPostsOn = items.minPosts;
+		hidePosts = items.hidePosts;
 		addons();
 	});
 }
@@ -743,53 +743,33 @@ var customTabs = {
 			document.title = "Odo | Playbook";
 		});
 	},
-	addSummitTrigger: function () {
-		$('.SectionTabsList').append('<li class="SectionTab" id="summitTrigger" style="cursor:pointer;">Summit Trigger</li>');
-		//SET WINDOW HEIGHT
-		document.getElementById("summitTrigger").addEventListener("click", function () {
-			window.location.hash = "SummitTrigger";
-			$(".SectionTabsList > li").removeClass('ActiveTab');
-			$('#summitTrigger').addClass(' ActiveTab');
-			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-			//ADD IFRAME
-			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='//genesisqcorput1.qualtrics.com/SE/?SID=SV_5jZmbyiuIfBis8B'></iframe>";
-			//CHANGE THE PAGE TITLE
-			document.getElementsByClassName('PageTitle')[0].innerHTML = "Summit Trigger";
-			document.title = "Odo | Summit Trigger";
-		});
-	},
 	addHelpMessages: function () {
 		var container = $('.SectionTabsList');
-		var unreadCount = 0;
+		var unreadCount = 1;
+		var unreadCountDate; // THE LAST TIME THEY LOOKED AT THE TIPS
 		chrome.storage.sync.get({
-			cm: null
-		}, function (items) {
-			currentMessage = items.cm;
-			console.log(items.cm);
-			if (currentMessage == null) {
+			ucSetDate: new Date().toString(), //MUST CHANGE TO STRING
+			uc: 0
+		}, function(items) {
+			unreadCountDate = new Date(items.ucSetDate);
+			unreadCount = items.uc;
+			console.log(items.ucSetDate);
+			console.log(unreadCountDate);
+			console.log(Math.abs(unreadCountDate - new Date()));
+			var diff = Math.abs(unreadCountDate - new Date()) // FIGURE OUT HOW MANY MILLISECONDS IT'S BEEN SINCE THEY VISITED THE TIPS SECTION
+			if (diff > 432000000) {
 				unreadCount += 1;
-			} else {
-				unreadCount = 0;
-			}
-			console.log(unreadCount);
-			chrome.storage.sync.set({
-				uc: unreadCount
-			});
-			chrome.storage.sync.get({
-				uc: 0
-			}, function (items) {
-				console.log(items.uc);
-				unreadCount = items.uc;
-			});
-			if (unreadCount > 0) {
 				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer; color: #04a365; border-top: #04a365 4px solid">Tips & Tricks</li>';
+				chrome.storage.sync.set({
+					uc: unreadCount //PROBABLY NOT NECESSARY ANYMORE
+				});
 			} else {
 				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks</li>';
 			}
 			container.append(innerTab);
 		});
+	},
 
-	}
 };
 
 
@@ -808,7 +788,6 @@ function addons() {
 	changeTitle();
 	changeFavicon(favicon);
 	//APPLY A THEME
-	console.log("Current Theme is: " + Theme);
 	//ADD YOUR TABS
 	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
 		if (PlaybookTabOn) {
@@ -820,9 +799,6 @@ function addons() {
 	}
 	if (HelpDeskTabOn) {
 		customTabs.addHelpDesk();
-	}
-	if (SummitTriggerOn){
-		customTabs.addSummitTrigger();
 	}
 	if (TipsOn){
 		customTabs.addHelpMessages();
@@ -886,6 +862,9 @@ function addons() {
 	if (urlParams["b"] == "RSUserAccountAccess") {
 		var labelContainer = $('#BodyContent > div:nth-child(7)');
 		labelContainer.append("<label style='font-size: 3em; cursor:pointer;' for='EmergencyLoginCheckbox'>CLICK ME TO LOGIN </label>" );
+	}
+	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
+		hideSquawkPosts();
 	}
 }
 
@@ -969,14 +948,11 @@ function calculateTicketTotals(phoneValue,emailValue) {
 		var remaining = goalTickets - total;
 		var percentComplete = Math.round((total / goalTickets)*100);
 		var goal = new Date(GoalDate);
-		console.log(goal);
 		var msDay = 60*60*24*1000;
 		var today = new Date();
-		console.log(today);
 		var daysTillGoal = (( goal - today ) / msDay) + 1;
 		var estWeekends = ( daysTillGoal / 7 ) * 2;
 		var ticketsPerDay = Math.round(remaining / ( daysTillGoal - estWeekends));
-		console.log(daysTillGoal);
 		GradProgContainer.innerHTML = "<div id='TicketCounterInner' style='height: 20px; width: 100%; position: relative; border: 1px solid #000; border-radius: 3px;margin-bottom: 5px;'> <div style='background: #007ac0; position: absolute; left: 0; top: 0; bottom: 0; height: 20px; width: " + percentComplete + "%; color: #fff; text-align: right'></div><div id='PercentGradComplete' style='position: absolute; bottom: 0; top: 0; right: 0; left: 0; text-align: center;'>" + percentComplete + "%</div></div><div style='text-align: center;'>You need " + remaining + " tickets to hit the milestone! That means about " + ticketsPerDay + " tickets per day!</div>";
 		//DEPENDING ON THE PROGRESS, CHANGE THE LOCATION AND COLOR OF THE PERCENT SYMBOL WITHIN THE GRADPROGRESS BAR
 		if ((percentComplete >= 43) && (percentComplete < 60)) {
@@ -1004,7 +980,6 @@ function calculateTicketTotals(phoneValue,emailValue) {
 	// REDIRECT TO TICKET PAGE ON CLICK
 $(document).ready(function(){
 	$("#LeftMenuColumn").on("click", "#GradProgContainer", function(){
-		console.log("redirect");
 		window.location.href = 'http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&a=Home&b=TicketsMyStats';
 	});
 });
@@ -1071,88 +1046,110 @@ var pulseMods  = {
 	var messages = [
 		"Bookmark each data center login page and personal ODO pages to make the granting MBA process faster.",
 		"When troubleshooting in a long block, add skip logic to the question before the one you need.",
-		"In user moves 'notes', add the ODO ticket URL, usernames, and branded login page so that when you go back to it, you don't waste any more time searching for it."
-	]
+		"In user moves 'notes', add the ODO ticket URL, usernames, and branded login page so that when you go back to it, you don't waste any more time searching for it.",
+		"Place commonly misspelled or mistyped words into AText with the correct spelling as a way to autocorrect yourself.",
+		"Saving a short blurb for Jing-answer emails will save you time. For example: 'Hello [Name], Click HERE for your support video!' This way you can just make a video and not worry about also writing everything out.",
+		"Use hyperlinks to attach support pages to key words in your emails. e.g., 'you can do this with Email Triggers' (hyperlink 'Email Triggers' to http://www.qualtrics.com/university/researchsuite/advanced-building/advanced-options-drop-down/email-triggers/)",
+		"aText a generic message for if you haven't heard from a client in a few days. 'Hi there, I just wanted to follow up on the email I sent you... Did I answer your question?' It makes following up with a client much quicker, and that way you're able to auto-resolve without much worry if they don't respond within a day or so.",
+		"Use the comments section in Odo! Include pertinent details in comments on both phone and email tickets. This can save huge amounts of time sifting through emails for details. Similarly in phone tickets, with the added bonus that others looking at them can see what is going on in the interaction.",
+		"Title your Jing/Snagit videos with what they pertain to, especially the ones that have generic solutions in them. Reusing these videos can save lots of time."	,
+		"Before launching into a solution, it can save a lot of trouble later on in the conversation if you first check with the client to make sure you're understanding the issue. Example: 'So let me make sure I'm getting this right - you would like to send them a link with their previous answers prepopulated? Am I missing anything?'",
+		"If a problem seems very complex, simplify. You don't always need the details they provide. Ask the client what their end goal is as a way to see the whole picture. E.g., 'In a perfect situation, what do you want to happen for your participants?'",
+		"As a way to keep things organized on your screen, try opening a whole new window when you take a call instead of just a tab. This will keep things you look up and search for with that particular ticket grouped together, instead of having to sort through a million open tabs in one Chrome window.",
+		"Use folders in Gmail, especially if you're working on projects or other non-support items. In addition, if you know there are certain weekly emails you never read, use a filter to automatically mark them as read.",
+		"Use the Gmail extension. This allows you see when an email comes in while on other pages, and you can even mark as read from other pages.",
+		"Using a combination of Marking as Read, automatic filters, and folder sorting has reduced the number of internal emails I have to read to about 10/day. Try one or all of these - you won't regret it.",
+		"Don't be afraid to close Google Chat and Gmail, or at least have them in a different window behind what you're focusing on. They can be huge time wasters if you're not careful.",
+		"If there are tickets sitting in your inbox for a while, rename them so that you don't have to waste time later sifting through them. E.g. 'Pulse - Reminder Emails for Susan Smith'",
+		"When you initially read the email, tag a ticket topic. Doing this later requires you having to go back and reread the thread, whereas if you do it initially, it will save you time.",
+		"Use notes on your computer to copy important information such as the Survey ID or other useful information as you work. It will make this information more readily accessible when you file a help desk ticket, pulse, etc.",
+		"For one day, track which pages you use the most. At the end of the day, make bookmarks for each page that you used often (e.g. Jira search, playbook, help desk survey)",
+		"Create bookmarks for all of your different data center log ins or additional accounts you might have (CSAT, admin accounts, etc)",
+		"Take advantage of the notes section on the User Move ticket. Taking notes when you're creating the ticket will make it far easier and quicker reach back to the client in a few days. (E.g., Odo ticket URL, usernames, branded login page, etc.)",
+		"When in doubt, make a copy of a client's survey right away. This will allow you to customize your troubleshooting and cut directly to the problem (removing unnecessary logic, blocks, etc.)",
+		"Be sure to test on all data centers, as this information is commonly included in a pulse if you're needing to file one. Having these logins readily accessible via bookmarks is helpful, too.",
+		"When you're troubleshooting, move the block of the survey you're working on to the top of the survey flow, so you don't have to click through the entire survey when testing.",
+		"If you're troubleshooting in a long block, add skip logic to the question before the one you need to test out.",
+		"Want to answer those calls faster? Have your headset ring so that you don't have to watch the phone or Calltrics. Check out instructions here: http://screencast.com/t/BAyKzUDip4i",
+		"Stay on top of your pulses by checking the status of the bug that it's linked to toward the bottom of the ticket. Here you will see the most recent comments about the bug from the engineering team. ",
+		"Refresh your troubleshooting by reading this awesome piece by one of our rockstar Res Team members, Greg: http://odo.corp.qualtrics.com/wiki/index.php/How_to_Troubleshoot",
+		"As soon as you hear the words, 'error message', ask the client to grab you a screenshot. Screenshots are crucial for accurately reproducing and for filing pulses. Same thing with anything browser related - always ask for browser type and version number. Never hurts to have and can save you waiting time if you ask right away.",
+		"Download the Survey Toolbox, developed by John Morrell. Do it. Right now.",
+		"Check out this google doc to download the most useful Chrome extensions, as suggested by current and past Quni members: https://docs.google.com/spreadsheets/d/1myTR4as5lwt3bzfH-Q54dl160skMd-Pe9Prj_vOQLxA/edit#gid=0&vpid=A1",
+		"For a quicker login, use s.qualtrics.com.",
+		"If you are using Chrome you can go settings > On Startup > Open a specific page or set of pages to have chrome load the 8 tabs I always want to have open.",
+		"For troubleshooting, downloading a survey translation is a good way to get a list of all question and answer choice ID's, particularly for things like Drill downs.",
+		"Here's a cool tip that I learned that will help you when you are out of town, and will help your clients out while you're gone. If you want people to have access to your Post-Resolution emails while you're gone, create a filter in your Gmail account to automatically forward those emails to a member on your team who has agreed to help, turning it on and off on either side of your break. To do this, in the search bar of Gmail, click the light gray down arrow and next to Subject, paste in 'Post-Resolution Email: ', then pick 'Create filter with this search >>'. There's an option to forward the emails to an address that you'll add to a list.",
+		"Don't be afraid to mute your emails, especially for long threads that can be distracting. You can find this option under 'More' in the thread itself."
+	];
 	var currentMessage;
 	var lastWeeksMessage;
-	chrome.storage.sync.get({
-		cm: null,
-		lwm: null
-	}, function (items) {
-		currentMessage = items.cm;
-		lastWeeksMessage = items.lwm;
-		console.log(items.cm);
-		console.log(lastWeeksMessage);
-	});
 
 	function toggleMessages(refresh) {
-		if ((currentMessage == null) || (refresh)) {
-			var max = messages.length;
-			var rand = Math.floor(Math.random() * max) + 0
-			currentMessage = rand;
-			chrome.storage.sync.set({
-				cm: currentMessage,
-				lwm: lastWeeksMessage
-			});
-		}
-		replaceCenterContent(currentMessage);
+		chrome.storage.sync.get({
+			cm: 0
+		}, function(items) {
+			currentMessage = items.cm;
+			if ((currentMessage == null) || (refresh)) {
+				var max = messages.length;
+				var rand = Math.floor(Math.random() * max) + 0
+				currentMessage = rand;
+				chrome.storage.sync.set({
+					cm: currentMessage,
+					lwm: lastWeeksMessage,
+					uc: 0,
+					ucSetDate: new Date()
+				});
+			} else {
+				console.log("Current Message: " + currentMessage);
+			}
+			replaceCenterContent(currentMessage);
+		});
 	}
 	$(".SectionTabsList").on("click", "#MessagesTab", function () {
-		console.log("Show me a message");
 		toggleMessages(false);
 	});
 
 	function replaceCenterContent(id) {
-		document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='NewTip'>Give me a new tip</button><div id='TipList'></div></div><div style='margin-top: 50px; display:inline-block;' id='TipSurvey'></div></div>";
+		document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='AddToSnippets' class='btn'>Add tip to my Snippets</button><button class='btn' id='NewTip'>Give me a new tip</button><div id='TipList'></div></div><div style='margin-top: 50px; display:inline-block;' id='TipSurvey'></div></div>";
 		document.getElementById('TipContent').innerHTML = messages[id];
 		document.getElementById('TipHeader').innerHTML = "To be more productive this week...";
-		document.getElementById('TipList').innerHTML = "To see the whole list, <a href='#' target='_blank'>click here</a>.";
+		document.getElementById('TipList').innerHTML = "To see the whole list, <a href='http://odo.corp.qualtrics.com/wiki/index.php/Quni#Quni_Culture' target='_blank'>click here</a>.";
 		document.getElementById('TipSurvey').innerHTML = "<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>Was this Helpful?      </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>     Suggest a New Tip</a>";
-
+		currentMessageID = id;
+		console.log("Resetting the date");
+		chrome.storage.sync.set({
+			ucSetDate: new Date().toString()
+		});
 	}
 	$("#BodyContent").on("click", "#NewTip", function () {
-		console.log("Show me a new message");
 		toggleMessages(true);
 	});
 	function addFindMeButton() {
 		$("#RightMenuColumn").append("<div id='FindMeButtonContainer' style='text-align: right;'><button id='FindMeButton'>Find Myself in the Report</button></div>");
 	}
-	$("#RightMenuColumn").on("click", "#FindMeButton", function () {
-		findMe(myName);
+	$("body").on("click", "#AddToSnippets", function () {
+		addNewSnippet(messages[currentMessageID]);
 	});
+	var currentMessageID;
+	function addNewSnippet(snippet) {
+	    var data = new FormData();
+	    data.append('Description', snippet);
 
-//ALLOW FOR FINDING ONESELF ON THE ODO REPORTS PAGE FOR QUNI
-	function findMe(nameInput) {
-		console.log(nameInput);
-		if ((nameInput == "") || (nameInput == undefined)) {
-			var nameInput = prompt("Please enter your name", "");
-			chrome.storage.sync.set({
-				name: nameInput
-			});
-			var allEmployees = document.querySelectorAll('#Rankings > a > div');
-			for (i=0; i<allEmployees.length; i++) {
-				var name = allEmployees[i].querySelector('div.rank-text > b').innerHTML;
-				console.log(name[i]);
-				if (name.toLowerCase().indexOf(nameInput.toLowerCase()) != -1) {
-					console.log("Found you!");
-					allEmployees[i].style.background = "#fff";
-					allEmployees[i].style.outline = "5px solid red";
-				}
-			}
-		} else {
-			console.log("Running Else Function");
-			var allEmployees = document.querySelectorAll('#Rankings > a > div');
-		for (i=0; i<allEmployees.length; i++) {
-			var name = allEmployees[i].querySelector('div.rank-text > b').innerHTML;
-			console.log(name[i]);
-			if (name.toLowerCase().indexOf(nameInput.toLowerCase()) != -1) {
-				console.log("Found you!");
-				allEmployees[i].style.background = "#fff";
-				allEmployees[i].style.outline = "5px solid red";
-			}
-		}
-		}
+	    jQuery.ajax({
+	        url: 'http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor&addSnippet=true&week=ThisWeek&eid=MATTHEWB&date=2016-03-14&Description=test',
+	        data: data,
+	        cache: false,
+	        contentType: false,
+	        processData: false,
+	        type: 'POST',
+	        success: function(data){
+	            alert("Added to Snippets");
+	        }
+	    });
 	}
+
+
 var customStylesheets = {
 	shrinkPosts: function() {
 		document.head.insertAdjacentHTML('beforeend',
@@ -1188,7 +1185,7 @@ function hideSquawkPosts() {
 $('#BodyContent').on('click', '#SquawkToggle', function () {
 	hideSquawkPosts();
 });
-hideSquawkPosts();
+
 
 
 

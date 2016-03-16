@@ -26,6 +26,8 @@ function save_options() {
 	var panels = document.getElementById('Panels').checked;
 	var alerts = document.getElementById('greyAlerts').checked;
 	var smallPosts = document.getElementById('shrinkPosts').checked;
+	var hideSquawkPosts = document.getElementById('hideSquawkPosts').checked;
+	console.log(hideSquawkPosts);
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -52,7 +54,8 @@ function save_options() {
 		panels: panels,
 		calmAlerts: alerts,
 		minPosts: smallPosts,
-		ltxt: loginText
+		ltxt: loginText,
+		hidePosts: hideSquawkPosts
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -87,14 +90,14 @@ function restore_options() {
 		tm: null,
 		tg: 3700,
 		td: "2016-12-12",
-		tips: false,
+		tips: true,
 		ename: "",
 		panels: false,
 		calmAlerts: true,
 		minPosts: true,
-		ltxt: ""
+		ltxt: "",
+		hidePosts: false
 	}, function(items) {
-		console.log(items.gp);
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
 		document.getElementById('StartClinicTime').value = items.sct;
@@ -121,8 +124,8 @@ function restore_options() {
 		document.getElementById('Panels').checked = items.panels;
 		document.getElementById('greyAlerts').checked = items.calmAlerts;
 		document.getElementById('shrinkPosts').checked = items.minPosts;
-		modifiers.makeOpaque();
-
+		document.getElementById('hideSquawkPosts').checked = items.hidePosts;
+		makeOpaque();
 	});
 }
 //EVENT LISTENERS
@@ -131,13 +134,13 @@ document.getElementById('save').addEventListener('click',
 	save_options);
 document.getElementById('Wrapper').addEventListener('change',
 	save_options);
-document.getElementById('Snippets').addEventListener('change', modifiers.makeOpaque);
-document.getElementById('ClinicButton').addEventListener('change', modifiers.makeOpaque);
-document.getElementById("FeedbackLink").addEventListener("click", modifiers.loadFeedback);
-document.getElementById("Exit").addEventListener("click", modifiers.closeFeedback);
-document.getElementById("Overlay").addEventListener("click", modifiers.closeFeedback);
-var modifiers = {
-	makeOpaque: function() {
+document.getElementById('Snippets').addEventListener('change', makeOpaque);
+document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
+document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
+document.getElementById("Exit").addEventListener("click", closeFeedback);
+document.getElementById("Overlay").addEventListener("click", closeFeedback);
+
+	function makeOpaque() {
 		var snipOps = document.getElementsByClassName('SubOption')[0];
 		var snipToggle = document.getElementById('Snippets').checked;
 		if (snipToggle) {
@@ -152,15 +155,15 @@ var modifiers = {
 		} else {
 			clinOps.style.display = "none";
 		}
-	},
-	loadFeedback: function () {
+	}
+	function loadFeedback() {
 		document.getElementById('Overlay').style.display = "block";
 		document.getElementById('Iframe').src='https://survey.qualtrics.com/SE/?SID=SV_3OT1mMS5wBagn8p';
-	},
-	closeFeedback: function () {
+	}
+	function closeFeedback() {
 		document.getElementById('Overlay').style.display = "none";
 		document.getElementById('Iframe').src='';
 	}
-}
+
 
 
