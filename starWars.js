@@ -25,7 +25,6 @@ function getVars() {
 		PlaybookTabOn = items.pb;
 		SnippetsOn = items.s;
 		changeThemes();
-		console.log('star wars js page loaded' + Theme);
 	});
 }
 
@@ -142,12 +141,9 @@ var starWars = {
 
 var currentUrl = window.location.href;
 var usingKB = currentUrl.indexOf("index.php") != -1;
-console.log(usingKB);
 
 function changeThemes() {
-	console.log("Attempting Theme Change");
 	if (Theme === "starwars") {
-		console.log("Star Wars loading now");
 		starWars.changeBackground();
 		starWars.changeText();
 		starWars.changeBarnaby();
@@ -177,7 +173,6 @@ function changeThemes() {
 		);
 		starWars.updateHeader();
 	} else {
-		console.log("Failed Theme Change");
 	}
 }
 getVars();
