@@ -94,7 +94,8 @@ function getVars() {
 		addons();
 	});
 }
-getVars();
+getVars(); //GET THE VARS
+
 var urlParams;
 var product = "RS";
 var feature = "";
@@ -113,7 +114,7 @@ var status = "Open,'In Progress', Reopened";
 		urlParams[decode(match[1])] = decode(match[2]);
 })();
 
-/*GET EMPLOYEE ID*/
+/*GET EMPLOYEE ID AND ET IT AS CHROME STORAGE*/
 var getEID = function() {
 	var intID = urlParams["eid"];
 	chrome.storage.sync.set({
@@ -773,7 +774,26 @@ var customTabs = {
 };
 
 
-
+function hideSquawkPosts() {
+	console.log("hiding posts");
+	var postArea = $('#DiscussionWrapper');
+	if (!document.getElementById("SquawkToggle")) {
+		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
+	}
+	if (postArea.is(":visible") == false) {
+		postArea.show();
+		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
+		document.getElementById('SquawkToggle').style.padding = "5px 10px";
+	} else {
+		document.getElementById('DiscussionWrapper').style.display = "none";
+		postArea.hide();
+		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
+		document.getElementById('SquawkToggle').style.padding = "60px 10px";
+	}
+}
+$('#BodyContent').on('click', '#SquawkToggle', function () {
+	hideSquawkPosts();
+});
 
 
 
@@ -968,7 +988,7 @@ function calculateTicketTotals(phoneValue,emailValue) {
 			percentContainer.style.right = "0";
 			percentContainer.style.width = "auto";
 		}
-		if (percentComplete >= 100) {
+		if (remaining <= 0) {
 			GradProgContainer.innerHTML = "Congrats! You've finished!"
 		}
 	} else {
@@ -1165,29 +1185,135 @@ var customStylesheets = {
 	}
 };
 
-function hideSquawkPosts() {
-	console.log("hiding posts");
-	var postArea = $('#DiscussionWrapper');
-	if (!document.getElementById("SquawkToggle")) {
-		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
-	}
-	if (postArea.is(":visible") == false) {
-		postArea.show();
-		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
-		document.getElementById('SquawkToggle').style.padding = "5px 10px";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+s = document;
+masthead = s.getElementsByClassName("PageMenuBar");
+
+function decryptSearch(input) {
+	console.log(input);
+	if (input.indexOf("SV_") == 0) {
+		console.log("SurveyID");
+		var payload = {
+			loc: 'http://odo.corp.qualtrics.com/?',
+			b: 'ProductToolsSurveySearch',
+			type: 'SurveyID'
+		}
+	} else if (input.indexOf("UR_") == 0) {
+		console.log("UserID");
+		var payload = {
+			loc: 'http://odo.corp.qualtrics.com/?',
+			b: 'ProductToolsUserSearch',
+			type: 'UserID'
+		}
+	} else if (input.indexOf("@") != -1) {
+		console.log("Email Address");
+		var payload = {
+			loc: 'http://odo.corp.qualtrics.com/?',
+			b: 'ProductToolsUserSearch',
+			type: 'EmailAddress'
+		}
 	} else {
-		document.getElementById('DiscussionWrapper').style.display = "none";
-		postArea.hide();
-		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
-		document.getElementById('SquawkToggle').style.padding = "60px 10px";
+		console.log("Knowledge Base");
+		var payload = {
+			loc: 'http://odo.corp.qualtrics.com/wiki/index.php?search=',
+			b: "",
+			type: 'Wiki'
+		}
+		window.location = payload.loc + input;
+		return false;
 	}
+	window.location = payload.loc + "b=" + payload.b + "&OmniSearch=1&Type=" + payload.type + "&Query=" + input;
+
 }
-$('#BodyContent').on('click', '#SquawkToggle', function () {
-	hideSquawkPosts();
+function addMegaBar(){
+	megaSearch = document.createElement("DIV");
+	megaSearch.setAttribute("id","megaSearch");
+	megaSearch.style.float = "right";
+	megaSearch.style.clear = "right";
+	megaSearch.style.margin = "0px 0px 0px 0px";
+	masthead[0].appendChild(megaSearch);
+}
+
+function addOmniSearch() {
+	omniForm = document.createElement("FORM");
+	//omniForm.setAttribute("action","decryptSearch(formData)");
+	omniForm.style.margin = "0px 5px 0px 5px";
+
+	omniQuery = document.createElement("INPUT"); //build out the location textbox
+	omniQuery.setAttribute("type","hidden");
+	omniQuery.setAttribute("name","b");         //give it the name of b
+	omniQuery.setAttribute("value",location);
+
+	omniSearch = document.createElement("INPUT"); //build out the omni search bar
+	omniSearch.setAttribute("type","text");
+	omniSearch.setAttribute("name","query"); //give it the name of query
+	omniSearch.setAttribute("placeholder","Omni Search");
+	omniSearch.setAttribute("id", "OmniSearchValue");
+
+	omniSubmit = document.createElement("Input");
+	omniSubmit.setAttribute("id", "OmniSearch");
+	omniSubmit.setAttribute("value", "Go");
+	omniSubmit.setAttribute("type", "button");
+	submitText = document.createTextNode("Go");
+	omniSubmit.appendChild(submitText);
+
+	omniForm.appendChild(omniQuery);
+	omniForm.appendChild(omniSearch);
+	omniForm.appendChild(omniSubmit);
+	megaSearch.appendChild(omniForm);
+	omniForm.style.display = "inline-block";
+}
+addMegaBar();
+addOmniSearch();
+
+$("body").on("click", "#OmniSearch", function () {
+	value = document.getElementById('OmniSearchValue').value;
+	decryptSearch(value);
 });
 
 
-
-
+if (urlParams["OmniSearch"] == 1) {
+	var input = urlParams["Query"];
+	console.log("Runnnnnnn");
+	if (urlParams["Type"] == "SurveyID") {
+		console.log("Survey");
+		var surveySearch = document.getElementById("SearchText");
+		var surveySubmit = document.getElementById("SearchButton");
+		surveySearch.value = input;
+		surveySubmit.click();
+	} else if (urlParams["Type"] == "EmailAddress") {
+		console.log("Email");
+		var emailSearch = document.getElementById("Email");
+		var emailSubmit = document.getElementById("SearchButton");
+		emailSearch.value = input;
+		emailSubmit.click();
+	} else if (urlParams["Type"] == "UserID") {
+		console.log("UserID");
+		var userSearch = document.getElementById("UserName");
+		var userSubmit = document.getElementById("SearchButton");
+		console.log(userSearch);
+		userSearch.value = input;
+		userSubmit.click();
+	} else {
+		console.log("Some error has occurred");
+	}
+}
 
 

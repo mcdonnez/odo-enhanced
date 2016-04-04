@@ -84,3 +84,21 @@ th {
 #TipHeader {
 	margin: 1em;
 }
+
+
+/*OmniSearch CSS*/
+#OmniSearch, #OmniSearchValue {
+	padding: .2 .5em;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	outline: 0;
+	transition: .5s;
+	font-size: 14px;
+	font-weight: 100;
+}
+#OmniSearchValue {
+	width: 100px;
+}
+#OmniSearchValue:focus {
+	width: 200px;
+}
