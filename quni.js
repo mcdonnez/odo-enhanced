@@ -94,7 +94,8 @@ function getVars() {
 		addons();
 	});
 }
-getVars();
+getVars(); //GET THE VARS
+
 var urlParams;
 var product = "RS";
 var feature = "";
@@ -113,11 +114,12 @@ var status = "Open,'In Progress', Reopened";
 		urlParams[decode(match[1])] = decode(match[2]);
 })();
 
-/*GET EMPLOYEE ID*/
+/*GET EMPLOYEE ID AND ET IT AS CHROME STORAGE*/
 var getEID = function() {
-	var intID = urlParams["eid"];
+	EmpID = urlParams["eid"];
+	console.log(EmpID);
 	chrome.storage.sync.set({
-		eid: intID
+		eid: EmpID
 	});
 }
 
@@ -773,7 +775,26 @@ var customTabs = {
 };
 
 
-
+function hideSquawkPosts() {
+	console.log("hiding posts");
+	var postArea = $('#DiscussionWrapper');
+	if (!document.getElementById("SquawkToggle")) {
+		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
+	}
+	if (postArea.is(":visible") == false) {
+		postArea.show();
+		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
+		document.getElementById('SquawkToggle').style.padding = "5px 10px";
+	} else {
+		document.getElementById('DiscussionWrapper').style.display = "none";
+		postArea.hide();
+		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
+		document.getElementById('SquawkToggle').style.padding = "60px 10px";
+	}
+}
+$('#BodyContent').on('click', '#SquawkToggle', function () {
+	hideSquawkPosts();
+});
 
 
 
@@ -865,6 +886,21 @@ function addons() {
 	}
 	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
 		hideSquawkPosts();
+	}
+	//MBA GRANTING
+	//Check to be sure they are in the right brand before deploying
+	if ( ((urlParams["bid"] == "qcorp") || (urlParams["bid"] == "qaz1") || (urlParams["bid"] == "qcorpaz1") || (urlParams["bid"] == "qcorpus1") || (urlParams["bid"] == "qcorpeu") || (urlParams["bid"] == "qasia") || (urlParams["bid"] == "qcorpau1")) && (urlParams["b"] == "RSUserProfile")) {
+		var email = document.querySelectorAll('#UserInfoContainer > table > tbody > tr:nth-child(1) > td:nth-child(4)')[0].innerHTML;
+		var eid = EmpID.toLowerCase();
+		console.log(email);
+		console.log(eid);
+		console.log(email.indexOf(eid));
+		if (email.indexOf(eid) != -1) {
+			
+			var col = $('#RightMenuColumn');
+			var inner = "<div class='red'><div><b>MBA Promotion<br /><br /></b></div><input type='button' id='RequestMBA' value='Request MBA'/></div>";
+			col.append(inner);
+		}
 	}
 }
 
@@ -968,7 +1004,7 @@ function calculateTicketTotals(phoneValue,emailValue) {
 			percentContainer.style.right = "0";
 			percentContainer.style.width = "auto";
 		}
-		if (percentComplete >= 100) {
+		if (remaining <= 0) {
 			GradProgContainer.innerHTML = "Congrats! You've finished!"
 		}
 	} else {
@@ -1165,29 +1201,226 @@ var customStylesheets = {
 	}
 };
 
-function hideSquawkPosts() {
-	console.log("hiding posts");
-	var postArea = $('#DiscussionWrapper');
-	if (!document.getElementById("SquawkToggle")) {
-		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
-	}
-	if (postArea.is(":visible") == false) {
-		postArea.show();
-		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
-		document.getElementById('SquawkToggle').style.padding = "5px 10px";
-	} else {
-		document.getElementById('DiscussionWrapper').style.display = "none";
-		postArea.hide();
-		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
-		document.getElementById('SquawkToggle').style.padding = "60px 10px";
+
+
+// s = document;
+// masthead = s.getElementsByClassName("PageMenuBar");
+
+// function decryptSearch(input) {
+// 	console.log(input);
+// 	if (input.indexOf("SV_") == 0) {
+// 		console.log("SurveyID");
+// 		var payload = {
+// 			loc: 'http://odo.corp.qualtrics.com/?',
+// 			b: 'ProductToolsSurveySearch',
+// 			type: 'SurveyID'
+// 		}
+// 	} else if (input.indexOf("UR_") == 0) {
+// 		console.log("UserID");
+// 		var payload = {
+// 			loc: 'http://odo.corp.qualtrics.com/?',
+// 			b: 'ProductToolsUserSearch',
+// 			type: 'UserID'
+// 		}
+// 	} else if (input.indexOf("@") != -1) {
+// 		console.log("Email Address");
+// 		var payload = {
+// 			loc: 'http://odo.corp.qualtrics.com/?',
+// 			b: 'ProductToolsUserSearch',
+// 			type: 'EmailAddress'
+// 		}
+// 	} else {
+// 		console.log("Knowledge Base");
+// 		var payload = {
+// 			loc: 'http://odo.corp.qualtrics.com/wiki/index.php?search=',
+// 			b: "",
+// 			type: 'Wiki'
+// 		}
+// 		window.location = payload.loc + input;
+// 		return false;
+// 	}
+// 	window.location = payload.loc + "b=" + payload.b + "&OmniSearch=1&Type=" + payload.type + "&Query=" + input;
+
+// }
+// function addMegaBar(){
+// 	megaSearch = document.createElement("DIV");
+// 	megaSearch.setAttribute("id","megaSearch");
+// 	megaSearch.style.float = "right";
+// 	megaSearch.style.clear = "right";
+// 	megaSearch.style.margin = "0px 0px 0px 0px";
+// 	masthead[0].appendChild(megaSearch);
+// }
+
+// function addOmniSearch() {
+// 	omniForm = document.createElement("FORM");
+// 	//omniForm.setAttribute("action","decryptSearch(formData)");
+// 	omniForm.style.margin = "0px 5px 0px 5px";
+
+// 	omniQuery = document.createElement("INPUT"); //build out the location textbox
+// 	omniQuery.setAttribute("type","hidden");
+// 	omniQuery.setAttribute("name","b");         //give it the name of b
+// 	omniQuery.setAttribute("value",location);
+
+// 	omniSearch = document.createElement("INPUT"); //build out the omni search bar
+// 	omniSearch.setAttribute("type","text");
+// 	omniSearch.setAttribute("name","query"); //give it the name of query
+// 	omniSearch.setAttribute("placeholder","Omni Search");
+// 	omniSearch.setAttribute("id", "OmniSearchValue");
+
+// 	omniSubmit = document.createElement("Input");
+// 	omniSubmit.setAttribute("id", "OmniSearch");
+// 	omniSubmit.setAttribute("value", "Go");
+// 	omniSubmit.setAttribute("type", "button");
+// 	submitText = document.createTextNode("Go");
+// 	omniSubmit.appendChild(submitText);
+
+// 	omniForm.appendChild(omniQuery);
+// 	omniForm.appendChild(omniSearch);
+// 	omniForm.appendChild(omniSubmit);
+// 	megaSearch.appendChild(omniForm);
+// 	omniForm.style.display = "inline-block";
+// }
+// addMegaBar();
+// addOmniSearch();
+
+// $("body").on("click", "#OmniSearch", function () {
+// 	value = document.getElementById('OmniSearchValue').value;
+// 	decryptSearch(value);
+// });
+
+
+// if (urlParams["OmniSearch"] == 1) {
+// 	var input = urlParams["Query"];
+// 	if (urlParams["Type"] == "SurveyID") {
+// 		console.log("Survey");
+// 		var surveySearch = document.getElementById("SearchText");
+// 		var surveySubmit = document.getElementById("SearchButton");
+// 		surveySearch.value = input;
+// 		surveySubmit.click();
+// 	} else if (urlParams["Type"] == "EmailAddress") {
+// 		console.log("Email");
+// 		var emailSearch = document.getElementById("Email");
+// 		var emailSubmit = document.getElementById("SearchButton");
+// 		emailSearch.value = input;
+// 		emailSubmit.click();
+// 	} else if (urlParams["Type"] == "UserID") {
+// 		console.log("UserID");
+// 		var userSearch = document.getElementById("UserName");
+// 		var userSubmit = document.getElementById("SearchButton");
+// 		console.log(userSearch);
+// 		userSearch.value = input;
+// 		userSubmit.click();
+// 	} else {
+// 		console.log("Some error has occurred");
+// 	}
+// }
+
+//MBA GRANTING 
+
+$('#RightMenuColumn').on('click', '#RequestMBA', function () {
+	requestMBA();
+});
+var requestID;
+var ListenerInitialized;
+function requestMBA() {
+	// Firebase Refs
+	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
+	var requestRef = new Firebase(firebaseRoot + 'requests');
+	// Prompt for Info for Request
+	var uid = urlParams["uid"];
+	var infoContainer = document.getElementById('UserInfoContainer');
+	var fn = infoContainer.querySelectorAll('input')[1].value;
+	var ln = infoContainer.querySelectorAll('input')[2].value;
+	var name = fn + " " + ln;
+	var requestReason = prompt("What do you need MBA for?");
+	var timestamp = new Date();
+	var hr = timestamp.getHours();
+	var min = timestamp.getMinutes();
+	var sec = timestamp.getSeconds();
+	var time = hr + ":" + min + ":" + sec;
+	//Create Request
+	var newRequest = requestRef.push({
+		name: name,
+		reason: requestReason,
+		time: time,
+		granter: "",
+		uid: uid
+	});
+	// Get Request ID
+	requestID = newRequest.key();
+	// Add ID and Status to Request
+	requestRef.child(requestID).update({
+		id: requestID,
+		status: "requested"
+	});
+	if (!ListenerInitialized) {
+		initializeListener();
 	}
 }
-$('#BodyContent').on('click', '#SquawkToggle', function () {
-	hideSquawkPosts();
-});
+
+
+function initializeListener() {
+	ListenerInitialized = true;
+	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
+	var requestRef = new Firebase(firebaseRoot + 'requests');
+	requestRef.on("value", function(snapshot) {
+		// Get list of requests
+		var requestList = snapshot.val()
+		// Loop through requests
+		for (var r in requestList) {
+			var request = requestList[r];
+			// If Request Status is "requested"
+			if(request.id === requestID) {
+				console.log("Found Request")
+				var gName = request.name;
+				var gReply = request.reply;
+				if(request.status == "accepted") {
+					console.log("accept 1");
+					acceptNotification(gName,gReply);
+				}
+				if(request.status == "rejected") {
+					console.log("reject 1"); 
+					rejectNotification(gName,gReply);
+				}
+			}
+		}
+	}, function (errorObject) {
+		console.warn("The read failed: " + errorObject.code);
+	});
+}
 
 
 
 
+function acceptNotification(granterName, granterReply) {
+	console.log("accept 2");
+	// If Browser doesn't allow notifications
+	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
+	// If notification permission has not been enabled
+	if (Notification.permission !== "granted") {Notification.requestPermission();}
+	// If notifications are allowed
+	if(Notification.permission === "granted") {
+		var notification = new Notification(granterName + ' approved your MBA request', {
+			icon: 'http://vignette1.wikia.nocookie.net/disney/images/c/c8/Genie5.png/revision/latest?cb=20130719001923',
+			body: granterReply,
+			requireInteraction: true,
+		});
+	}
+}
 
+function rejectNotification(granterName, granterReply) {
+	console.log("reject 2"); 
+	// If Browser doesn't allow notifications
+	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
+	// If notification permission has not been enabled
+	if (Notification.permission !== "granted") {Notification.requestPermission();}
+	// If notifications are allowed
+	if(Notification.permission === "granted") {
+		var notification = new Notification(granterName + ' declined your MBA request', {
+			icon: 'http://www.rotoscopers.com/wp-content/uploads/2014/10/3.jpg',
+			body: granterReply,
+			requireInteraction: true,
+		});
+	}
+}
 
