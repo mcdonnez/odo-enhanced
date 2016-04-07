@@ -888,15 +888,39 @@ function addons() {
 		hideSquawkPosts();
 	}
 	//MBA GRANTING
+	//List of brands that are allowed:
+	var brands = [
+		"qcorpta",
+		"qcorpeastta",
+		"qcorptaau1",
+		"qaz1ta",
+		"qeuropeta",
+		"Qualtrics_360",
+		"q360au1",
+		"q_az1_360",
+		"360eu",
+		"q360co1",
+		"qcorp",
+		"qaz1",
+		"qcorpus1",
+		"qcorpeu",
+		"qasia",
+		"qcorpau1",
+		"genesisqcorpau1",
+		"genesisqcorpaz1",
+		"genesisqcorpeu",
+		"qunigenesis",
+		"genesisqcorput1",
+	];
 	//Check to be sure they are in the right brand before deploying
-	if ( ((urlParams["bid"] == "qcorp") || (urlParams["bid"] == "qaz1") || (urlParams["bid"] == "qcorpaz1") || (urlParams["bid"] == "qcorpus1") || (urlParams["bid"] == "qcorpeu") || (urlParams["bid"] == "qasia") || (urlParams["bid"] == "qcorpau1")) && (urlParams["b"] == "RSUserProfile")) {
+	var bid = urlParams["bid"];
+	if ( (brands.indexOf(bid) >= 0) && (urlParams["b"] == "RSUserProfile")) {
 		var email = document.querySelectorAll('#UserInfoContainer > table > tbody > tr:nth-child(1) > td:nth-child(4)')[0].innerHTML;
 		var eid = EmpID.toLowerCase();
 		console.log(email);
 		console.log(eid);
 		console.log(email.indexOf(eid));
 		if (email.indexOf(eid) != -1) {
-			
 			var col = $('#RightMenuColumn');
 			var inner = "<div class='red'><div><b>MBA Promotion<br /><br /></b></div><input type='button' id='RequestMBA' value='Request MBA'/></div>";
 			col.append(inner);
