@@ -1341,110 +1341,110 @@ var customStylesheets = {
 
 //MBA GRANTING 
 
-$('#RightMenuColumn').on('click', '#RequestMBA', function () {
-	requestMBA();
-});
-var requestID;
-var ListenerInitialized;
-function requestMBA() {
-	// Firebase Refs
-	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
-	var requestRef = new Firebase(firebaseRoot + 'requests');
-	// Prompt for Info for Request
-	var uid = urlParams["uid"];
-	var infoContainer = document.getElementById('UserInfoContainer');
-	var fn = infoContainer.querySelectorAll('input')[1].value;
-	var ln = infoContainer.querySelectorAll('input')[2].value;
-	var name = fn + " " + ln;
-	var requestReason = prompt("What do you need MBA for?");
-	var timestamp = new Date();
-	var hr = timestamp.getHours();
-	var min = timestamp.getMinutes();
-	var sec = timestamp.getSeconds();
-	var time = hr + ":" + min + ":" + sec;
-	//Create Request
-	var newRequest = requestRef.push({
-		name: name,
-		reason: requestReason,
-		time: time,
-		granter: "",
-		uid: uid
-	});
-	// Get Request ID
-	requestID = newRequest.key();
-	// Add ID and Status to Request
-	requestRef.child(requestID).update({
-		id: requestID,
-		status: "requested"
-	});
-	if (!ListenerInitialized) {
-		initializeListener();
-	}
-}
+// $('#RightMenuColumn').on('click', '#RequestMBA', function () {
+// 	requestMBA();
+// });
+// var requestID;
+// var ListenerInitialized;
+// function requestMBA() {
+// 	// Firebase Refs
+// 	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
+// 	var requestRef = new Firebase(firebaseRoot + 'requests');
+// 	// Prompt for Info for Request
+// 	var uid = urlParams["uid"];
+// 	var infoContainer = document.getElementById('UserInfoContainer');
+// 	var fn = infoContainer.querySelectorAll('input')[1].value;
+// 	var ln = infoContainer.querySelectorAll('input')[2].value;
+// 	var name = fn + " " + ln;
+// 	var requestReason = prompt("What do you need MBA for?");
+// 	var timestamp = new Date();
+// 	var hr = timestamp.getHours();
+// 	var min = timestamp.getMinutes();
+// 	var sec = timestamp.getSeconds();
+// 	var time = hr + ":" + min + ":" + sec;
+// 	//Create Request
+// 	var newRequest = requestRef.push({
+// 		name: name,
+// 		reason: requestReason,
+// 		time: time,
+// 		granter: "",
+// 		uid: uid
+// 	});
+// 	// Get Request ID
+// 	requestID = newRequest.key();
+// 	// Add ID and Status to Request
+// 	requestRef.child(requestID).update({
+// 		id: requestID,
+// 		status: "requested"
+// 	});
+// 	if (!ListenerInitialized) {
+// 		initializeListener();
+// 	}
+// }
 
 
-function initializeListener() {
-	ListenerInitialized = true;
-	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
-	var requestRef = new Firebase(firebaseRoot + 'requests');
-	requestRef.on("value", function(snapshot) {
-		// Get list of requests
-		var requestList = snapshot.val()
-		// Loop through requests
-		for (var r in requestList) {
-			var request = requestList[r];
-			// If Request Status is "requested"
-			if(request.id === requestID) {
-				console.log("Found Request")
-				var gName = request.name;
-				var gReply = request.reply;
-				if(request.status == "accepted") {
-					console.log("accept 1");
-					acceptNotification(gName,gReply);
-				}
-				if(request.status == "rejected") {
-					console.log("reject 1"); 
-					rejectNotification(gName,gReply);
-				}
-			}
-		}
-	}, function (errorObject) {
-		console.warn("The read failed: " + errorObject.code);
-	});
-}
+// function initializeListener() {
+// 	ListenerInitialized = true;
+// 	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
+// 	var requestRef = new Firebase(firebaseRoot + 'requests');
+// 	requestRef.on("value", function(snapshot) {
+// 		// Get list of requests
+// 		var requestList = snapshot.val()
+// 		// Loop through requests
+// 		for (var r in requestList) {
+// 			var request = requestList[r];
+// 			// If Request Status is "requested"
+// 			if(request.id === requestID) {
+// 				console.log("Found Request")
+// 				var gName = request.name;
+// 				var gReply = request.reply;
+// 				if(request.status == "accepted") {
+// 					console.log("accept 1");
+// 					acceptNotification(gName,gReply);
+// 				}
+// 				if(request.status == "rejected") {
+// 					console.log("reject 1"); 
+// 					rejectNotification(gName,gReply);
+// 				}
+// 			}
+// 		}
+// 	}, function (errorObject) {
+// 		console.warn("The read failed: " + errorObject.code);
+// 	});
+// }
 
 
 
 
-function acceptNotification(granterName, granterReply) {
-	console.log("accept 2");
-	// If Browser doesn't allow notifications
-	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
-	// If notification permission has not been enabled
-	if (Notification.permission !== "granted") {Notification.requestPermission();}
-	// If notifications are allowed
-	if(Notification.permission === "granted") {
-		var notification = new Notification(granterName + ' approved your MBA request', {
-			icon: 'http://vignette1.wikia.nocookie.net/disney/images/c/c8/Genie5.png/revision/latest?cb=20130719001923',
-			body: granterReply,
-			requireInteraction: true,
-		});
-	}
-}
+// function acceptNotification(granterName, granterReply) {
+// 	console.log("accept 2");
+// 	// If Browser doesn't allow notifications
+// 	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
+// 	// If notification permission has not been enabled
+// 	if (Notification.permission !== "granted") {Notification.requestPermission();}
+// 	// If notifications are allowed
+// 	if(Notification.permission === "granted") {
+// 		var notification = new Notification(granterName + ' approved your MBA request', {
+// 			icon: 'http://vignette1.wikia.nocookie.net/disney/images/c/c8/Genie5.png/revision/latest?cb=20130719001923',
+// 			body: granterReply,
+// 			requireInteraction: true,
+// 		});
+// 	}
+// }
 
-function rejectNotification(granterName, granterReply) {
-	console.log("reject 2"); 
-	// If Browser doesn't allow notifications
-	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
-	// If notification permission has not been enabled
-	if (Notification.permission !== "granted") {Notification.requestPermission();}
-	// If notifications are allowed
-	if(Notification.permission === "granted") {
-		var notification = new Notification(granterName + ' declined your MBA request', {
-			icon: 'http://www.rotoscopers.com/wp-content/uploads/2014/10/3.jpg',
-			body: granterReply,
-			requireInteraction: true,
-		});
-	}
-}
+// function rejectNotification(granterName, granterReply) {
+// 	console.log("reject 2"); 
+// 	// If Browser doesn't allow notifications
+// 	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
+// 	// If notification permission has not been enabled
+// 	if (Notification.permission !== "granted") {Notification.requestPermission();}
+// 	// If notifications are allowed
+// 	if(Notification.permission === "granted") {
+// 		var notification = new Notification(granterName + ' declined your MBA request', {
+// 			icon: 'http://www.rotoscopers.com/wp-content/uploads/2014/10/3.jpg',
+// 			body: granterReply,
+// 			requireInteraction: true,
+// 		});
+// 	}
+// }
 
