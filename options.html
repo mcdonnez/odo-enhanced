@@ -19,10 +19,6 @@
 				<input class='Check' value='playbook' id='Playbook' type='checkbox' />
 				<span>Playbook</span>
 			</label>
-			<label class='CheckLabel' for='SummitTrigger'>
-				<input class='Check' value='summittrigger' id='SummitTrigger' type='checkbox' />
-				<span>Summit Email Trigger</span>
-			</label>
 			<br>
 			<label class='CheckLabel' for='Panels'>
 				<input class='Check' value='panels' id='Panels' type='checkbox' />
@@ -36,13 +32,13 @@
 			<br>
 		</div>
 		<div class='OptionSection'>Snippets</br>
-			<div class='Description'>The following options all have to do with Snippets</div>
+			<!-- <div class='Description'>The following options all have to do with Snippets</div> -->
 			<label class='CheckLabel' for='Snippets'>
 				<input class='Check' value='snippets' id='Snippets' type='checkbox' />
 				<span>Add Snippets to Odo Home page</span>
 			</label>
 			<br>
-			<div class='SubOption'>
+			<div class='SubOption' id="SnippetsOptions">
 				<label class='CheckLabel' for='CloseSnippets'>
 					<input class='Check' value='closesnippets' id='CloseSnippets' type='checkbox' />
 					<span>Collapse snippets by default (can be opened by clicking Snippets)</span>
@@ -133,12 +129,13 @@
 				<input class='Check' value='gradview' id='GradProgress' type='checkbox'/>
 				<span>Show Progress Toward Ticket Goal</span>
 			</label><br>
-			<div class='Description'>Specify your Ticket Goal: </div>
-				<input class='textbox' value='3700' id='TicketGoal' type='text'/>
-			<br>
-			<div class='Description'>When would you like to achieve this goal? </div>
-				<input class='textbox' value='2016-12-12'id='TicketDate' type='date'/>
-			<br>
+			<div class='subOption' id="ProgressOptions">
+				<div class='Description'>Specify your Ticket Goal: </div>
+					<input class='textbox' value='3700' id='TicketGoal' type='text'/>
+				<br>
+				<div class='Description'>When would you like to achieve this goal? </div>
+					<input class='textbox' value='2016-12-12'id='TicketDate' type='date'/>
+			</div>
 			<div class='Description'>Verify your EmployeeID (i.e. "MATTHEWB"): </div>
 				<input class='textbox' value='employeeid' id='EmployeeID' type='text'/>
 			<br>
@@ -221,6 +218,16 @@ label {
 	transition: .3s;
 	cursor: pointer;
 	background-color: #cacaca;
+}
+input[type=text] {
+	width: 90%;
+	padding: .4em .6em;
+	border: 1px solid #ddd;
+	border-radius: .2em;
+}
+input[type=text]:focus {
+	border-color: #04a365;
+	outline: 0;
 }
 .CheckLabel span:hover {
 	background-color: #ddd;

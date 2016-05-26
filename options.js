@@ -9,7 +9,6 @@ function save_options() {
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
 	var playbook = document.getElementById('Playbook').checked;
-	var summitTrigger = document.getElementById('SummitTrigger').checked;
 	var snippets = document.getElementById('Snippets').checked;
 	var snippetsClosed = document.getElementById('CloseSnippets').checked;
 	var snippetDay = document.getElementById('ColorSnippets').value;
@@ -39,7 +38,6 @@ function save_options() {
 		de: design,
 		ee: easterEggs,
 		pb: playbook,
-		st: summitTrigger,
 		tm: theme,
 		s: snippets,
 		sc: snippetsClosed,
@@ -81,7 +79,6 @@ function restore_options() {
 		ee: "",
 		pb: "",
 		s: true,
-		st: true,
 		sc: "",
 		sd: 4,
 		sl: "#04b26e",
@@ -108,7 +105,6 @@ function restore_options() {
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
 		document.getElementById('Playbook').checked = items.pb;
-		document.getElementById('SummitTrigger').checked = items.st;
 		document.getElementById('Snippets').checked = items.s;
 		document.getElementById('CloseSnippets').checked = items.sc;
 		document.getElementById('ColorSnippets').value = items.sd;
@@ -136,12 +132,13 @@ document.getElementById('Wrapper').addEventListener('change',
 	save_options);
 document.getElementById('Snippets').addEventListener('change', makeOpaque);
 document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
+document.getElementById('GradProgress').addEventListener('change', makeOpaque);
 document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
 document.getElementById("Exit").addEventListener("click", closeFeedback);
 document.getElementById("Overlay").addEventListener("click", closeFeedback);
 
 	function makeOpaque() {
-		var snipOps = document.getElementsByClassName('SubOption')[0];
+		var snipOps = document.getElementById('SnippetsOptions');
 		var snipToggle = document.getElementById('Snippets').checked;
 		if (snipToggle) {
 			snipOps.style.display = "block";
@@ -154,6 +151,13 @@ document.getElementById("Overlay").addEventListener("click", closeFeedback);
 			clinOps.style.display = "block";
 		} else {
 			clinOps.style.display = "none";
+		}
+		var progOps = document.getElementById('ProgressOptions');
+		var progToggle = document.getElementById('GradProgress').checked;
+		if (progToggle) {
+			progOps.style.display = "block";
+		} else {
+			progOps.style.display = "none";
 		}
 	}
 	function loadFeedback() {

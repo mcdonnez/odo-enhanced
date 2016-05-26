@@ -2,7 +2,16 @@ console.log("Success! Odo Enhanced Works!");
 /* ------------- Built by Zach McDonnell & Matt Bloomfield---------------- */
 /* ------------- Return query string in var urlParams ---------------- */
 
-/*-----Retrieve variables from Chrome storage--------*/
+
+
+/******************************************************************/
+/***************                                *******************/
+/**************        Page Initialization       ******************/
+/***************                                *******************/
+/******************************************************************/
+
+
+/*------- Initialize variables from Chrome Storage ------*/
 
 var EmailButtonOn;
 var ClinicButtonOn;
@@ -35,6 +44,7 @@ var calmAlertsOn;
 var minimalPostsOn;
 var hidePosts;
 
+/*------- Retrieve variables from Chrome Storage ------*/
 
 function getVars() {
 	chrome.storage.sync.get({
@@ -94,7 +104,13 @@ function getVars() {
 		addons();
 	});
 }
-getVars(); //GET THE VARS
+
+/*------- Run function to get variables from Chrome Storage ------*/
+
+getVars();
+
+
+/*------- Know which page you are on via the urlParams ------*/
 
 var urlParams;
 var product = "RS";
@@ -114,7 +130,8 @@ var status = "Open,'In Progress', Reopened";
 		urlParams[decode(match[1])] = decode(match[2]);
 })();
 
-/*GET EMPLOYEE ID AND ET IT AS CHROME STORAGE*/
+/*------- Get EID and set in Chrome Storage ------*/
+
 var getEID = function() {
 	EmpID = urlParams["eid"];
 	console.log(EmpID);
@@ -123,7 +140,14 @@ var getEID = function() {
 	});
 }
 
-/* --------- Sets the appropriate favicon to use (works with the new css by Matt Bloomfield) -------- */
+
+/******************************************************************/
+/***************                                *******************/
+/**************          Page Level Setup        ******************/
+/***************                                *******************/
+/******************************************************************/
+
+/* --------- Sets the appropriate favicon to use  -------- */
 var favicon;
 switch (urlParams["a"]) {
 case 'Tickets':
@@ -214,19 +238,6 @@ case 'CompanyOfficeMaps':
 default:
 }
 
-/* ------------- Add Email Button ---------------- */
-function addEmailTicket() {
-container = document.getElementsByClassName('SectionButtonsContainer')[0];
-var node = document.createElement("A");
-var textnode = document.createTextNode("Create Email Ticket");
-node.appendChild(textnode);
-node.setAttribute("id", "newEmail");
-node.setAttribute("class", "btn btn-success");
-node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
-container.appendChild(node);
-document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
-};
-
 /* ------------- Dynamic Favicons ---------------- */
 document.head || (document.head = document.getElementsByTagName('head')[0]);
 
@@ -260,270 +271,20 @@ function changeTitle() {
 	}
 };
 
-/* ------------- Integrate Jira into Odo Dialog (See Auto-fill section for trigger) ---------------- */
-var feature;
-var product;
-var type;
-var jira = {};
+/******************************************************************/
+/***************                                *******************/
+/**************         Feature Additions        ******************/
+/***************                                *******************/
+/******************************************************************/
 
-function getNewJira() {
-	jira.product = $('#jiraProduct').val();
-	jira.feature = $('#jiraSearch').val();
-	jira.status = $('#jiraStatus').val();
-	jira.type = $('#jiraType').val();
-	$('#BodyContent').html("<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>");
-	getJira(jira);
-};
 
-function insertBugs(jiraBugs) {
-	$('#BodyContent').html(jiraBugs.getElementsByTagName('body')[0].innerHTML);
-	//odoBugs.removeAttribute('style'); //removes height limit of content
-	document.getElementById('newSearch').addEventListener('click', getNewJira);
-	document.getElementById('jiraSearch').onkeypress = function (event) {
-		if (event.keyCode == 13) {
-			getNewJira();
-		}
-	};
-	var pageSet = document.createElement('div');
-	$('#bugResults').DataTable();
-	$('#bugResults tbody').on('click', 'tr td:nth-child(1)', function () {
-		console.log(this);
-		var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + $.trim(this.innerHTML);
-		window.open(url);
-	});
-	$('#bugResults tbody').on('click', 'tr td:nth-child(3)', function () {
-		$(this).closest('tr').toggleClass('selected');
-	});
-	$('#jiraSearch').val(jira.feature);
-	if (jira.product)
-		$('#jiraProduct').val(jira.product);
-	else
-		$('#jiraProduct').val('RS');
-	if (jira.status)
-		$('#jiraStatus').val(jira.status)
-	else
-		$('#jiraProduct').val('Open');
-	if (jira.type)
-		$('#jiraType').val(jira.type);
-	else
-		$('#jiraType').val('Bug');
-}
-var bug;
+/******************************************************************/
+/***************  Better Views into Hidden Things  ****************/
+/******************************************************************/
 
-function getJira(jira) {
-	console.log(jira);
-	if (jira.feature) {
-		bug = jira.feature.match(/[A-Z,a-z]{2,3}-\d{3,5}/);
-	}
-	if (bug) {
-		var url = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=EB_Viewer&iid=" + jira.feature;
-		window.open(url);
-	} else {
-		var query = "";
-		if (jira.feature) {
-			query += "text ~ " + "'" + jira.feature + "'";
-		}
-		if (jira.type) {
-			query += "AND issuetype in (" + jira.type + ")"
-		}
-		if (jira.status) {
-			query += "AND status in (" + jira.status + ")";
-		}
-		if (jira.product != "") {
-			query += "AND project in (" + jira.product + ")";
-		}
-		//query = "project in (" + product + ") AND issuetype = Bug AND status in (" + status + ") AND text ~ " + "'" + feature + "'";
-		query = query.replace(/ /g, '%20');
-		query = query.replace(/'/g, '%27');
-		var url = "http://mcdonnellteach.com/jiraIssue.php?startAt=0&maxResults=100&query=" + query;
-		console.log(url);
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("GET", url, true);
-		xmlhttp.responseType = "document";
-		xmlhttp.send();
-		xmlhttp.onreadystatechange = function () {
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				insertBugs(xmlhttp.response);
-			}
-		}
-	}
-};
 
-/* ------------- Autofill dialog box depending on fields present ---------------- */
-var changeDialog = document.getElementById('Dialog');
-changeDialog.onmouseenter = function () {
-	/* ------------- Add choices of products for Jira ---------- */
-	if (document.getElementById('JiraProduct') && !document.getElementById('addCPR')) {
-		var cpr = document.createElement('option');
-		cpr.value = 'CPR';
-		cpr.id = 'addCPR';
-		cpr.innerHTML = 'Genesis Results (CPR)';
-		document.getElementById('JiraProduct').appendChild(cpr);
-		var rw = document.createElement('option');
-		rw.value = 'RW';
-		rw.id = 'vocal';
-		rw.innerHTML = 'Vocalize';
-		document.getElementById('JiraProduct').appendChild(rw);
-		var res = document.createElement('option');
-		res.value = 'RES';
-		res.id = 'Response';
-		res.innerHTML = 'Genesis Responses (RES)';
-		document.getElementById('JiraProduct').appendChild(res);
-	}
-	/* ------------- Get dynamic QWiki article and initialize Knowledge Base Tabs (just jira for now)---------- */
-	if (document.getElementById('Articles') && !document.getElementById('addedArticle')) {
-		document.getElementById('Articles').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
-		if (document.getElementById('TopicList')) {
-			page = document.getElementById('TopicList').innerHTML.match(/\| ([\w\s]+)/)[1];
-		} else {
-			page = '';
-		};
-		getQWiki(page);
-		/* ------------- Prepare for tab clicks on KnowledgeBase -----------*/
-		if (document.getElementById('TopicList')) {
-			product = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[1];
-			if (product == 'Genesis') {
-				product = 'CPR';
-			};
-			feature = document.getElementById('TopicList').querySelectorAll('td')[0].innerHTML.match(/(.*) \| (.*)/)[2];
-			status = "Open,'In Progress', Reopened";
-		} else {
-			product = '';
-			feature = '';
-			status = "Open,'In Progress', Reopened";
-		}
-		document.querySelectorAll('[aria-controls=Bugs]')[0].onclick = function () {
-			if (!document.getElementById('addedBugs')) {
-				document.getElementById('Bugs').innerHTML = "<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>";
-				getJira(product, feature, status);
-			}
-		};
-	}
-	/*--- Add Confirm to Close on Email Tickets ---*/
-	if (document.getElementById('cancel') && !document.getElementById('cancelPrompt')) {
-		$('#cancel').hide();
-		$("<div id='cancelPrompt' class='button'>Close</div>").insertAfter('#cancel');
-		$('.button-group').on('click', '#cancelPrompt', function () {
-			var r = confirm('Are you sure you want to close without saving your work?');
-			if (r == true) {
-				$('#cancel').trigger('click');
-			}
-		});
-	}
-	/* ------------- List of IDs to autofill ---------- */
-	var user;
-	if (document.getElementById('to') !== null && document.getElementById('to').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('to').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
-		} else {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('to').value = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
-		}
-	}
-	if (document.getElementById('LoginID') !== null && document.getElementById('LoginID').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('LoginID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
-		} else {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('LoginID').value = user.match(/UN: (.*)</)[1];
-		}
-		$('#Product').change(function () {
-			var product = document.getElementById("Product").value
-			switch (product) {
-			case 'SiteIntercept':
-				product = 'SiteIntercept';
-				break;
-			case 'TargetAudience':
-				product = 'Target Audience';
-				break;
-			case 'EE':
-				product = 'Employee Engagement';
-				break;
-			default:
-				product = '';
-				break;
-			}
-			if (product != '') {
-				document.getElementById("Code").value = product + " -> ";
-			}
-		});
-	}
-	if (document.getElementById('UserName') !== null && document.getElementById('UserName').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('UserName').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/<br>(.*)/)[1];
-		} else if (document.getElementsByClassName('Box')[0]) {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('UserName').value = user.match(/UN: (.*)</)[1];
-		}
-	}
-	if (document.getElementById('DataCenterID') !== null && document.getElementById('DataCenterID').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('DataCenterID').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[3].innerHTML;
-		} else {
-			user = document.getElementsByClassName('Box')[2].innerHTML;
-			document.getElementById('DataCenterID').value = user.match(/([UCAE][TOSZU][1I]?[A]?)/)[1];
-		}
-	}
-	if (document.getElementById('UserID') !== null && document.getElementById('UserID').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('UserID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
-		} else {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('UserID').value = user.match(/(UR.?_\w{12,15})/)[1];
-		}
-	}
-	if (document.getElementById('RSUserID') !== null && document.getElementById('RSUserID').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('RSUserID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[0].href.match(/uid=(.*)&/)[1];
-		} else {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('RSUserID').value = user.match(/(UR.?_\w{15})/)[1];
-		}
-	}
-	if (document.getElementById('BrandID') !== null && document.getElementById('BrandID').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('BrandID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[1].href.match(/bid=(.*)/)[1];
-		} else {
-			document.getElementById('BrandID').value = document.querySelectorAll("div.Box a")[0].innerHTML;
-		}
-	}
-	if (document.getElementById('RSBrandID') !== null && document.getElementById('RSBrandID').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('RSBrandID').value = document.getElementById('BodyContent').getElementsByClassName('overLib')[1].href.match(/bid=(.*)/)[1];
-		} else {
-			document.getElementById('RSBrandID').value = document.querySelectorAll("div.Box a")[0].innerHTML;
-		}
-	}
-	if (document.getElementById('ClientName') !== null && document.getElementById('RightMenuColumn').getElementsByClassName('overLib')[0] !== undefined && document.getElementById('ClientName').value == "") {
-		document.getElementById('ClientName').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].innerHTML;
-	}
-	if (document.getElementById('ClientID') !== null && document.getElementById('ClientID').value == "" && document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0]) {
-		document.getElementById('ClientID').value = document.getElementById('RightMenuColumn').getElementsByClassName('Yellow')[0].getElementsByClassName('overLib')[0].href.match(/cid=(.*)/)[1];
-	}
-	if (document.getElementById('FirstName') && document.getElementById('FirstName').value == "" && document.getElementById('LastName') && document.getElementById('LastName').value == "") {
-		var name = document.getElementsByClassName('Header')[0].querySelectorAll('td')[1].innerHTML;
-		var fname = name.split(" ");
-		document.getElementById('FirstName').value = fname[0];
-		document.getElementById('LastName').value = fname[1];
-	}
-	if (document.getElementById('Email') && document.getElementById('Email').value == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('Email').value = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
-		} else {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('Email').value = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
-		}
-	}
-	if (document.getElementById('PD-Email') && document.getElementById('PD-Email').innerHTML == "") {
-		if (urlParams["b"] == "TicketViewer") {
-			document.getElementById('PD-Email').innerHTML = document.getElementById('BodyContent').getElementsByClassName('Selected')[0].querySelectorAll("td")[1].innerHTML.match(/mailto:(.*)" target/)[1];
-		} else {
-			user = document.getElementsByClassName('Box')[0].innerHTML;
-			document.getElementById('PD-Email').innerHTML = user.match(/Email: ([\w\d\.\-\_]+@[\w\d\.\-\_]+)/)[1];
-		}
-	}
-};
-	// ---- Snippets on Home Page ----
+/*------ Snippets on Home Page ------*/
+
 var snippetsMods = {
 	//RETRIEVE CONTENT FROM SNIPPETS PAGE
 	setSnippetsContainer: function () {
@@ -603,7 +364,9 @@ var snippetsMods = {
 		}
 	}
 };
-// ALLOW FOR OPENING AND CLOSING SNIPPETS CONTAINER
+
+/*------ Open and Close Snippets on Click ------*/
+
 $("#LeftMenuColumn").on("click", "#SnippetsHeader", function () {
 	var container = document.getElementById('snippetsContainer');
 	if (container != null) {
@@ -623,330 +386,7 @@ $("#LeftMenuColumn").on("click", "#SnippetsHeader", function () {
 	}
 });
 
-/*--- Konami Code for Mario Face to Appear ---*/
-// check to make sure that the browser can handle window.addEventListener
-function konami() {
-	if (window.addEventListener) {
-		// create the keys and konami variables
-		var keys = [],
-			konami = "38,38,40,40,37,39,37,39,66,65";
-		// bind the keydown event to the Konami function
-		window.addEventListener("keydown", function (e) {
-			// push the keycode to the 'keys' array
-			keys.push(e.keyCode);
-			// and check to see if the user has entered the Konami code
-			if (keys.toString().indexOf(konami) >= 0) {
-				var pageLogo = document.querySelector('body > div.Masthead > a > img');
-				pageLogo.src = "http://s29.postimg.org/8v50sgzon/Mario_head.png";
-				addMario();
-				// and finally clean up the keys array
-				keys = [];
-			};
-		}, true);
-	};
-};
-
-/*ADD Mario brothers on konami code execution: */
-function addMario() {
-	$('.SectionTabsList').append('<li class="SectionTab" id="marioTab" style="cursor:pointer;">Mario</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById("marioTab").addEventListener("click", function () {
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		$('#marioTab').addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
-		document.getElementsByClassName('Masthead')[0].style.background = "black";
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://justiceleague.az1.qualtrics.com/jfe/form/SV_9XpCXziiai5lVDn?23=3'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Mario Brothers";
-		document.title = "Odo | Important Stuff";
-	});
-};
-
-
-//CUSTOM TABS
-var customTabs = {
-	/*Adds the Help Desk tab to every page*/
-	addHelpDesk: function () {
-		$('.SectionTabsList').append('<li class="SectionTab" id="helpdeskTab" style="cursor:pointer;">Help Desk Ticket</li>');
-		//SET WINDOW HEIGHT
-		document.getElementById("helpdeskTab").addEventListener("click", function () {
-			$(".SectionTabsList > li").removeClass('ActiveTab');
-			$('#helpdeskTab').addClass(' ActiveTab');
-			$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
-			//ADD IFRAME
-			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1300px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1'></iframe>";
-			//CHANGE THE PAGE TITLE
-			document.getElementsByClassName('PageTitle')[0].innerHTML = "Help Desk Request";
-			document.title = "Odo | Help Desk Request";
-		});
-	},
-	/*Adds the Options tab to home page*/
-	addChromeOptions: function () {
-		$('.SectionTabsList').append('<li class="SectionTab" id="optionsTab" style="cursor:pointer;">Extension Options</li>');
-		//SET WINDOW HEIGHT
-		document.getElementById("optionsTab").addEventListener("click", function () {
-			$(".SectionTabsList > li").removeClass('ActiveTab');
-			$('#optionsTab').addClass(' ActiveTab');
-			$('.SectionButtonsContainer, .TimezonesTableContainer').fadeIn();
-			//ADD IFRAME
-			var optionsUrl = chrome.extension.getURL("options.html");
-			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 800px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + optionsUrl + "'></iframe>";
-			//CHANGE THE PAGE TITLE
-			document.getElementsByClassName('PageTitle')[0].innerHTML = "Chrome Extension Options";
-			document.title = "Odo | Extension Options";
-		});
-	},
-	//Adding Design Tab to each page
-	addDesign: function () {
-		$('.SectionTabsList').append('<li class="SectionTab" id="designTab" style="cursor:pointer;">Design</li>');
-		//SET WINDOW HEIGHT
-		document.getElementById("designTab").addEventListener("click", function () {
-			$(".SectionTabsList > li").removeClass('ActiveTab');
-			$('#designTab').addClass(' ActiveTab');
-			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-			//ADD IFRAME
-			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader'></iframe>";
-			//CHANGE THE PAGE TITLE
-			document.getElementsByClassName('PageTitle')[0].innerHTML = "Design";
-			document.title = "Odo | Design";
-		});
-	},
-	//Adding Panels Tab to each page
-	addPanels: function () {
-		$('.SectionTabsList').append('<li class="SectionTab" id="panelsTab" style="cursor:pointer;">Panels Playbook</li>');
-		//SET WINDOW HEIGHT
-		document.getElementById("panelsTab").addEventListener("click", function () {
-			$(".SectionTabsList > li").removeClass('ActiveTab');
-			$('#panelsTab').addClass(' ActiveTab');
-			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-			//ADD IFRAME
-			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/panels#noHeader'></iframe>";
-			//CHANGE THE PAGE TITLE
-			document.getElementsByClassName('PageTitle')[0].innerHTML = "Panels";
-			document.title = "Odo | Panels Resources";
-		});
-	},
-	/*--- Add Playbook as a tab ---*/
-
-	//CHANGE TAB NAME
-	addPlaybook: function () {
-		$('.SectionTabsList').append('<li class="SectionTab" id="playbookTab" style="cursor:pointer;">Playbook</li>');
-		//SET WINDOW HEIGHT
-		document.getElementById("playbookTab").addEventListener("click", function () {
-			window.location.hash = "playbook";
-			$(".SectionTabsList > li").removeClass('ActiveTab');
-			$('#playbookTab').addClass(' ActiveTab');
-			$('.SectionButtonsContainer, .SearchBar, .TimezonesTableContainer').fadeOut();
-			//ADD IFRAME
-			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/playbook#noHeader'></iframe>";
-			//CHANGE THE PAGE TITLE
-			document.getElementsByClassName('PageTitle')[0].innerHTML = "Playbook";
-			document.title = "Odo | Playbook";
-		});
-	},
-	addHelpMessages: function () {
-		var container = $('.SectionTabsList');
-		var unreadCount = 1;
-		var unreadCountDate; // THE LAST TIME THEY LOOKED AT THE TIPS
-		chrome.storage.sync.get({
-			ucSetDate: new Date().toString(), //MUST CHANGE TO STRING
-			uc: 0
-		}, function(items) {
-			unreadCountDate = new Date(items.ucSetDate);
-			unreadCount = items.uc;
-			console.log(items.ucSetDate);
-			console.log(unreadCountDate);
-			console.log(Math.abs(unreadCountDate - new Date()));
-			var diff = Math.abs(unreadCountDate - new Date()) // FIGURE OUT HOW MANY MILLISECONDS IT'S BEEN SINCE THEY VISITED THE TIPS SECTION
-			if (diff > 432000000) {
-				unreadCount += 1;
-				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer; color: #04a365; border-top: #04a365 4px solid">Tips & Tricks</li>';
-				chrome.storage.sync.set({
-					uc: unreadCount //PROBABLY NOT NECESSARY ANYMORE
-				});
-			} else {
-				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks</li>';
-			}
-			container.append(innerTab);
-		});
-	},
-
-};
-
-
-function hideSquawkPosts() {
-	console.log("hiding posts");
-	var postArea = $('#DiscussionWrapper');
-	if (!document.getElementById("SquawkToggle")) {
-		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
-	}
-	if (postArea.is(":visible") == false) {
-		postArea.show();
-		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
-		document.getElementById('SquawkToggle').style.padding = "5px 10px";
-	} else {
-		document.getElementById('DiscussionWrapper').style.display = "none";
-		postArea.hide();
-		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
-		document.getElementById('SquawkToggle').style.padding = "60px 10px";
-	}
-}
-$('#BodyContent').on('click', '#SquawkToggle', function () {
-	hideSquawkPosts();
-});
-
-
-
-
-
-
-function addons() {
-	//GENERAL GRABBING
-	if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
-		getEID();
-	}
-	changeTitle();
-	changeFavicon(favicon);
-	//APPLY A THEME
-	//ADD YOUR TABS
-	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
-		if (PlaybookTabOn) {
-			customTabs.addPlaybook();
-		}
-		if (EasterEggsOn) {
-			konami();
-		}
-	}
-	if (HelpDeskTabOn) {
-		customTabs.addHelpDesk();
-	}
-	if (TipsOn){
-		customTabs.addHelpMessages();
-	}
-	if (DesignTabOn) {
-		customTabs.addDesign();
-	}
-	if (PanelsTabOn) {
-		customTabs.addPanels();
-	}
-	//SNIPPETS AND CHROME OPTIONS
-	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
-		if (SnippetsOn) {
-			snippetsMods.setSnippetsContainer();
-		}
-		customTabs.addChromeOptions();
-	}
-	//CUSTOM BUTTONS
-	if (EmailButtonOn) {
-		addEmailTicket();
-	}
-	if (ClinicButtonOn) {
-		if (currentDay == ClinicDay) {
-			if ( (currentHour >= ClinicStartTime.split(":")[0]) && (currentHour <= ClinicEndTime.split(":")[1]) ) {
-				addClinicTicket();
-			}
-		}
-	}
-	if (MiniTicketOn) {
-		minimizeTicketButton();
-	}
-	if ((ShowGradProgressOn) && (EmpID != "")) {
-		showQuniProgress();
-	}
-	if (urlParams["a"] == "QUni") {
-		addJiraSearch();
-		addTicketSearch();
-	}
-	if ((urlParams["a"] == "QUniReports") && (urlParams["TopNav"] == "Reports")) {
-		reportsObject.addFindMeButton();
-	}
-	//PULSE MODIFICATIONS
-	if (urlParams["b"] == "TicketViewer") {
-		if (document.getElementsByClassName('SectionHeaderText')[0].innerHTML === "Client Pulse") {
-			pulseMods.addPulseButtons();
-		} else {
-			console.log("not a pulse");
-		}
-	}
-	if (document.getElementById('EmergencyLoginCheckbox')) {
-		var loginCheckbox = document.getElementById('EmergencyLoginCheckbox');
-		window.addEventListener("click", pulseMods.addResTeamBit);
-	}
-	//CUSTOM STYLESHEETS
-	if(minimalPostsOn) {
-		customStylesheets.shrinkPosts();
-	}
-	if(calmAlertsOn) {
-		customStylesheets.greyAlerts();
-	}
-	if (urlParams["b"] == "RSUserAccountAccess") {
-		var labelContainer = $('#BodyContent > div:nth-child(7)');
-		labelContainer.append("<label style='font-size: 3em; cursor:pointer;' for='EmergencyLoginCheckbox'>CLICK ME TO LOGIN </label>" );
-	}
-	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
-		hideSquawkPosts();
-	}
-	//MBA GRANTING
-	//List of brands that are allowed:
-	var brands = [
-		"qcorpta",
-		"qcorpeastta",
-		"qcorptaau1",
-		"qaz1ta",
-		"qeuropeta",
-		"Qualtrics_360",
-		"q360au1",
-		"q_az1_360",
-		"360eu",
-		"q360co1",
-		"qcorp",
-		"qaz1",
-		"qcorpus1",
-		"qcorpeu",
-		"qasia",
-		"qcorpau1",
-		"genesisqcorpau1",
-		"genesisqcorpaz1",
-		"genesisqcorpeu",
-		"qunigenesis",
-		"genesisqcorput1",
-	];
-	//Check to be sure they are in the right brand before deploying
-	var bid = urlParams["bid"];
-	if ( (brands.indexOf(bid) >= 0) && (urlParams["b"] == "RSUserProfile")) {
-		var email = document.querySelectorAll('#UserInfoContainer > table > tbody > tr:nth-child(1) > td:nth-child(4)')[0].innerHTML;
-		var eid = EmpID.toLowerCase();
-		console.log(email);
-		console.log(eid);
-		console.log(email.indexOf(eid));
-		if (email.indexOf(eid) != -1) {
-			var col = $('#RightMenuColumn');
-			var inner = "<div class='red'><div><b>MBA Promotion<br /><br /></b></div><input type='button' id='RequestMBA' value='Request MBA'/></div>";
-			col.append(inner);
-		}
-	}
-}
-
-function addClinicTicket() {
-	container = document.getElementsByClassName('SectionButtonsContainer')[0];
-	var node = document.createElement("A");
-	var textnode = document.createTextNode("Create Clinic Ticket");
-	node.appendChild(textnode);
-	node.setAttribute("id", "newClinic");
-	node.setAttribute("class", "btn btn-success");
-	node.setAttribute('onclick', 'Dialog("http://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
-	container.appendChild(node);
-	document.getElementById('newClinic').innerHTML = "<span class='icon btn-icon-plus'></span><span>Create Clinic Ticket</span>";
-}
-
-function minimizeTicketButton() {
-	var btnInner = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5) > span:nth-child(2)');
-	btnInner.remove();
-	var btn = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5)');
-	btn.parent().prepend(btn);
-
-}
+/*------- Show Quni's progress toward milestones ------*/
 
 function showQuniProgress() {
 	var url = "http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&eid=" + EmpID + "&a=MyProfile&b=TicketsMyStats";
@@ -1037,71 +477,106 @@ function calculateTicketTotals(phoneValue,emailValue) {
 	}
 
 }
-	// REDIRECT TO TICKET PAGE ON CLICK
-$(document).ready(function(){
-	$("#LeftMenuColumn").on("click", "#GradProgContainer", function(){
-		window.location.href = 'http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&a=Home&b=TicketsMyStats';
-	});
-});
-function addTicketSearch() {
-	$('#LeftMenuColumn').append("<div class='PageFrameLeftMenuItem' style='cursor:pointer' id='TicketSearch'>Ticket Search</div>");
-}
-	// REDIRECT TO TICKET PAGE ON CLICK
-$(document).ready(function(){
-	$("#LeftMenuColumn").on("click", "#TicketSearch", function(){
-		$("#LeftMenuColumn > a > div").removeClass('PageFrameLeftMenuItemSelected');
-		$("#LeftMenuColumn > a > div").addClass('PageFrameLeftMenuItem');
-		$('#TicketSearch').addClass(' PageFrameLeftMenuItemSelected');
-		//ADD IFRAME
-		document.getElementById('BodyContent').innerHTML = "<iframe style='border: 0; height: 1000px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='http://itwiki.corp.qualtrics.com/odo-enhanced-resources/ticketSearch.html'></iframe>";
 
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "Ticket Search";
-		document.title = "Odo | Ticket Search";
-	});
-});
-function addJiraSearch() {
-	console.log("Adding JIRA");
-	$('#LeftMenuColumn').append("<div class='PageFrameLeftMenuItem' style='cursor:pointer' id='JiraSearch'>JIRA Bug Search</div>");
-}
-// USED FOR JIRA TICKET SEARCH
-$(document).ready(function(){
-	$("#LeftMenuColumn").on("click", "#JiraSearch", function(){
-		$("#LeftMenuColumn > a > div").removeClass('PageFrameLeftMenuItemSelected');
-		$("#LeftMenuColumn > a > div").addClass('PageFrameLeftMenuItem');
-		$('#JiraSearch').addClass(' PageFrameLeftMenuItemSelected');
-		window.location = "http://odo.corp.qualtrics.com/index.php?a=QUni&b=SupportJiraIssues";
-		document.getElementsByClassName('PageTitle')[0].innerHTML = "JIRA Search";
-		document.title = "Odo | JIRA Search";
-	});
-});
-var pulseMods  = {
-	addPulseButtons: function () {
-		/*
-		var container = document.getElementById('CPbuttons');
-		console.log(container);
-		var button1Text = "<button class='ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left' role='button' aria-disabled='false'><span class='ui-button-text'><a href='https://service.sumologic.com/ui/' target='_blank' style='color: #007ac0; font-weight: normal;'>Check SumoLogic</a></span></button>";
-		$(container).append(button1Text);
-		*/
-		var placer = $('.SectionHeader');
-		$("<div id='NewButtonContainer'></div>").insertAfter(placer);
-		var container = $('#NewButtonContainer');
-		$(container).append("<h3>Resources</h3>");
-		$(container).append("<a href='https://service.sumologic.com/ui/' target='_blank' class='pulse-helpers'>Check SumoLogic</a>");
-		$(container).append("<a href='https://qualtrics.atlassian.net/secure/Dashboard.jspa' target='_blank' class='pulse-helpers'>Check JIRA</a>");
-	},
-	addResTeamBit: function () {
-		var textarea = document.querySelectorAll('#EmergencyLoginForm > textarea')[0];
-		textarea.innerHTML = loginText;
+
+/*------ Hide the Squawkbox on page load until clicked ------*/
+
+function hideSquawkPosts() {
+	console.log("hiding posts");
+	var postArea = $('#DiscussionWrapper');
+	if (!document.getElementById("SquawkToggle")) {
+		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
+	}
+	if (postArea.is(":visible") == false) {
+		postArea.show();
+		document.getElementById('SquawkToggle').innerHTML = "Hide Posts";
+		document.getElementById('SquawkToggle').style.padding = "5px 10px";
+	} else {
+		document.getElementById('DiscussionWrapper').style.display = "none";
+		postArea.hide();
+		document.getElementById('SquawkToggle').innerHTML = "Show Posts";
+		document.getElementById('SquawkToggle').style.padding = "60px 10px";
 	}
 }
+$('#BodyContent').on('click', '#SquawkToggle', function () {
+	hideSquawkPosts();
+});
+/******************************************************************/
+/***************         Adding Custom Tabs        ****************/
+/******************************************************************/
+
+
+/*------ Reusable function to add additional tabs ------*/
+
+function addTab(name, height, id, src, pageTitle) {
+	$('.SectionTabsList').append('<li class="SectionTab" id="' + id + '" style="cursor:pointer;">' + name + '</li>');
+	//SET WINDOW HEIGHT
+	document.getElementById(id).addEventListener("click", function () {
+		$(".SectionTabsList > li").removeClass('ActiveTab');
+		var tabID = "#" + id;
+		$(tabID).addClass(' ActiveTab');
+		$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
+		//ADD IFRAME
+		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: " + height + "px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + src + "'></iframe>";
+		//CHANGE THE PAGE TITLE
+		document.getElementsByClassName('PageTitle')[0].innerHTML = pageTitle;
+		document.title = "Odo | " + pageTitle;
+	});
+}
+
+
+/*------ Additional tabs to be added using function above ------*/
+
+var customTabs = {
+	/*Adds the Help Desk tab to every page*/
+	addHelpDesk: function() {
+		addTab("Help Desk Ticket", "1300", "helpdeskTab", 'http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1', "Help Desk Request");
+	},
+	addChromeOptions: function() {
+		var optionsUrl = chrome.extension.getURL("options.html");
+		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options");
+	},
+	addDesign: function() {
+		addTab("Design", "1300", "designTab", "http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader", "Design");
+	},
+	addPanels: function() {
+		addTab("Panels Playbook", "1000", "panelsTab", "http://itwiki.corp.qualtrics.com/panels#noHeader", "Panels Resources");
+	},
+	addPlaybook: function() {
+		addTab("Playbook", "1000", "playbookTab", "http://itwiki.corp.qualtrics.com/playbook#noHeader", "Playbook");
+	},
+	addHelpMessages: function () {
+		var container = $('.SectionTabsList');
+		var unreadCount = 1;
+		var unreadCountDate; // THE LAST TIME THEY LOOKED AT THE TIPS
+		chrome.storage.sync.get({
+			ucSetDate: new Date().toString(), //MUST CHANGE TO STRING
+			uc: 0
+		}, function(items) {
+			unreadCountDate = new Date(items.ucSetDate);
+			unreadCount = items.uc;
+			console.log(items.ucSetDate);
+			console.log(unreadCountDate);
+			console.log(Math.abs(unreadCountDate - new Date()));
+			var diff = Math.abs(unreadCountDate - new Date()) // FIGURE OUT HOW MANY MILLISECONDS IT'S BEEN SINCE THEY VISITED THE TIPS SECTION
+			if (diff > 432000000) {
+				unreadCount += 1;
+				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer; color: #04a365; border-top: #04a365 4px solid">Tips & Tricks</li>';
+				chrome.storage.sync.set({
+					uc: unreadCount //PROBABLY NOT NECESSARY ANYMORE
+				});
+			} else {
+				var innerTab = '<li class="SectionTab" id="MessagesTab" style="float:right; cursor:pointer;">Tips & Tricks</li>';
+			}
+			container.append(innerTab);
+		});
+	},
+
+};
 
 
 
-
-
-
-
-//ADD MESSAGING TO THE APP
+/*------------ Adding help messages as a tab -------------*/
 
 	var messages = [
 		"Bookmark each data center login page and personal ODO pages to make the granting MBA process faster.",
@@ -1210,6 +685,65 @@ var pulseMods  = {
 	}
 
 
+/******************************************************************/
+/***************     Adding Additional Buttons     ****************/
+/******************************************************************/
+
+
+/*------ Add Clinic Button ------*/
+
+function addClinicTicket() {
+	container = document.getElementsByClassName('SectionButtonsContainer')[0];
+	var node = document.createElement("A");
+	var textnode = document.createTextNode("Create Clinic Ticket");
+	node.appendChild(textnode);
+	node.setAttribute("id", "newClinic");
+	node.setAttribute("class", "btn btn-success");
+	node.setAttribute('onclick', 'Dialog("http://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
+	container.appendChild(node);
+	document.getElementById('newClinic').innerHTML = "<span class='icon btn-icon-plus'></span><span>Create Clinic Ticket</span>";
+}
+
+/* ------------- Add Email Button ---------------- */
+
+function addEmailTicket() {
+	container = document.getElementsByClassName('SectionButtonsContainer')[0];
+	var node = document.createElement("A");
+	var textnode = document.createTextNode("Create Email Ticket");
+	node.appendChild(textnode);
+	node.setAttribute("id", "newEmail");
+	node.setAttribute("class", "btn btn-success");
+	node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
+	container.appendChild(node);
+	document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
+};
+
+/*------ Minify General Ticket Button ------*/
+
+function minimizeTicketButton() {
+	var btnInner = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5) > span:nth-child(2)');
+	btnInner.remove();
+	var btn = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5)');
+	btn.parent().prepend(btn);
+}
+
+
+
+/*------------ Adding a bit of text when logging into accounts -------------*/
+
+function addResTeamBit() {
+	var textarea = document.querySelectorAll('#EmergencyLoginForm > textarea')[0];
+	textarea.innerHTML = loginText;
+}
+
+
+/******************************************************************/
+/***************                                *******************/
+/**************      Add custom stylesheets      ******************/
+/**************    based on selected options     ******************/
+/***************                                *******************/
+/******************************************************************/
+
 var customStylesheets = {
 	shrinkPosts: function() {
 		document.head.insertAdjacentHTML('beforeend',
@@ -1225,226 +759,91 @@ var customStylesheets = {
 	}
 };
 
+/******************************************************************/
+/***************                                *******************/
+/**************       Check user settings        ******************/
+/**************        and run functions         ******************/
+/**************           accordingly            ******************/
+/***************                                *******************/
+/******************************************************************/
 
 
-// s = document;
-// masthead = s.getElementsByClassName("PageMenuBar");
+function addons() {
+	//GENERAL GRABBING
+	if ((urlParams["eid"] != null) && (urlParams["eid"] != "") && (urlParams["a"] === "MyProfile")) {
+		getEID();
+	}
+	changeTitle();
+	changeFavicon(favicon);
+	//APPLY A THEME
+	//ADD YOUR TABS
+	if ((urlParams["a"] == "Home" || urlParams['TopNav'] != "Tickets") || (urlParams["a"] == 'MyProfile') || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets")) {
+		if (PlaybookTabOn) {
+			customTabs.addPlaybook();
+		}
+	}
+	if (HelpDeskTabOn) {
+		customTabs.addHelpDesk();
+	}
+	if (TipsOn){
+		customTabs.addHelpMessages();
+	}
+	if (DesignTabOn) {
+		customTabs.addDesign();
+	}
+	if (PanelsTabOn) {
+		customTabs.addPanels();
+	}
+	//SNIPPETS AND CHROME OPTIONS
+	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
+		if (SnippetsOn) {
+			snippetsMods.setSnippetsContainer();
+		}
+		customTabs.addChromeOptions();
+	}
+	//CUSTOM BUTTONS
+	if (EmailButtonOn) {
+		addEmailTicket();
+	}
+	if (ClinicButtonOn) {
+		if (currentDay == ClinicDay) {
+			if ( (currentHour >= ClinicStartTime.split(":")[0]) && (currentHour <= ClinicEndTime.split(":")[1]) ) {
+				addClinicTicket();
+			}
+		}
+	}
+	if (MiniTicketOn) {
+		minimizeTicketButton();
+	}
+	if ((ShowGradProgressOn) && (EmpID != "")) {
+		showQuniProgress();
+	}
+	if (urlParams["a"] == "QUni") {
+		addJiraSearch();
+		addTicketSearch();
+	}
+	if ((urlParams["a"] == "QUniReports") && (urlParams["TopNav"] == "Reports")) {
+		reportsObject.addFindMeButton();
+	}
+	//PULSE MODIFICATIONS
+	if (document.getElementById('EmergencyLoginCheckbox')) {
+		var loginCheckbox = document.getElementById('EmergencyLoginCheckbox');
+		window.addEventListener("click", addResTeamBit);
+	}
+	//CUSTOM STYLESHEETS
+	if(minimalPostsOn) {
+		customStylesheets.shrinkPosts();
+	}
+	if(calmAlertsOn) {
+		customStylesheets.greyAlerts();
+	}
+	if (urlParams["b"] == "RSUserAccountAccess") {
+		var labelContainer = $('#BodyContent > div:nth-child(7)');
+		labelContainer.append("<label style='font-size: 3em; cursor:pointer;' for='EmergencyLoginCheckbox'>CLICK ME TO LOGIN </label>" );
+	}
+	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
+		hideSquawkPosts();
+	}
+}
 
-// function decryptSearch(input) {
-// 	console.log(input);
-// 	if (input.indexOf("SV_") == 0) {
-// 		console.log("SurveyID");
-// 		var payload = {
-// 			loc: 'http://odo.corp.qualtrics.com/?',
-// 			b: 'ProductToolsSurveySearch',
-// 			type: 'SurveyID'
-// 		}
-// 	} else if (input.indexOf("UR_") == 0) {
-// 		console.log("UserID");
-// 		var payload = {
-// 			loc: 'http://odo.corp.qualtrics.com/?',
-// 			b: 'ProductToolsUserSearch',
-// 			type: 'UserID'
-// 		}
-// 	} else if (input.indexOf("@") != -1) {
-// 		console.log("Email Address");
-// 		var payload = {
-// 			loc: 'http://odo.corp.qualtrics.com/?',
-// 			b: 'ProductToolsUserSearch',
-// 			type: 'EmailAddress'
-// 		}
-// 	} else {
-// 		console.log("Knowledge Base");
-// 		var payload = {
-// 			loc: 'http://odo.corp.qualtrics.com/wiki/index.php?search=',
-// 			b: "",
-// 			type: 'Wiki'
-// 		}
-// 		window.location = payload.loc + input;
-// 		return false;
-// 	}
-// 	window.location = payload.loc + "b=" + payload.b + "&OmniSearch=1&Type=" + payload.type + "&Query=" + input;
-
-// }
-// function addMegaBar(){
-// 	megaSearch = document.createElement("DIV");
-// 	megaSearch.setAttribute("id","megaSearch");
-// 	megaSearch.style.float = "right";
-// 	megaSearch.style.clear = "right";
-// 	megaSearch.style.margin = "0px 0px 0px 0px";
-// 	masthead[0].appendChild(megaSearch);
-// }
-
-// function addOmniSearch() {
-// 	omniForm = document.createElement("FORM");
-// 	//omniForm.setAttribute("action","decryptSearch(formData)");
-// 	omniForm.style.margin = "0px 5px 0px 5px";
-
-// 	omniQuery = document.createElement("INPUT"); //build out the location textbox
-// 	omniQuery.setAttribute("type","hidden");
-// 	omniQuery.setAttribute("name","b");         //give it the name of b
-// 	omniQuery.setAttribute("value",location);
-
-// 	omniSearch = document.createElement("INPUT"); //build out the omni search bar
-// 	omniSearch.setAttribute("type","text");
-// 	omniSearch.setAttribute("name","query"); //give it the name of query
-// 	omniSearch.setAttribute("placeholder","Omni Search");
-// 	omniSearch.setAttribute("id", "OmniSearchValue");
-
-// 	omniSubmit = document.createElement("Input");
-// 	omniSubmit.setAttribute("id", "OmniSearch");
-// 	omniSubmit.setAttribute("value", "Go");
-// 	omniSubmit.setAttribute("type", "button");
-// 	submitText = document.createTextNode("Go");
-// 	omniSubmit.appendChild(submitText);
-
-// 	omniForm.appendChild(omniQuery);
-// 	omniForm.appendChild(omniSearch);
-// 	omniForm.appendChild(omniSubmit);
-// 	megaSearch.appendChild(omniForm);
-// 	omniForm.style.display = "inline-block";
-// }
-// addMegaBar();
-// addOmniSearch();
-
-// $("body").on("click", "#OmniSearch", function () {
-// 	value = document.getElementById('OmniSearchValue').value;
-// 	decryptSearch(value);
-// });
-
-
-// if (urlParams["OmniSearch"] == 1) {
-// 	var input = urlParams["Query"];
-// 	if (urlParams["Type"] == "SurveyID") {
-// 		console.log("Survey");
-// 		var surveySearch = document.getElementById("SearchText");
-// 		var surveySubmit = document.getElementById("SearchButton");
-// 		surveySearch.value = input;
-// 		surveySubmit.click();
-// 	} else if (urlParams["Type"] == "EmailAddress") {
-// 		console.log("Email");
-// 		var emailSearch = document.getElementById("Email");
-// 		var emailSubmit = document.getElementById("SearchButton");
-// 		emailSearch.value = input;
-// 		emailSubmit.click();
-// 	} else if (urlParams["Type"] == "UserID") {
-// 		console.log("UserID");
-// 		var userSearch = document.getElementById("UserName");
-// 		var userSubmit = document.getElementById("SearchButton");
-// 		console.log(userSearch);
-// 		userSearch.value = input;
-// 		userSubmit.click();
-// 	} else {
-// 		console.log("Some error has occurred");
-// 	}
-// }
-
-//MBA GRANTING 
-
-// $('#RightMenuColumn').on('click', '#RequestMBA', function () {
-// 	requestMBA();
-// });
-// var requestID;
-// var ListenerInitialized;
-// function requestMBA() {
-// 	// Firebase Refs
-// 	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
-// 	var requestRef = new Firebase(firebaseRoot + 'requests');
-// 	// Prompt for Info for Request
-// 	var uid = urlParams["uid"];
-// 	var infoContainer = document.getElementById('UserInfoContainer');
-// 	var fn = infoContainer.querySelectorAll('input')[1].value;
-// 	var ln = infoContainer.querySelectorAll('input')[2].value;
-// 	var name = fn + " " + ln;
-// 	var requestReason = prompt("What do you need MBA for?");
-// 	var timestamp = new Date();
-// 	var hr = timestamp.getHours();
-// 	var min = timestamp.getMinutes();
-// 	var sec = timestamp.getSeconds();
-// 	var time = hr + ":" + min + ":" + sec;
-// 	//Create Request
-// 	var newRequest = requestRef.push({
-// 		name: name,
-// 		reason: requestReason,
-// 		time: time,
-// 		granter: "",
-// 		uid: uid
-// 	});
-// 	// Get Request ID
-// 	requestID = newRequest.key();
-// 	// Add ID and Status to Request
-// 	requestRef.child(requestID).update({
-// 		id: requestID,
-// 		status: "requested"
-// 	});
-// 	if (!ListenerInitialized) {
-// 		initializeListener();
-// 	}
-// }
-
-
-// function initializeListener() {
-// 	ListenerInitialized = true;
-// 	var firebaseRoot = new Firebase("https://blazing-torch-4033.firebaseio.com/");
-// 	var requestRef = new Firebase(firebaseRoot + 'requests');
-// 	requestRef.on("value", function(snapshot) {
-// 		// Get list of requests
-// 		var requestList = snapshot.val()
-// 		// Loop through requests
-// 		for (var r in requestList) {
-// 			var request = requestList[r];
-// 			// If Request Status is "requested"
-// 			if(request.id === requestID) {
-// 				console.log("Found Request")
-// 				var gName = request.name;
-// 				var gReply = request.reply;
-// 				if(request.status == "accepted") {
-// 					console.log("accept 1");
-// 					acceptNotification(gName,gReply);
-// 				}
-// 				if(request.status == "rejected") {
-// 					console.log("reject 1"); 
-// 					rejectNotification(gName,gReply);
-// 				}
-// 			}
-// 		}
-// 	}, function (errorObject) {
-// 		console.warn("The read failed: " + errorObject.code);
-// 	});
-// }
-
-
-
-
-// function acceptNotification(granterName, granterReply) {
-// 	console.log("accept 2");
-// 	// If Browser doesn't allow notifications
-// 	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
-// 	// If notification permission has not been enabled
-// 	if (Notification.permission !== "granted") {Notification.requestPermission();}
-// 	// If notifications are allowed
-// 	if(Notification.permission === "granted") {
-// 		var notification = new Notification(granterName + ' approved your MBA request', {
-// 			icon: 'http://vignette1.wikia.nocookie.net/disney/images/c/c8/Genie5.png/revision/latest?cb=20130719001923',
-// 			body: granterReply,
-// 			requireInteraction: true,
-// 		});
-// 	}
-// }
-
-// function rejectNotification(granterName, granterReply) {
-// 	console.log("reject 2"); 
-// 	// If Browser doesn't allow notifications
-// 	if (!Notification) {alert('Desktop notifications not available in your browser.'); return;}
-// 	// If notification permission has not been enabled
-// 	if (Notification.permission !== "granted") {Notification.requestPermission();}
-// 	// If notifications are allowed
-// 	if(Notification.permission === "granted") {
-// 		var notification = new Notification(granterName + ' declined your MBA request', {
-// 			icon: 'http://www.rotoscopers.com/wp-content/uploads/2014/10/3.jpg',
-// 			body: granterReply,
-// 			requireInteraction: true,
-// 		});
-// 	}
-// }
 
