@@ -196,11 +196,6 @@ case 'TicketsSupportInBox':
 case 'SupportRecommendedTickets':
 	favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
 	break;
-case 'SupportJiraIssues':
-	favicon = 'global/template/img/Bug.png';
-	$('#BodyContent').html("<img style='position: absolute;left: 47%;top: 50%;' src='https://s.qualtrics.com/ControlPanel/File.php?F=F_d5B1fUz1R32UoWF'>");
-	getJira(product, feature, status);
-	break;
 case 'SupportAlternateEmailTickets':
 	favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
 	break;
@@ -533,7 +528,7 @@ var customTabs = {
 		addTab("Help Desk Ticket", "1300", "helpdeskTab", 'http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1', "Help Desk Request");
 	},
 	addChromeOptions: function() {
-		var optionsUrl = chrome.extension.getURL("options.html");
+		var optionsUrl = chrome.extension.getURL("../resources/options.html");
 		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options");
 	},
 	addDesign: function() {
@@ -748,13 +743,13 @@ var customStylesheets = {
 	shrinkPosts: function() {
 		document.head.insertAdjacentHTML('beforeend',
 			'<link rel="stylesheet" type="text/css" href="' +
-			chrome.runtime.getURL("squawkPosts.css") + '">'
+			chrome.runtime.getURL("css/squawkPosts.css") + '">'
 		);
 	},
 	greyAlerts: function() {
 		document.head.insertAdjacentHTML('beforeend',
 			'<link rel="stylesheet" type="text/css" href="' +
-			chrome.runtime.getURL("greyAlerts.css") + '">'
+			chrome.runtime.getURL("css/greyAlerts.css") + '">'
 		);
 	}
 };
@@ -817,10 +812,6 @@ function addons() {
 	}
 	if ((ShowGradProgressOn) && (EmpID != "")) {
 		showQuniProgress();
-	}
-	if (urlParams["a"] == "QUni") {
-		addJiraSearch();
-		addTicketSearch();
 	}
 	if ((urlParams["a"] == "QUniReports") && (urlParams["TopNav"] == "Reports")) {
 		reportsObject.addFindMeButton();

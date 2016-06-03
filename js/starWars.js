@@ -169,7 +169,7 @@ function changeThemes() {
 		//LOAD ADDITIONAL STYLESHEET
 		document.head.insertAdjacentHTML('beforeend',
 			'<link rel="stylesheet" type="text/css" href="' +
-			chrome.runtime.getURL("starWars.css") + '">'
+			chrome.runtime.getURL("../css/starWars.css") + '">'
 		);
 		starWars.updateHeader();
 	} else {

@@ -15,16 +15,16 @@
 		"storage",
 		"tabs"
 	],
-	"web_accessible_resources": ["options.html", "starWars.css", "squawkPosts.css", "greyAlerts.css"],
+	"web_accessible_resources": ["resources/options.html", "css/starWars.css", "css/squawkPosts.css", "css/greyAlerts.css"],
 	"icons": {
-		"128": "icon.png"
+		"128": "img/icon.png"
 	},
-	"options_page": "options.html",
+	"options_page": "resources/options.html",
 	"content_scripts": [
 		{
 			"matches": ["http://odo.corp.qualtrics.com/*"],
-			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "quni.js", "resources/tinyeditor/tinyeditor.js", "starWars.js", "resources/firebase.js"],
-			"css": ["resources/jquery.dataTables.css", "odo-enhanced.css", "resources/tinyeditor/style.css"],
+			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "js/quni.js", "resources/tinyeditor/tinyeditor.js", "js/starWars.js", "resources/firebase.js"],
+			"css": ["resources/jquery.dataTables.css", "css/odo-enhanced.css", "resources/tinyeditor/style.css"],
 			"run_at": "document_end"
 	}
 	]
