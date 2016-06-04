@@ -9,10 +9,6 @@ function save_options() {
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
 	var playbook = document.getElementById('Playbook').checked;
-	var snippets = document.getElementById('Snippets').checked;
-	var snippetsClosed = document.getElementById('CloseSnippets').checked;
-	var snippetDay = document.getElementById('ColorSnippets').value;
-	var snippetColor = document.getElementById('SnippetColor').value;
 	var ticketGoal = document.getElementById('TicketGoal').value;
 	var ticketDate = document.getElementById('TicketDate').value;
 	var goalDate = new Date(ticketDate);
@@ -39,10 +35,6 @@ function save_options() {
 		ee: easterEggs,
 		pb: playbook,
 		tm: theme,
-		s: snippets,
-		sc: snippetsClosed,
-		sd: snippetDay,
-		sl: snippetColor,
 		eid: employeeID,
 		gp: gradProgress,
 		tg: ticketGoal,
@@ -78,10 +70,6 @@ function restore_options() {
 		de: false,
 		ee: "",
 		pb: "",
-		s: true,
-		sc: "",
-		sd: 4,
-		sl: "#04b26e",
 		eid: "",
 		gp: true,
 		tm: null,
@@ -105,10 +93,6 @@ function restore_options() {
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
 		document.getElementById('Playbook').checked = items.pb;
-		document.getElementById('Snippets').checked = items.s;
-		document.getElementById('CloseSnippets').checked = items.sc;
-		document.getElementById('ColorSnippets').value = items.sd;
-		document.getElementById('SnippetColor').value = items.sl;
 		document.getElementById('EmployeeID').value = items.eid;
 		document.getElementById('GradProgress').checked = items.gp;
 		document.getElementById('Theme').value = items.tm;
@@ -130,7 +114,6 @@ document.getElementById('save').addEventListener('click',
 	save_options);
 document.getElementById('Wrapper').addEventListener('change',
 	save_options);
-document.getElementById('Snippets').addEventListener('change', makeOpaque);
 document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
 document.getElementById('GradProgress').addEventListener('change', makeOpaque);
 document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
@@ -138,13 +121,6 @@ document.getElementById("Exit").addEventListener("click", closeFeedback);
 document.getElementById("Overlay").addEventListener("click", closeFeedback);
 
 	function makeOpaque() {
-		var snipOps = document.getElementById('SnippetsOptions');
-		var snipToggle = document.getElementById('Snippets').checked;
-		if (snipToggle) {
-			snipOps.style.display = "block";
-		} else {
-			snipOps.style.display = "none";
-		}
 		var clinOps = document.getElementById('ClinicOptions');
 		var clinToggle = document.getElementById('ClinicButton').checked;
 		if (clinToggle) {

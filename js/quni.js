@@ -23,10 +23,6 @@ var HelpDeskTabOn;
 var DesignTabOn;
 var EasterEggsOn;
 var PlaybookTabOn;
-var SnippetsOn;
-var SnippetsClosed;
-var SnippetsDay;
-var SnippetsColor;
 var ShowGradProgressOn;
 var EmpID;
 var Theme;
@@ -58,10 +54,6 @@ function getVars() {
 		de: "", // Design Tab
 		ee: "", // Easter Eggs
 		pb: "", // Playbook Tab
-		s: true, //Snippets
-		sc: "", // Snippets Closed
-		sd: 4, // Snippets Day
-		sl: "#04b26e", // Snippets Color
 		gp: true, // Grad Progress Tracker
 		eid: "", // Employee ID
 		tm: "", // Current Theme
@@ -85,10 +77,6 @@ function getVars() {
 		DesignTabOn = items.de;
 		EasterEggsOn = items.ee;
 		PlaybookTabOn = items.pb;
-		SnippetsOn = items.s;
-		SnippetsClosed = items.sc;
-		SnippetsDay = items.sd;
-		SnippetsColor = items.sl;
 		ShowGradProgressOn = items.gp;
 		EmpID = items.eid;
 		Theme = items.tm;
@@ -276,110 +264,6 @@ function changeTitle() {
 /******************************************************************/
 /***************  Better Views into Hidden Things  ****************/
 /******************************************************************/
-
-
-/*------ Snippets on Home Page ------*/
-
-var snippetsMods = {
-	//RETRIEVE CONTENT FROM SNIPPETS PAGE
-	setSnippetsContainer: function () {
-		var url = "http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor";
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("GET", url, true);
-		xmlhttp.responseType = "document";
-		xmlhttp.send();
-		xmlhttp.onreadystatechange = function () {
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				var response = xmlhttp.response;
-				//Create Container
-				$('#LeftMenuColumn').prepend("<div class='Title' style='cursor:pointer;' id='SnippetsHeader'>My Snippets</div><div id='SnippetsPreview' style='font-size: 10px; text-align:center; overflow: hidden;'></div><table style='cursor:pointer' id='snippetsContainer'><tbody></tbody></table>");
-				if (Theme === "starwars") {
-					document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
-				}
-				// PLACE SNIPPETS IN CONTAINER
-				if (response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0]) {
-					var numberComplete = 0;
-					var finalOutput = response.querySelectorAll('#ThisWeekSnippetTable > table > tbody')[0].innerHTML;
-					var snippetSideBar = document.getElementById('snippetsContainer');
-					snippetSideBar.innerHTML = finalOutput;
-					var table = document.getElementById('snippetsContainer');
-					//CLEAN EACH SNIPPET ONE BY ONE
-					for (i = 0; i < table.rows.length; i++) {
-						var row = table.rows[i];
-						row.style.background = "transparent";
-						//COLOR SNIPPETS WHEN COMPLETED
-						var checkBox = row.getElementsByTagName('input')[0];
-						//GET DATE TO TURN SNIPPETS RED AFTER WEDNESDAY
-						var d = new Date();
-						var n = d.getDay();
-						if (checkBox.checked) {
-							row.style.display = "none";
-							numberComplete = numberComplete + 1;
-						} else if (n >= SnippetsDay) /*var set in chrome options */ {
-							row.style.outline = "1px solid " + SnippetsColor;
-						}
-						//ELIMINATE X
-						row.deleteCell(0);
-						row.deleteCell(1);
-						//TRUNCATE LABELS ON SNIPPETS
-						var length = 40; //LENGTH OF SNIPPET POST BEFORE TRUNCATION
-						var rowContents = row.getElementsByTagName('td')[0];
-						//VERIFY THAT TRUNCATION IS NECESSARY
-						if (rowContents.innerHTML.length > length) {
-							var replaceMe = row.getElementsByTagName('td')[0].innerHTML;
-							rowContents.innerHTML = replaceMe.substring(0, length) + "...";
-						}
-					}
-					//Congratulate if Snippets are completed
-					if (table.rows.length == numberComplete) {
-						var snippetSideBar = document.getElementById('snippetsContainer');
-						snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>Success! <br>Great Job! Way to be a finisher.</div>";
-						document.getElementById('SnippetsPreview').style.height = "0px";
-					}
-					//Add preview bar for when closed
-					var numberIncomplete = table.rows.length - numberComplete;
-					document.getElementById('SnippetsPreview').innerHTML = numberComplete + " Complete; " + numberIncomplete + " to go";
-					if (SnippetsClosed == false) {
-						document.getElementById('SnippetsPreview').style.display = "none";
-					}
-				} else {
-					//ALERT THAT NO SNIPPETS ARE PRESENT
-					var snippetSideBar = document.getElementById('snippetsContainer');
-					snippetSideBar.innerHTML = "<div style='padding:5px;text-align:center;font-size:10pt;'>You don't have any snippets! Click here to add snippets.</div>";
-					snippetSideBar.style.cursor = "pointer";
-					snippetSideBar.style.outline = "1px solid " + SnippetsColor;
-				}
-				//ALLOW FOR EDITING OF SNIPPETS
-				snippetSideBar.setAttribute('onclick', "Dialog('?a=Snippets&b=SnippetsEditor&date=&reload=false');");
-				//CLOSE SNIPPETS
-				if (SnippetsClosed) {
-					table.style.display = "none";
-				}
-			}
-		}
-	}
-};
-
-/*------ Open and Close Snippets on Click ------*/
-
-$("#LeftMenuColumn").on("click", "#SnippetsHeader", function () {
-	var container = document.getElementById('snippetsContainer');
-	if (container != null) {
-		if (container.style.display === "none") {
-			container.style.display = "table";
-			document.getElementById('SnippetsPreview').style.display = "none";
-			chrome.storage.sync.set({
-				sc: false
-			});
-		} else {
-			container.style.display = "none";
-			document.getElementById('SnippetsPreview').style.display = "block";
-			chrome.storage.sync.set({
-				sc: true
-			});
-		}
-	}
-});
 
 /*------- Show Quni's progress toward milestones ------*/
 
@@ -791,9 +675,6 @@ function addons() {
 	}
 	//SNIPPETS AND CHROME OPTIONS
 	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
-		if (SnippetsOn) {
-			snippetsMods.setSnippetsContainer();
-		}
 		customTabs.addChromeOptions();
 	}
 	//CUSTOM BUTTONS

@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Flat Theme, Favicons, Autofill Tickets, QWiki Integration, Improved Jira Integration, Visible Snippets",
-	"version": "1.6.0.0",
+	"version": "1.7.0.0",
 
 
 	"permissions": [
