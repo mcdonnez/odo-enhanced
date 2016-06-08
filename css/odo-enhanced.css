@@ -116,3 +116,65 @@ div.red {
     text-align: center;
     padding: 15px 0;
 }
+
+
+
+
+/*REACTIONS */
+.reaction {
+	opacity: .5;
+	transition: .2s;
+	cursor:pointer;
+	position: relative;
+	display:inline-block;
+	width:40px;
+	height:40px;
+	background-size: contain;
+	background-repeat:no-repeat;
+	background-position: center center;
+	margin: .1em .4em;
+}
+.taco {
+	background-image: url(http://blog.fpweb.net/media/2013/02/Say-NO-to-SPAM-325x321.png);
+	float: right;
+}
+.scrappy {
+	background-image: url(https://qglobalops.co1.qualtrics.com/WRQualtricsControlPanel/Graphic.php?IM=IM_aXA0nCzpEaKXiVn);
+}
+.allIn {
+	background-image: url(https://qglobalops.co1.qualtrics.com/WRQualtricsControlPanel/Graphic.php?IM=IM_e2SHvxWrJMmYwUB);
+}
+.obsessed {
+	background-image: url(https://qglobalops.co1.qualtrics.com/WRQualtricsControlPanel/Graphic.php?IM=IM_1SuT54KTtijmdhz);
+}
+.oneTeam {
+	background-image: url(https://qglobalops.co1.qualtrics.com/WRQualtricsControlPanel/Graphic.php?IM=IM_9vKvaNyDVwpkuu9);
+}
+.transparent {
+	background-image: url(https://qglobalops.co1.qualtrics.com/WRQualtricsControlPanel/Graphic.php?IM=IM_ah3PUb9TmfrkqIR);
+}
+.reaction:hover {
+	opacity: .9;
+}
+.reaction_count {
+	position: absolute;
+	right:-10px;
+	bottom:3px;
+	margin-right:10px;
+	background: rgba(255,255,255,.6);
+	border-radius: .2em;
+}
+
+.nonOpaque {
+	opacity: 1 !important;
+	transition:.2s;
+	transform: rotate(360deg);
+}
+.hidden {
+	display:none;
+}
+
+
+
+
+

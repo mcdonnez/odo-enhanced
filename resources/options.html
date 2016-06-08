@@ -87,6 +87,7 @@
 			</label><br>
 			<br>
 		</div>
+
 		<div class='OptionSection'>Misc</br>
 			<div class='Description'>Choose any other options here: </div>
 			<label class='CheckLabel' for='EasterEggs'>
@@ -116,8 +117,16 @@
 			</label><br>
 			<label class='CheckLabel' for='hideSquawkPosts'>
 				<input class='Check' value='hideSquawkPosts' id='hideSquawkPosts' type='checkbox'/>
-				<span>Hide Squawkbox Posts</span>
+				<span>Hide the Squawkbox</span>
 			</label><br>
+
+			<label class='CheckLabel' for='markSpammyPosts'>
+				<input class='Check' value='markSpammyPosts' id='markSpammyPosts' type='checkbox'/>
+				<span>Mark Spammy Posts</span>
+			</label><br>
+			<div class='Description'>After how many aggregate spam clicks should we mark them as spam?</div>
+				<input class='textbox' value='spamCount' id='SpamCount' type='text'/>
+			<br/>
 			<div class='Description'>Custom text for when forcing login</div>
 				<input class='textbox' value='logintext' id='LoginText' type='text'/>
 			<br>

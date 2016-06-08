@@ -22,6 +22,8 @@ function save_options() {
 	var alerts = document.getElementById('greyAlerts').checked;
 	var smallPosts = document.getElementById('shrinkPosts').checked;
 	var hideSquawkPosts = document.getElementById('hideSquawkPosts').checked;
+	var spamCount = document.getElementById('SpamCount').value;
+	var blockSpam = document.getElementById('blockSpam').checked;
 	console.log(hideSquawkPosts);
 	chrome.storage.sync.set({
 		em: createEmail,
@@ -45,7 +47,9 @@ function save_options() {
 		calmAlerts: alerts,
 		minPosts: smallPosts,
 		ltxt: loginText,
-		hidePosts: hideSquawkPosts
+		hidePosts: hideSquawkPosts,
+		spamCount: spamCount,
+		blockSpam: blockSpam
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -81,7 +85,9 @@ function restore_options() {
 		calmAlerts: true,
 		minPosts: true,
 		ltxt: "",
-		hidePosts: false
+		hidePosts: false,
+		spamCount: 25,
+		blockSpam: true
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -105,6 +111,8 @@ function restore_options() {
 		document.getElementById('greyAlerts').checked = items.calmAlerts;
 		document.getElementById('shrinkPosts').checked = items.minPosts;
 		document.getElementById('hideSquawkPosts').checked = items.hidePosts;
+		document.getElementById('SpamCount').value = items.spamCount;
+		document.getElementById('blockSpam').checked = items.blockSpam;
 		makeOpaque();
 	});
 }

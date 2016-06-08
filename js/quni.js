@@ -39,6 +39,8 @@ var loginText;
 var calmAlertsOn;
 var minimalPostsOn;
 var hidePosts;
+var spamCount;
+var blockSpam;
 
 /*------- Retrieve variables from Chrome Storage ------*/
 
@@ -65,7 +67,9 @@ function getVars() {
 		ltxt: "",
 		calmAlerts: false,
 		minPosts:false,
-		hidePosts: false
+		hidePosts: false,
+		spamCount: 25,
+		blockSpam: true
 	}, function (items) {
 		EmailButtonOn = items.em;
 		ClinicButtonOn = items.cl;
@@ -89,6 +93,8 @@ function getVars() {
 		calmAlertsOn = items.calmAlerts;
 		minimalPostsOn = items.minPosts;
 		hidePosts = items.hidePosts;
+		spamCount = items.spamCount;
+		blockSpam = items.blockSpam;
 		addons();
 	});
 }
@@ -96,7 +102,6 @@ function getVars() {
 /*------- Run function to get variables from Chrome Storage ------*/
 
 getVars();
-
 
 /*------- Know which page you are on via the urlParams ------*/
 
@@ -615,6 +620,272 @@ function addResTeamBit() {
 	textarea.innerHTML = loginText;
 }
 
+/*------------- Adding reactions to Odo Squawkbox Posts --------------*/
+var hiddenPostsArray = [];
+function hideIndividualPosts() {
+	chrome.storage.sync.get({
+		hiddenPostsArray: ""
+	}, function(items) {
+		hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
+		console.log("Trying to hide posts");
+		console.log(hiddenPostsArray);
+		for (var i=0; i<hiddenPostsArray.length; i++) {
+			var id = hiddenPostsArray[i];
+			console.log("HIDING SOMETHING");
+			console.log(id);
+			document.getElementById(id).className += " hidden";
+		}
+	});
+}
+
+function addReactionButtons() {
+	var firebaseRef = new Firebase("https://odo-enhanced.firebaseio.com/posts");
+	console.log("Adding Reactions");
+
+	// get the counts for every post
+	var posts = document.getElementsByClassName('DiscussionControls');
+	var postElements = {};
+	var firebasePosts = {};
+	firebaseRef.once("value", function(snapshot) {
+		firebasePosts = snapshot.val();
+		for (var i=0; i<posts.length; i++) {
+			var id = posts[i].id.split("-")[1];
+			postElements[id] = {
+				scrappyCount: 0,
+				allInCount: 0,
+				obsessedCount: 0,
+				oneTeamCount: 0,
+				transparentCount: 0,
+				tacoCount: 0,
+				id: id
+			}
+			if (firebasePosts[id]) {
+				for (prop in firebasePosts[id]) {
+					console.log(prop);
+					postElements[id][prop] = firebasePosts[id][prop];
+				}
+			}
+		}
+		console.log(postElements);
+		// add the actual buttons
+		addButtons(postElements);
+	});
+
+	//define actions for button clicks
+	$('.DiscussionControls').on('click', '.taco', function () {
+		var forReal = confirm("Are you sure you want to hide this spam?");
+		if (forReal) {
+			var parentID = this.parentElement.parentElement.id;
+			discussionID = parentID.split('-')[1];
+			$(this).addClass("nonOpaque");
+			console.log(this.parentElement.parentElement.parentElement);
+			var containerID = "DiscussionContainer-" + discussionID;
+			$("#" + containerID).addClass("hidden");
+			//trigger something to firebase
+			postElements[discussionID].tacoCount += 1;
+			var obj = {
+					id: discussionID,
+					tacoCount: postElements[discussionID].tacoCount,
+				}
+			firebaseRef.child(discussionID).update(obj);
+			//trigger something to your personal storage
+			hiddenPostsArray.push(containerID);
+			chrome.storage.sync.set({
+				hiddenPostsArray: JSON.stringify(hiddenPostsArray)
+			});
+			//trigger something to view
+			var selector = "#" + parentID + " div .taco .reaction_count"
+			document.querySelector(selector).innerHTML = obj.tacoCount;
+		}
+	});
+
+	$('.DiscussionControls').on('click', '.scrappy', function () {
+		if( $(this).hasClass("noMoreClicky")) {
+			alert("Hey... stop spamming");
+		} else {
+			var parentID = this.parentElement.parentElement.id;
+			discussionID = parentID.split('-')[1];
+			$(this).addClass("nonOpaque");
+			$(this).addClass("noMoreClicky");
+			//trigger something to firebase
+			postElements[discussionID].scrappyCount += 1;
+			var obj = {
+					id: discussionID,
+					scrappyCount: postElements[discussionID].scrappyCount,
+				}
+			firebaseRef.child(discussionID).update(obj);
+
+			//trigger something to your personal storage
+
+			//trigger something to view
+			var selector = "#" + parentID + " div .scrappy .reaction_count"
+			document.querySelector(selector).innerHTML = obj.scrappyCount;
+		}
+	});
+	$('.DiscussionControls').on('click', '.allIn', function () {
+		if( $(this).hasClass("noMoreClicky")) {
+			alert("Hey... stop spamming");
+		} else {
+			var parentID = this.parentElement.parentElement.id;
+			discussionID = parentID.split('-')[1];
+			$(this).addClass("nonOpaque");
+			$(this).addClass("noMoreClicky");
+			//trigger something to firebase
+			postElements[discussionID].allInCount += 1;
+			var obj = {
+					id: discussionID,
+					allInCount: postElements[discussionID].allInCount,
+				}
+			firebaseRef.child(discussionID).update(obj);
+
+			//trigger something to your personal storage
+
+			//trigger something to view
+			var selector = "#" + parentID + " div .allIn .reaction_count"
+			document.querySelector(selector).innerHTML = obj.allInCount;
+		}
+	});
+	$('.DiscussionControls').on('click', '.obsessed', function () {
+		if( $(this).hasClass("noMoreClicky")) {
+			alert("Hey... stop spamming");
+		} else {
+			var parentID = this.parentElement.parentElement.id;
+			discussionID = parentID.split('-')[1];
+			$(this).addClass("nonOpaque");
+			$(this).addClass("noMoreClicky");
+			//trigger something to firebase
+			postElements[discussionID].obsessedCount += 1;
+			var obj = {
+					id: discussionID,
+					obsessedCount: postElements[discussionID].obsessedCount,
+				}
+			firebaseRef.child(discussionID).update(obj);
+
+			//trigger something to your personal storage
+
+			//trigger something to view
+			var selector = "#" + parentID + " div .obsessed .reaction_count"
+			document.querySelector(selector).innerHTML = obj.obsessedCount;
+		}
+	});
+	$('.DiscussionControls').on('click', '.oneTeam', function () {
+		if( $(this).hasClass("noMoreClicky")) {
+			alert("Hey... stop spamming");
+		} else {
+			var parentID = this.parentElement.parentElement.id;
+			discussionID = parentID.split('-')[1];
+			$(this).addClass("nonOpaque");
+			$(this).addClass("noMoreClicky");
+			//trigger something to firebase
+			postElements[discussionID].oneTeamCount += 1;
+			var obj = {
+					id: discussionID,
+					oneTeamCount: postElements[discussionID].oneTeamCount,
+				}
+			firebaseRef.child(discussionID).update(obj);
+
+			//trigger something to your personal storage
+
+			//trigger something to view
+			var selector = "#" + parentID + " div .oneTeam .reaction_count"
+			document.querySelector(selector).innerHTML = obj.oneTeamCount;
+		}
+
+	});
+	$('.DiscussionControls').on('click', '.transparent', function () {
+		if( $(this).hasClass("noMoreClicky")) {
+			alert("Hey... stop spamming");
+		} else {
+			var parentID = this.parentElement.parentElement.id;
+			discussionID = parentID.split('-')[1];
+			$(this).addClass("nonOpaque");
+			$(this).addClass("noMoreClicky");
+			//trigger something to firebase
+			postElements[discussionID].transparentCount += 1;
+			var obj = {
+					id: discussionID,
+					transparentCount: postElements[discussionID].transparentCount,
+				}
+			firebaseRef.child(discussionID).update(obj);
+
+			//trigger something to your personal storage
+
+			//trigger something to view
+			var selector = "#" + parentID + " div .transparent .reaction_count"
+			document.querySelector(selector).innerHTML = obj.transparentCount;
+		}
+
+	});
+}
+function addButtons(postElements) {
+	for (post in postElements) {
+		var tacoClass = "";
+		var scrappyClass = "";
+		var allInClass = "";
+		var obsessedClass = "";
+		var oneTeamClass = "";
+		var transparentClass = "";
+		var id = "#DiscussionControls-" + post;
+		//check for spam
+		if (postElements[post].tacoCount >= spamCount) {
+			var spamID = "DiscussionCommentSection-" + post;
+			document.getElementById(spamID).style.display = "none";
+
+			var spamID = "DiscussionSummary-" + post;
+			document.getElementById(spamID).style.display = "block";
+
+			var spamID = "DiscussionLikesSection-" + post;
+			document.getElementById(spamID).style.display = "none";
+
+			var spamID = "DiscussionText-" + post;
+			document.getElementById(spamID).style.display = "none";
+
+			var spamID = "DiscussionContainer-" + post;
+			var container = document.getElementById(spamID);
+			container.querySelector('img').src = "http://blog.fpweb.net/media/2013/02/Say-NO-to-SPAM-325x321.png";
+		}
+		//set counts
+		if (postElements[post].scrappyCount >= 1) {
+			scrappyClass = "nonOpaque";
+		}
+		if (postElements[post].allInCount >= 1) {
+			allInClass = "nonOpaque";
+		}
+		if (postElements[post].obsessedCount >= 1) {
+			obsessedClass = "nonOpaque";
+		}
+		if (postElements[post].oneTeamCount >= 1) {
+			oneTeamClass = "nonOpaque";
+		}
+		if (postElements[post].transparentCount >= 1) {
+			transparentClass = "nonOpaque";
+		}
+		$(id).append(	"<div>" +
+							"<div class='transparent reaction " + transparentClass + "'>" +
+								"<div class='reaction_count'>" + postElements[post].transparentCount + "</div>" +
+							"</div>" +
+							"<div class='allIn reaction " + allInClass + "'>" +
+								"<div class='reaction_count'>" + postElements[post].allInCount + "</div>" +
+							"</div>" +
+							"<div class='obsessed reaction " + obsessedClass + "'>" +
+								"<div class='reaction_count'>" + postElements[post].obsessedCount + "</div>" +
+							"</div>" +
+							"<div class='oneTeam reaction " + oneTeamClass + "'>" +
+								"<div class='reaction_count'>" + postElements[post].oneTeamCount + "</div>" +
+							"</div>" +
+							"<div class='scrappy reaction " + scrappyClass + "'>" +
+								"<div class='reaction_count'>" + postElements[post].scrappyCount + "</div>" +
+							"</div>" +
+							"<div class='taco reaction " + tacoClass + "'>" +
+								"<div class='hidden reaction_count'>" + postElements[post].tacoCount + "</div>" +
+							"</div>" +
+						"</div>");
+		}
+}
+
+window.setTimeout(function() {
+	addReactionButtons();
+}, 1500);
 
 /******************************************************************/
 /***************                                *******************/
@@ -715,6 +986,11 @@ function addons() {
 	}
 	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
 		hideSquawkPosts();
+	}
+	if ((blockSpam) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
+		window.setTimeout(function() {
+			hideIndividualPosts();
+		}, 1500);
 	}
 }
 
