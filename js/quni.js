@@ -96,6 +96,7 @@ function getVars() {
 		spamCount = items.spamCount;
 		blockSpam = items.blockSpam;
 		addons();
+		console.log(minimalPostsOn);
 	});
 }
 
@@ -826,6 +827,10 @@ function addButtons(postElements) {
 		var oneTeamClass = "";
 		var transparentClass = "";
 		var id = "#DiscussionControls-" + post;
+		//minimize some posts
+		if (minimalPostsOn) {
+			$('.DiscussionSummary').addClass("hidden");
+		}
 		//check for spam
 		if (postElements[post].tacoCount >= spamCount) {
 			var spamID = "DiscussionCommentSection-" + post;

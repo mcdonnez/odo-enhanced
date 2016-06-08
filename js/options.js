@@ -23,8 +23,7 @@ function save_options() {
 	var smallPosts = document.getElementById('shrinkPosts').checked;
 	var hideSquawkPosts = document.getElementById('hideSquawkPosts').checked;
 	var spamCount = document.getElementById('SpamCount').value;
-	var blockSpam = document.getElementById('blockSpam').checked;
-	console.log(hideSquawkPosts);
+	var blockSpam = document.getElementById('BlockSpam').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -112,7 +111,7 @@ function restore_options() {
 		document.getElementById('shrinkPosts').checked = items.minPosts;
 		document.getElementById('hideSquawkPosts').checked = items.hidePosts;
 		document.getElementById('SpamCount').value = items.spamCount;
-		document.getElementById('blockSpam').checked = items.blockSpam;
+		document.getElementById('BlockSpam').checked = items.blockSpam;
 		makeOpaque();
 	});
 }
