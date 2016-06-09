@@ -614,7 +614,7 @@ function addResTeamBit() {
 }
 
 /*------------- Adding reactions to Odo Squawkbox Posts --------------*/
-
+var hiddenPostsArray = [];
 function addReactionButtons() {
 	var firebaseRef = new Firebase("https://odo-enhanced.firebaseio.com/posts");
 
@@ -641,22 +641,27 @@ function addReactionButtons() {
 				}
 			}
 		}
+		console.log(postElements);
 		// add the actual buttons
 		addButtons(postElements);
+		chrome.storage.sync.get({
+			hiddenPostsArray: ""
+		}, function(items) {
+			hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
+			console.log(hiddenPostsArray);
+			for (var i=0; i<hiddenPostsArray.length; i++) {
+				var id = hiddenPostsArray[i];
+				var numericId = hiddenPostsArray[i].split("-")[1];
+				console.log("Need to delete " + numericId);
+				if (postElements.hasOwnProperty(numericId)) {
+					console.log("Found " + id + " in postElements");
+					document.getElementById(id).className += " hidden";
+				}
+			}
+		});
 	});
 
-	var hiddenPostsArray = [];
-	chrome.storage.sync.get({
-		hiddenPostsArray: ""
-	}, function(items) {
-		hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
-		for (var i=0; i<hiddenPostsArray.length; i++) {
-			var id = hiddenPostsArray[i];
-			if (postElements[id]) {
-				document.getElementById(id).className += " hidden";
-			}
-		}
-	});
+	
 
 	//define actions for button clicks
 	$('.DiscussionControls').on('click', '.taco', function () {
