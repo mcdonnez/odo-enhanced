@@ -620,20 +620,24 @@ function addReactionButtons() {
 
 	// get the counts for every post
 	var posts = document.getElementsByClassName('DiscussionControls');
-	var postElements = {};
+	if (!postElements) {
+		var postElements = {};
+	}
 	var firebasePosts = {};
 	firebaseRef.once("value", function(snapshot) {
 		firebasePosts = snapshot.val();
 		for (var i=0; i<posts.length; i++) {
 			var id = posts[i].id.split("-")[1];
-			postElements[id] = {
-				scrappyCount: 0,
-				allInCount: 0,
-				obsessedCount: 0,
-				oneTeamCount: 0,
-				transparentCount: 0,
-				tacoCount: 0,
-				id: id
+			if (!postElements[id]) {
+				postElements[id] = {
+					scrappyCount: 0,
+					allInCount: 0,
+					obsessedCount: 0,
+					oneTeamCount: 0,
+					transparentCount: 0,
+					tacoCount: 0,
+					id: id
+				}
 			}
 			if (firebasePosts[id]) {
 				for (prop in firebasePosts[id]) {
@@ -641,20 +645,16 @@ function addReactionButtons() {
 				}
 			}
 		}
-		console.log(postElements);
 		// add the actual buttons
 		addButtons(postElements);
 		chrome.storage.sync.get({
 			hiddenPostsArray: ""
 		}, function(items) {
 			hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
-			console.log(hiddenPostsArray);
 			for (var i=0; i<hiddenPostsArray.length; i++) {
 				var id = hiddenPostsArray[i];
 				var numericId = hiddenPostsArray[i].split("-")[1];
-				console.log("Need to delete " + numericId);
 				if (postElements.hasOwnProperty(numericId)) {
-					console.log("Found " + id + " in postElements");
 					document.getElementById(id).className += " hidden";
 				}
 			}
@@ -808,74 +808,80 @@ function addReactionButtons() {
 
 	});
 }
+var postIdsWithButtons = [];
 function addButtons(postElements) {
 	for (post in postElements) {
-		var tacoClass = "";
-		var scrappyClass = "";
-		var allInClass = "";
-		var obsessedClass = "";
-		var oneTeamClass = "";
-		var transparentClass = "";
-		var id = "#DiscussionControls-" + post;
-		//minimize some posts
-		if (minimalPostsOn) {
-			$('.DiscussionSummary').addClass("hidden");
-		}
-		//check for spam
-		if (postElements[post].tacoCount >= spamCount) {
-			var spamID = "DiscussionCommentSection-" + post;
-			document.getElementById(spamID).style.display = "none";
+		if (postIdsWithButtons.indexOf(post) > -1) {
+		} else {
+			postIdsWithButtons.push(post);
+			var tacoClass = "";
+			var scrappyClass = "";
+			var allInClass = "";
+			var obsessedClass = "";
+			var oneTeamClass = "";
+			var transparentClass = "";
+			var id = "#DiscussionControls-" + post;
+			//minimize some posts
+			if (minimalPostsOn) {
+				$('.DiscussionSummary').addClass("hidden");
+			}
+			//check for spam
+			if (postElements[post].tacoCount >= spamCount) {
+				var spamID = "DiscussionCommentSection-" + post;
+				document.getElementById(spamID).style.display = "none";
 
-			var spamID = "DiscussionSummary-" + post;
-			document.getElementById(spamID).style.display = "block";
+				var spamID = "DiscussionSummary-" + post;
+				document.getElementById(spamID).style.display = "block";
 
-			var spamID = "DiscussionLikesSection-" + post;
-			document.getElementById(spamID).style.display = "none";
+				var spamID = "DiscussionLikesSection-" + post;
+				document.getElementById(spamID).style.display = "none";
 
-			var spamID = "DiscussionText-" + post;
-			document.getElementById(spamID).style.display = "none";
+				var spamID = "DiscussionText-" + post;
+				document.getElementById(spamID).style.display = "none";
 
-			var spamID = "DiscussionContainer-" + post;
-			var container = document.getElementById(spamID);
-			container.querySelector('img').src = "http://blog.fpweb.net/media/2013/02/Say-NO-to-SPAM-325x321.png";
+				var spamID = "DiscussionContainer-" + post;
+				var container = document.getElementById(spamID);
+				container.querySelector('img').src = "http://blog.fpweb.net/media/2013/02/Say-NO-to-SPAM-325x321.png";
+			}
+			//set counts
+			if (postElements[post].scrappyCount >= 1) {
+				scrappyClass = "nonOpaque";
+			}
+			if (postElements[post].allInCount >= 1) {
+				allInClass = "nonOpaque";
+			}
+			if (postElements[post].obsessedCount >= 1) {
+				obsessedClass = "nonOpaque";
+			}
+			if (postElements[post].oneTeamCount >= 1) {
+				oneTeamClass = "nonOpaque";
+			}
+			if (postElements[post].transparentCount >= 1) {
+				transparentClass = "nonOpaque";
+			}
+			$(id).append(	"<div>" +
+								"<div class='transparent reaction " + transparentClass + "'>" +
+									"<div class='reaction_count'>" + postElements[post].transparentCount + "</div>" +
+								"</div>" +
+								"<div class='allIn reaction " + allInClass + "'>" +
+									"<div class='reaction_count'>" + postElements[post].allInCount + "</div>" +
+								"</div>" +
+								"<div class='obsessed reaction " + obsessedClass + "'>" +
+									"<div class='reaction_count'>" + postElements[post].obsessedCount + "</div>" +
+								"</div>" +
+								"<div class='oneTeam reaction " + oneTeamClass + "'>" +
+									"<div class='reaction_count'>" + postElements[post].oneTeamCount + "</div>" +
+								"</div>" +
+								"<div class='scrappy reaction " + scrappyClass + "'>" +
+									"<div class='reaction_count'>" + postElements[post].scrappyCount + "</div>" +
+								"</div>" +
+								"<div class='taco reaction " + tacoClass + "'>" +
+									"<div class='hidden reaction_count'>" + postElements[post].tacoCount + "</div>" +
+								"</div>" +
+							"</div>");
 		}
-		//set counts
-		if (postElements[post].scrappyCount >= 1) {
-			scrappyClass = "nonOpaque";
-		}
-		if (postElements[post].allInCount >= 1) {
-			allInClass = "nonOpaque";
-		}
-		if (postElements[post].obsessedCount >= 1) {
-			obsessedClass = "nonOpaque";
-		}
-		if (postElements[post].oneTeamCount >= 1) {
-			oneTeamClass = "nonOpaque";
-		}
-		if (postElements[post].transparentCount >= 1) {
-			transparentClass = "nonOpaque";
-		}
-		$(id).append(	"<div>" +
-							"<div class='transparent reaction " + transparentClass + "'>" +
-								"<div class='reaction_count'>" + postElements[post].transparentCount + "</div>" +
-							"</div>" +
-							"<div class='allIn reaction " + allInClass + "'>" +
-								"<div class='reaction_count'>" + postElements[post].allInCount + "</div>" +
-							"</div>" +
-							"<div class='obsessed reaction " + obsessedClass + "'>" +
-								"<div class='reaction_count'>" + postElements[post].obsessedCount + "</div>" +
-							"</div>" +
-							"<div class='oneTeam reaction " + oneTeamClass + "'>" +
-								"<div class='reaction_count'>" + postElements[post].oneTeamCount + "</div>" +
-							"</div>" +
-							"<div class='scrappy reaction " + scrappyClass + "'>" +
-								"<div class='reaction_count'>" + postElements[post].scrappyCount + "</div>" +
-							"</div>" +
-							"<div class='taco reaction " + tacoClass + "'>" +
-								"<div class='hidden reaction_count'>" + postElements[post].tacoCount + "</div>" +
-							"</div>" +
-						"</div>");
-		}
+		
+	}
 }
 
 
@@ -983,8 +989,16 @@ function addons() {
 	if ((urlParams["a"] == null) && (urlParams["b"] == null)) {
 		window.setTimeout(function() {
 			addReactionButtons();
+			document.getElementById('DiscussionLoadMoreBar').addEventListener("click", function() {
+				window.setTimeout(function() {
+					addReactionButtons();
+				}, 2400);
+			})
 		}, 2400);
+
 	}
 }
+
+
 
 
