@@ -878,9 +878,7 @@ function addButtons(postElements) {
 		}
 }
 
-window.setTimeout(function() {
-	addReactionButtons();
-}, 2400);
+
 
 /******************************************************************/
 /***************                                *******************/
@@ -982,11 +980,11 @@ function addons() {
 	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
 		hideSquawkPosts();
 	}
-	// if ((blockSpam) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
-	// 	window.setTimeout(function() {
-	// 		hideIndividualPosts();
-	// 	}, 1500);
-	// }
+	if ((urlParams["a"] == null) && (urlParams["b"] == null)) {
+		window.setTimeout(function() {
+			addReactionButtons();
+		}, 2400);
+	}
 }
 
 
