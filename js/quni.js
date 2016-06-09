@@ -880,7 +880,7 @@ function addButtons(postElements) {
 
 window.setTimeout(function() {
 	addReactionButtons();
-}, 4000);
+}, 2400);
 
 /******************************************************************/
 /***************                                *******************/
