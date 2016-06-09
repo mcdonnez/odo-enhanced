@@ -96,7 +96,6 @@ function getVars() {
 		spamCount = items.spamCount;
 		blockSpam = items.blockSpam;
 		addons();
-		console.log(minimalPostsOn);
 	});
 }
 
@@ -128,7 +127,6 @@ var status = "Open,'In Progress', Reopened";
 
 var getEID = function() {
 	EmpID = urlParams["eid"];
-	console.log(EmpID);
 	chrome.storage.sync.set({
 		eid: EmpID
 	});
@@ -367,7 +365,6 @@ function calculateTicketTotals(phoneValue,emailValue) {
 /*------ Hide the Squawkbox on page load until clicked ------*/
 
 function hideSquawkPosts() {
-	console.log("hiding posts");
 	var postArea = $('#DiscussionWrapper');
 	if (!document.getElementById("SquawkToggle")) {
 		$("#BodyContent").prepend("<div id='SquawkToggle' style='transition: .2s; border: 2px solid green; padding: 5px 10px; text-align: center; margin: 20px auto; cursor: pointer; border-radius: .2em; color: green; font-size: 16px;'>Show Posts</div>");
@@ -440,9 +437,6 @@ var customTabs = {
 		}, function(items) {
 			unreadCountDate = new Date(items.ucSetDate);
 			unreadCount = items.uc;
-			console.log(items.ucSetDate);
-			console.log(unreadCountDate);
-			console.log(Math.abs(unreadCountDate - new Date()));
 			var diff = Math.abs(unreadCountDate - new Date()) // FIGURE OUT HOW MANY MILLISECONDS IT'S BEEN SINCE THEY VISITED THE TIPS SECTION
 			if (diff > 432000000) {
 				unreadCount += 1;
@@ -521,7 +515,6 @@ var customTabs = {
 					ucSetDate: new Date()
 				});
 			} else {
-				console.log("Current Message: " + currentMessage);
 			}
 			replaceCenterContent(currentMessage);
 		});
@@ -537,7 +530,6 @@ var customTabs = {
 		document.getElementById('TipList').innerHTML = "To see the whole list, <a href='http://odo.corp.qualtrics.com/wiki/index.php/Quni#Quni_Culture' target='_blank'>click here</a>.";
 		document.getElementById('TipSurvey').innerHTML = "<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>Was this Helpful?      </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>     Suggest a New Tip</a>";
 		currentMessageID = id;
-		console.log("Resetting the date");
 		chrome.storage.sync.set({
 			ucSetDate: new Date().toString()
 		});
@@ -622,26 +614,9 @@ function addResTeamBit() {
 }
 
 /*------------- Adding reactions to Odo Squawkbox Posts --------------*/
-var hiddenPostsArray = [];
-function hideIndividualPosts() {
-	chrome.storage.sync.get({
-		hiddenPostsArray: ""
-	}, function(items) {
-		hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
-		console.log("Trying to hide posts");
-		console.log(hiddenPostsArray);
-		for (var i=0; i<hiddenPostsArray.length; i++) {
-			var id = hiddenPostsArray[i];
-			console.log("HIDING SOMETHING");
-			console.log(id);
-			document.getElementById(id).className += " hidden";
-		}
-	});
-}
 
 function addReactionButtons() {
 	var firebaseRef = new Firebase("https://odo-enhanced.firebaseio.com/posts");
-	console.log("Adding Reactions");
 
 	// get the counts for every post
 	var posts = document.getElementsByClassName('DiscussionControls');
@@ -662,14 +637,25 @@ function addReactionButtons() {
 			}
 			if (firebasePosts[id]) {
 				for (prop in firebasePosts[id]) {
-					console.log(prop);
 					postElements[id][prop] = firebasePosts[id][prop];
 				}
 			}
 		}
-		console.log(postElements);
 		// add the actual buttons
 		addButtons(postElements);
+	});
+
+	var hiddenPostsArray = [];
+	chrome.storage.sync.get({
+		hiddenPostsArray: ""
+	}, function(items) {
+		hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
+		for (var i=0; i<hiddenPostsArray.length; i++) {
+			var id = hiddenPostsArray[i];
+			if (postElements[id]) {
+				document.getElementById(id).className += " hidden";
+			}
+		}
 	});
 
 	//define actions for button clicks
@@ -679,7 +665,6 @@ function addReactionButtons() {
 			var parentID = this.parentElement.parentElement.id;
 			discussionID = parentID.split('-')[1];
 			$(this).addClass("nonOpaque");
-			console.log(this.parentElement.parentElement.parentElement);
 			var containerID = "DiscussionContainer-" + discussionID;
 			$("#" + containerID).addClass("hidden");
 			//trigger something to firebase
@@ -890,7 +875,7 @@ function addButtons(postElements) {
 
 window.setTimeout(function() {
 	addReactionButtons();
-}, 1500);
+}, 4000);
 
 /******************************************************************/
 /***************                                *******************/
@@ -992,11 +977,11 @@ function addons() {
 	if ((hidePosts) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
 		hideSquawkPosts();
 	}
-	if ((blockSpam) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
-		window.setTimeout(function() {
-			hideIndividualPosts();
-		}, 1500);
-	}
+	// if ((blockSpam) && (urlParams["a"] == null) && (urlParams["b"] == null)) {
+	// 	window.setTimeout(function() {
+	// 		hideIndividualPosts();
+	// 	}, 1500);
+	// }
 }
 
 
