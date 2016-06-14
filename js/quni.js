@@ -661,8 +661,6 @@ function addReactionButtons() {
 		});
 	});
 
-	
-
 	//define actions for button clicks
 	$('.DiscussionControls').on('click', '.taco', function () {
 		var forReal = confirm("Are you sure you want to hide this spam?");
@@ -860,22 +858,22 @@ function addButtons(postElements) {
 				transparentClass = "nonOpaque";
 			}
 			$(id).append(	"<div>" +
-								"<div class='transparent reaction " + transparentClass + "'>" +
+								"<div class='transparent reaction " + transparentClass + "' title='Transparent'>" +
 									"<div class='reaction_count'>" + postElements[post].transparentCount + "</div>" +
 								"</div>" +
-								"<div class='allIn reaction " + allInClass + "'>" +
+								"<div class='allIn reaction " + allInClass + "' title='All In'>" +
 									"<div class='reaction_count'>" + postElements[post].allInCount + "</div>" +
 								"</div>" +
-								"<div class='obsessed reaction " + obsessedClass + "'>" +
+								"<div class='obsessed reaction " + obsessedClass + "' title='Customer Obsessed'>" +
 									"<div class='reaction_count'>" + postElements[post].obsessedCount + "</div>" +
 								"</div>" +
-								"<div class='oneTeam reaction " + oneTeamClass + "'>" +
+								"<div class='oneTeam reaction " + oneTeamClass + "' title='One Team'>" +
 									"<div class='reaction_count'>" + postElements[post].oneTeamCount + "</div>" +
 								"</div>" +
-								"<div class='scrappy reaction " + scrappyClass + "'>" +
+								"<div class='scrappy reaction " + scrappyClass + "' title='Scrappy'>" +
 									"<div class='reaction_count'>" + postElements[post].scrappyCount + "</div>" +
 								"</div>" +
-								"<div class='taco reaction " + tacoClass + "'>" +
+								"<div class='taco reaction " + tacoClass + "' title='Archive'>" +
 									"<div class='hidden reaction_count'>" + postElements[post].tacoCount + "</div>" +
 								"</div>" +
 							"</div>");
@@ -987,14 +985,19 @@ function addons() {
 		hideSquawkPosts();
 	}
 	if ((urlParams["a"] == null) && (urlParams["b"] == null)) {
-		window.setTimeout(function() {
-			addReactionButtons();
-			document.getElementById('DiscussionLoadMoreBar').addEventListener("click", function() {
-				window.setTimeout(function() {
-					addReactionButtons();
-				}, 2400);
-			})
-		}, 2400);
+		var squawkboxChecker = window.setInterval(function() {
+			console.log("checking");
+			if (document.getElementsByClassName('Discussion')) {
+				console.log("Found!")
+				addReactionButtons();
+				document.getElementById('DiscussionLoadMoreBar').addEventListener("click", function() {
+					window.setTimeout(function() {
+						addReactionButtons();
+					}, 2400);
+				})
+				clearInterval(squawkboxChecker);
+			}
+		}, 100);
 
 	}
 }
