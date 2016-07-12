@@ -1002,7 +1002,7 @@ function addons() {
 	}
 	//SPF CHECKER
 	if (urlParams["b"] == "RSBrandProfile"){
-		window.setTimeout(OdoSPFCheck, 100);
+		window.setTimeout(OdoSPFCheck, 300);
 	}
 }
 /*****************************************************
