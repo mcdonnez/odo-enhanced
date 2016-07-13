@@ -1000,8 +1000,127 @@ function addons() {
 		}, 100);
 
 	}
+	//SPF CHECKER
+	if (urlParams["b"] == "RSBrandProfile"){
+		window.setTimeout(OdoSPFCheck, 300);
+	}
 }
+/*****************************************************
+This is a tool to automate looking up SPF Records. It uses the Qualtrics SPF checker, which looks for the value of
+_spf.qualtrics.com on the DNS layer.
 
+Programmed by: Aaron Monk
+With help from Matthew Bloomfield and Carson Zeller
+Created: July 4 2016
+Last Modified: July 12 2016
+******************************************************/
+function OdoSPFCheck()
+{
+    // Create  Button
+
+    var button = document.createElement("input");
+    button.type = "button";
+    button.value = "Check SPF";
+
+    // Append to Valid Email Domain
+    document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td.BrandSettingsFieldLabelLight").appendChild(button);
+
+    // Add button event handler
+    button.addEventListener ("click", function() 
+    {
+     	//Store email domains in array
+     	var DomainArray = document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2) > textarea").value.split(',');
+
+     	//Remove the *, if present
+    	var index = DomainArray.indexOf('*');
+
+     	if (index > -1) 
+        {
+        	DomainArray.splice(index, 1);
+        }
+
+        //Remove spaces
+        for (i=0; i< DomainArray.length; i++)
+        {
+            DomainArray[i] = DomainArray[i].trim();
+        }
+
+
+        //Create a HTML Table element.
+        var spftable = document.createElement("TABLE");
+        spftable.border = "1";
+
+        //Populate Table Headers
+        var row = spftable.insertRow(-1);
+        var Domain_t = row.insertCell(0);
+        var SPF_t = row.insertCell(1);
+        var MX_t = row.insertCell(2);
+
+        Domain_t.innerHTML = '<b>Domain (<span style="color:blue; cursor:pointer;">?</span>)</b>';
+        SPF_t.innerHTML = "<b>Has SPF?</b>";
+        MX_t.innerHTML = "<b>Verify on MXToolbox</b>";
+
+
+        document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2)").appendChild(spftable);
+
+        // Perform an SPF Check of each domain and populate table
+    	for(i=0; i < DomainArray.length; i++)
+        {
+    		SPFCheck(DomainArray[i], i, function(Domain, DomainStatus)
+            {
+
+                var row = spftable.insertRow(-1);
+                var Domain_t = row.insertCell(0);
+                var SPF_t = row.insertCell(1);
+                var MX_t = row.insertCell(2);
+
+                Domain_t.innerHTML = Domain;
+                SPF_t.innerHTML = DomainStatus;
+                MX_t.innerHTML = "<a target='_blank' href='http://mxtoolbox.com/SuperTool.aspx?action=spf%3a" + Domain + "&run=toolpage'>Result for " + Domain + "</a>";           
+            });
+        }
+
+        //Add event listener for '?' info button
+        var info = document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2) > table > tbody > tr:nth-child(1) > td:nth-child(1)");
+        info.addEventListener("click", function() 
+        {
+            alert("This SPF Checker uses the Qualtrics SPF Check, which looks for _spf.qualtrics.com on the SPF Record. Uncommon but functional setups such _spf.qemailserver.com or our IP range (162.247.216.0/22) will record as 'No', but can be checked on MXToolbox.");
+        });
+
+    });
+
+    // SPF Checker Function
+    var data = null;
+
+    function SPFCheck(domain, index, callback)
+    {
+        var xhr = new XMLHttpRequest();
+        var URL = "http://itwiki.corp.qualtrics.com:4040/api/spf-checker?domain=" + domain;
+        var DomainStatus = null;
+
+        
+        xhr.addEventListener("readystatechange", function ()
+        	{
+       			 if (this.readyState === 4)
+        		{
+                    if( this.responseText == '{"hasQualtricsSpf":true}') 
+                    {
+                        DomainStatus = '<font color="green">Yes</font>';
+                    }
+                    else if(this.responseText == '{"hasQualtricsSpf":false}')
+                    {
+                        DomainStatus = '<font color="red">No</font>';
+                    }
+                    else {
+                        DomainStatus = '<font color="yellow">Error</font>';
+                    }
+                    callback(domain, DomainStatus);
+       			}
+        	});
+        xhr.open("GET", URL);
+        xhr.send(data);
+     }
+}
 
 
 
