@@ -390,20 +390,24 @@ $('#BodyContent').on('click', '#SquawkToggle', function () {
 
 /*------ Reusable function to add additional tabs ------*/
 
-function addTab(name, height, id, src, pageTitle) {
-	$('.SectionTabsList').append('<li class="SectionTab" id="' + id + '" style="cursor:pointer;">' + name + '</li>');
-	//SET WINDOW HEIGHT
-	document.getElementById(id).addEventListener("click", function () {
-		$(".SectionTabsList > li").removeClass('ActiveTab');
-		var tabID = "#" + id;
-		$(tabID).addClass(' ActiveTab');
-		$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
-		//ADD IFRAME
-		document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: " + height + "px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + src + "'></iframe>";
-		//CHANGE THE PAGE TITLE
-		document.getElementsByClassName('PageTitle')[0].innerHTML = pageTitle;
-		document.title = "Odo | " + pageTitle;
-	});
+function addTab(name, height, id, src, pageTitle, type) {
+	if (type == "inPage") {
+		$('.SectionTabsList').append('<li class="SectionTab" id="' + id + '" style="cursor:pointer;">' + name + '</li>');
+		//SET WINDOW HEIGHT
+		document.getElementById(id).addEventListener("click", function () {
+			$(".SectionTabsList > li").removeClass('ActiveTab');
+			var tabID = "#" + id;
+			$(tabID).addClass(' ActiveTab');
+			$('.SectionButtonsContainer, .TimezonesTableContainer').fadeOut();
+			//ADD IFRAME
+			document.getElementsByClassName('Page')[0].innerHTML = "<iframe style='border: 0; height: " + height + "px; width: 100%; left: 0; right: 0; top: 0; bottom: 0;' src='" + src + "'></iframe>";
+			//CHANGE THE PAGE TITLE
+			document.getElementsByClassName('PageTitle')[0].innerHTML = pageTitle;
+			document.title = "Odo | " + pageTitle;
+		});
+	} else {
+		$('.SectionTabsList').append('<li class="SectionTab" id="' + id + '" style="cursor:pointer;"><a href="' + src + '" target="_blank">' + name + '</a></li>');
+	}
 }
 
 
@@ -412,20 +416,79 @@ function addTab(name, height, id, src, pageTitle) {
 var customTabs = {
 	/*Adds the Help Desk tab to every page*/
 	addHelpDesk: function() {
-		addTab("Help Desk Ticket", "1300", "helpdeskTab", 'http://survey.qualtrics.com/WRQualtricsSurveyEngine/?SID=SV_3lo6hZODeRSbXsF&RID=MLRP_6i2XORBVUvB6cm1&_=1', "Help Desk Request");
+		var brandID = "";
+		var username = "";
+		var product = "";
+		var client = "";
+
+		if (urlParams["b"] == 'TicketViewer') {
+			// get the product
+			var ticketDetailsTable = document.getElementsByClassName('ticket-details-table')[0];
+			for (var i=0; i<ticketDetailsTable.rows.length; i++) {
+				if (ticketDetailsTable.rows[i].querySelectorAll('td')[0].innerHTML == 'Product:') { 
+					var product = ticketDetailsTable.rows[i].querySelectorAll('td')[1].innerHTML.split("&")[0]
+				}
+			}
+
+			// get the user data
+			if (document.getElementsByClassName('Green')[0].rows[1].querySelectorAll('td')[1].querySelector('a')) {
+				// for email tickets
+				console.log("Email Ticket");
+				var usersTable = document.getElementsByClassName('Green')[0];
+			}
+			else {
+				console.log("Phone Ticket");
+				// must be a phone ticket
+				var usersTable = document.getElementsByClassName('Green')[1];
+			}
+			if (usersTable.rows.length <= 1) {
+				alert("No user found");
+			} else {
+				if (usersTable.rows.length >= 3) {
+					// alert("Too many users... choosing the first one");
+				}
+				// get user id and username
+				var userBlob = usersTable.rows[1].querySelectorAll('td')[1];
+				var username = userBlob.innerHTML.split("<br>")[1];
+				var email = userBlob.querySelector('a').href.split(":")[1];
+				var userNameLink = usersTable.rows[1].querySelectorAll('td')[0].querySelector("a").href;
+				var queryArray = userNameLink.split("&");
+				for (var i=0; i<queryArray.length; i++) {
+					var key = queryArray[i].split("=")[0];
+					var val = queryArray[i].split("=")[1];
+					if (key == "uid") {
+						var userID = val;
+					}
+					if (key == "bid") {
+						var brandID = val;
+					}
+				}
+			}
+		}
+
+		// var EmpID = null;
+		var src = "https://qglobalops.co1.qualtrics.com/SE/?SID=SV_6Ja2Meaw9iTxw2h" 
+			+ "&pulseType=HelpDeskPulse"
+			+ "&eid=" + EmpID
+			+ "&brandID=" + brandID
+			+ "&username=" + username
+			+ "&product=" + product
+			+ "&client=" + client
+			+ "&email=" + email;
+		addTab("Help Desk Ticket", null, "helpdeskTab", src, null, "popout");
 	},
 	addChromeOptions: function() {
 		var optionsUrl = chrome.extension.getURL("../resources/options.html");
-		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options");
+		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options", "inPage");
 	},
 	addDesign: function() {
-		addTab("Design", "1300", "designTab", "http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader", "Design");
+		addTab("Design", "1300", "designTab", "http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader", "Design", "inPage");
 	},
 	addPanels: function() {
-		addTab("Panels Playbook", "1000", "panelsTab", "http://itwiki.corp.qualtrics.com/panels#noHeader", "Panels Resources");
+		addTab("Panels Playbook", "1000", "panelsTab", "http://itwiki.corp.qualtrics.com/panels#noHeader", "Panels Resources", "inPage");
 	},
 	addPlaybook: function() {
-		addTab("Playbook", "1000", "playbookTab", "http://itwiki.corp.qualtrics.com/playbook#noHeader", "Playbook");
+		addTab("Playbook", "1000", "playbookTab", "http://itwiki.corp.qualtrics.com/playbook#noHeader", "Playbook", "inPage");
 	},
 	addHelpMessages: function () {
 		var container = $('.SectionTabsList');
@@ -457,45 +520,6 @@ var customTabs = {
 
 /*------------ Adding help messages as a tab -------------*/
 
-	var messages = [
-		"Bookmark each data center login page and personal ODO pages to make the granting MBA process faster.",
-		"When troubleshooting in a long block, add skip logic to the question before the one you need.",
-		"In user moves 'notes', add the ODO ticket URL, usernames, and branded login page so that when you go back to it, you don't waste any more time searching for it.",
-		"Place commonly misspelled or mistyped words into AText with the correct spelling as a way to autocorrect yourself.",
-		"Saving a short blurb for Jing-answer emails will save you time. For example: 'Hello [Name], Click HERE for your support video!' This way you can just make a video and not worry about also writing everything out.",
-		"Use hyperlinks to attach support pages to key words in your emails. e.g., 'you can do this with Email Triggers' (hyperlink 'Email Triggers' to http://www.qualtrics.com/university/researchsuite/advanced-building/advanced-options-drop-down/email-triggers/)",
-		"aText a generic message for if you haven't heard from a client in a few days. 'Hi there, I just wanted to follow up on the email I sent you... Did I answer your question?' It makes following up with a client much quicker, and that way you're able to auto-resolve without much worry if they don't respond within a day or so.",
-		"Use the comments section in Odo! Include pertinent details in comments on both phone and email tickets. This can save huge amounts of time sifting through emails for details. Similarly in phone tickets, with the added bonus that others looking at them can see what is going on in the interaction.",
-		"Title your Jing/Snagit videos with what they pertain to, especially the ones that have generic solutions in them. Reusing these videos can save lots of time."	,
-		"Before launching into a solution, it can save a lot of trouble later on in the conversation if you first check with the client to make sure you're understanding the issue. Example: 'So let me make sure I'm getting this right - you would like to send them a link with their previous answers prepopulated? Am I missing anything?'",
-		"If a problem seems very complex, simplify. You don't always need the details they provide. Ask the client what their end goal is as a way to see the whole picture. E.g., 'In a perfect situation, what do you want to happen for your participants?'",
-		"As a way to keep things organized on your screen, try opening a whole new window when you take a call instead of just a tab. This will keep things you look up and search for with that particular ticket grouped together, instead of having to sort through a million open tabs in one Chrome window.",
-		"Use folders in Gmail, especially if you're working on projects or other non-support items. In addition, if you know there are certain weekly emails you never read, use a filter to automatically mark them as read.",
-		"Use the Gmail extension. This allows you see when an email comes in while on other pages, and you can even mark as read from other pages.",
-		"Using a combination of Marking as Read, automatic filters, and folder sorting has reduced the number of internal emails I have to read to about 10/day. Try one or all of these - you won't regret it.",
-		"Don't be afraid to close Google Chat and Gmail, or at least have them in a different window behind what you're focusing on. They can be huge time wasters if you're not careful.",
-		"If there are tickets sitting in your inbox for a while, rename them so that you don't have to waste time later sifting through them. E.g. 'Pulse - Reminder Emails for Susan Smith'",
-		"When you initially read the email, tag a ticket topic. Doing this later requires you having to go back and reread the thread, whereas if you do it initially, it will save you time.",
-		"Use notes on your computer to copy important information such as the Survey ID or other useful information as you work. It will make this information more readily accessible when you file a help desk ticket, pulse, etc.",
-		"For one day, track which pages you use the most. At the end of the day, make bookmarks for each page that you used often (e.g. Jira search, playbook, help desk survey)",
-		"Create bookmarks for all of your different data center log ins or additional accounts you might have (CSAT, admin accounts, etc)",
-		"Take advantage of the notes section on the User Move ticket. Taking notes when you're creating the ticket will make it far easier and quicker reach back to the client in a few days. (E.g., Odo ticket URL, usernames, branded login page, etc.)",
-		"When in doubt, make a copy of a client's survey right away. This will allow you to customize your troubleshooting and cut directly to the problem (removing unnecessary logic, blocks, etc.)",
-		"Be sure to test on all data centers, as this information is commonly included in a pulse if you're needing to file one. Having these logins readily accessible via bookmarks is helpful, too.",
-		"When you're troubleshooting, move the block of the survey you're working on to the top of the survey flow, so you don't have to click through the entire survey when testing.",
-		"If you're troubleshooting in a long block, add skip logic to the question before the one you need to test out.",
-		"Want to answer those calls faster? Have your headset ring so that you don't have to watch the phone or Calltrics. Check out instructions here: http://screencast.com/t/BAyKzUDip4i",
-		"Stay on top of your pulses by checking the status of the bug that it's linked to toward the bottom of the ticket. Here you will see the most recent comments about the bug from the engineering team. ",
-		"Refresh your troubleshooting by reading this awesome piece by one of our rockstar Res Team members, Greg: http://odo.corp.qualtrics.com/wiki/index.php/How_to_Troubleshoot",
-		"As soon as you hear the words, 'error message', ask the client to grab you a screenshot. Screenshots are crucial for accurately reproducing and for filing pulses. Same thing with anything browser related - always ask for browser type and version number. Never hurts to have and can save you waiting time if you ask right away.",
-		"Download the Survey Toolbox, developed by John Morrell. Do it. Right now.",
-		"Check out this google doc to download the most useful Chrome extensions, as suggested by current and past Quni members: https://docs.google.com/spreadsheets/d/1myTR4as5lwt3bzfH-Q54dl160skMd-Pe9Prj_vOQLxA/edit#gid=0&vpid=A1",
-		"For a quicker login, use s.qualtrics.com.",
-		"If you are using Chrome you can go settings > On Startup > Open a specific page or set of pages to have chrome load the 8 tabs I always want to have open.",
-		"For troubleshooting, downloading a survey translation is a good way to get a list of all question and answer choice ID's, particularly for things like Drill downs.",
-		"Here's a cool tip that I learned that will help you when you are out of town, and will help your clients out while you're gone. If you want people to have access to your Post-Resolution emails while you're gone, create a filter in your Gmail account to automatically forward those emails to a member on your team who has agreed to help, turning it on and off on either side of your break. To do this, in the search bar of Gmail, click the light gray down arrow and next to Subject, paste in 'Post-Resolution Email: ', then pick 'Create filter with this search >>'. There's an option to forward the emails to an address that you'll add to a list.",
-		"Don't be afraid to mute your emails, especially for long threads that can be distracting. You can find this option under 'More' in the thread itself."
-	];
 	var currentMessage;
 	var lastWeeksMessage;
 
