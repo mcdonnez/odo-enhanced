@@ -441,12 +441,7 @@ var customTabs = {
 				// must be a phone ticket
 				var usersTable = document.getElementsByClassName('Green')[1];
 			}
-			if (usersTable.rows.length <= 1) {
-				alert("No user found");
-			} else {
-				if (usersTable.rows.length >= 3) {
-					// alert("Too many users... choosing the first one");
-				}
+			if (usersTable.rows.length >= 1) {
 				// get user id and username
 				var userBlob = usersTable.rows[1].querySelectorAll('td')[1];
 				var username = userBlob.innerHTML.split("<br>")[1];
@@ -1009,19 +1004,22 @@ function addons() {
 		hideSquawkPosts();
 	}
 	if ((urlParams["a"] == null) && (urlParams["b"] == null)) {
+		var count = 0;
 		var squawkboxChecker = window.setInterval(function() {
-			console.log("checking");
-			if (document.getElementsByClassName('Discussion')) {
-				console.log("Found!")
+			if (document.getElementById('DiscussionLoadMoreBar')) {
 				addReactionButtons();
 				document.getElementById('DiscussionLoadMoreBar').addEventListener("click", function() {
 					window.setTimeout(function() {
 						addReactionButtons();
 					}, 2400);
-				})
+				});
 				clearInterval(squawkboxChecker);
 			}
-		}, 100);
+			count++;
+			if (count > 5) {
+				clearInterval(squawkboxChecker);
+			}
+		}, 500);
 
 	}
 	//SPF CHECKER
