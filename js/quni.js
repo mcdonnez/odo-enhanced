@@ -226,8 +226,6 @@ default:
 }
 
 /* ------------- Dynamic Favicons ---------------- */
-document.head || (document.head = document.getElementsByTagName('head')[0]);
-
 function changeFavicon(src) {
 	var link = document.createElement('link'),
 		oldLink = document.getElementById('dynamic-favicon');
