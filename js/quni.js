@@ -669,12 +669,14 @@ function addReactionButtons() {
 		chrome.storage.sync.get({
 			hiddenPostsArray: ""
 		}, function(items) {
-			hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
-			for (var i=0; i<hiddenPostsArray.length; i++) {
-				var id = hiddenPostsArray[i];
-				var numericId = hiddenPostsArray[i].split("-")[1];
-				if (postElements.hasOwnProperty(numericId)) {
-					document.getElementById(id).className += " hidden";
+			if (items.hiddenPostsArray.length > 0) {
+				hiddenPostsArray = JSON.parse(items.hiddenPostsArray) || [];
+				for (var i=0; i<hiddenPostsArray.length; i++) {
+					var id = hiddenPostsArray[i];
+					var numericId = hiddenPostsArray[i].split("-")[1];
+					if (postElements.hasOwnProperty(numericId)) {
+						document.getElementById(id).className += " hidden";
+					}
 				}
 			}
 		});
