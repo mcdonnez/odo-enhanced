@@ -5,7 +5,6 @@ function save_options() {
 	var clinicEndTime = document.getElementById('EndClinicTime').value;
 	var clinicDay = document.getElementById('ClinicDayNumber').value;
 	var minifyTicket = document.getElementById('MiniTicketButton').checked;
-	var helpDesk = document.getElementById('HelpDesk').checked;
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
 	var playbook = document.getElementById('Playbook').checked;
@@ -31,7 +30,6 @@ function save_options() {
 		sct: clinicStartTime,
 		ect: clinicEndTime,
 		cdn: clinicDay,
-		hd: helpDesk,
 		de: design,
 		ee: easterEggs,
 		pb: playbook,
@@ -69,7 +67,6 @@ function restore_options() {
 		ect: "",
 		cdn: "",
 		mt: "",
-		hd: true,
 		de: false,
 		ee: "",
 		pb: "",
@@ -94,7 +91,6 @@ function restore_options() {
 		document.getElementById('EndClinicTime').value = items.ect;
 		document.getElementById('ClinicDayNumber').value = items.cdn;
 		document.getElementById('MiniTicketButton').checked = items.mt;
-		document.getElementById('HelpDesk').checked = items.hd;
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
 		document.getElementById('Playbook').checked = items.pb;

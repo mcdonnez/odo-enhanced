@@ -19,7 +19,6 @@ var ClinicStartTime;
 var ClinicEndTime;
 var ClinicDay
 var MiniTicketOn;
-var HelpDeskTabOn;
 var DesignTabOn;
 var EasterEggsOn;
 var PlaybookTabOn;
@@ -52,7 +51,6 @@ function getVars() {
 		ect: "", // Clinic End Time
 		cdn: "", // Clinic Day
 		mt: '', // minify the ticket button
-		hd: true, // Help Desk Tab
 		de: "", // Design Tab
 		ee: "", // Easter Eggs
 		pb: "", // Playbook Tab
@@ -77,7 +75,6 @@ function getVars() {
 		ClinicEndTime = items.ect;
 		ClinicDay  = items.cdn;
 		MiniTicketOn = items.mt;
-		HelpDeskTabOn = items.hd;
 		DesignTabOn = items.de;
 		EasterEggsOn = items.ee;
 		PlaybookTabOn = items.pb;
@@ -412,64 +409,6 @@ function addTab(name, height, id, src, pageTitle, type) {
 /*------ Additional tabs to be added using function above ------*/
 
 var customTabs = {
-	/*Adds the Help Desk tab to every page*/
-	addHelpDesk: function() {
-		var brandID = "";
-		var username = "";
-		var product = "";
-		var client = "";
-
-		if (urlParams["b"] == 'TicketViewer') {
-			// get the product
-			var ticketDetailsTable = document.getElementsByClassName('ticket-details-table')[0];
-			for (var i=0; i<ticketDetailsTable.rows.length; i++) {
-				if (ticketDetailsTable.rows[i].querySelectorAll('td')[0].innerHTML == 'Product:') { 
-					var product = ticketDetailsTable.rows[i].querySelectorAll('td')[1].innerHTML.split("&")[0]
-				}
-			}
-
-			// get the user data
-			if (document.getElementsByClassName('Green')[0].rows[1].querySelectorAll('td')[1].querySelector('a')) {
-				// for email tickets
-				console.log("Email Ticket");
-				var usersTable = document.getElementsByClassName('Green')[0];
-			}
-			else {
-				console.log("Phone Ticket");
-				// must be a phone ticket
-				var usersTable = document.getElementsByClassName('Green')[1];
-			}
-			if (usersTable.rows.length >= 1) {
-				// get user id and username
-				var userBlob = usersTable.rows[1].querySelectorAll('td')[1];
-				var username = userBlob.innerHTML.split("<br>")[1];
-				var email = userBlob.querySelector('a').href.split(":")[1];
-				var userNameLink = usersTable.rows[1].querySelectorAll('td')[0].querySelector("a").href;
-				var queryArray = userNameLink.split("&");
-				for (var i=0; i<queryArray.length; i++) {
-					var key = queryArray[i].split("=")[0];
-					var val = queryArray[i].split("=")[1];
-					if (key == "uid") {
-						var userID = val;
-					}
-					if (key == "bid") {
-						var brandID = val;
-					}
-				}
-			}
-		}
-
-		// var EmpID = null;
-		var src = "https://qglobalops.co1.qualtrics.com/SE/?SID=SV_6Ja2Meaw9iTxw2h" 
-			+ "&pulseType=HelpDeskPulse"
-			+ "&eid=" + EmpID
-			+ "&brandID=" + brandID
-			+ "&username=" + username
-			+ "&product=" + product
-			+ "&client=" + client
-			+ "&email=" + email;
-		addTab("Help Desk Ticket", null, "helpdeskTab", src, null, "popout");
-	},
 	addChromeOptions: function() {
 		var optionsUrl = chrome.extension.getURL("../resources/options.html");
 		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options", "inPage");
