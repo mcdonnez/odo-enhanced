@@ -1,4 +1,3 @@
-console.log("Success! Odo Enhanced Works!");
 /* ------------- Built by Zach McDonnell & Matt Bloomfield---------------- */
 /* ------------- Return query string in var urlParams ---------------- */
 
@@ -291,30 +290,33 @@ function showQuniProgress() {
 					var headerRow = thead.rows[0].querySelectorAll('th');
 				}
 			}
-			// LOOP THROUGH HEADER OF TABLE TO FIND THE RESOLVED COLUMN
-			for (j=0; j<headerRow.length; j++) {
-				if (headerRow[j].textContent === "Resolved") {
-					var resCol = j;
+
+			if (headerRow) {
+				// LOOP THROUGH HEADER OF TABLE TO FIND THE RESOLVED COLUMN
+				for (j=0; j<headerRow.length; j++) {
+					if (headerRow[j].textContent === "Resolved") {
+						var resCol = j;
+					}
 				}
+				//LOOP THROUGH THE TABLE BODY TO FIND THE PHONE/EMAIL ROWS, THEN COLLECT VALUES IF THEY EXIST
+				for (k=0; k<tbody.querySelectorAll('td').length; k++) {
+					if (tbody.querySelectorAll('td')[k].textContent === "Support Phone Tickets") {
+						var phoneRow = tbody.querySelectorAll('td')[k].parentNode;
+						var phoneValue = phoneRow.cells[resCol].innerHTML.replace(",", "");
+						phoneValue = parseInt(phoneValue);
+					} else {
+						//phoneValue = 0;
+					}
+					if (tbody.querySelectorAll('td')[k].textContent === "Support Email Tickets") {
+						var emailRow = tbody.querySelectorAll('td')[k].parentNode;
+						var emailValue = emailRow.cells[resCol].innerHTML.replace(",", "");
+						emailValue = parseInt(emailValue);
+					} else {
+						//emailValue = 0;
+					}
+				}
+				calculateTicketTotals(phoneValue,emailValue);
 			}
-			//LOOP THROUGH THE TABLE BODY TO FIND THE PHONE/EMAIL ROWS, THEN COLLECT VALUES IF THEY EXIST
-			for (k=0; k<tbody.querySelectorAll('td').length; k++) {
-				if (tbody.querySelectorAll('td')[k].textContent === "Support Phone Tickets") {
-					var phoneRow = tbody.querySelectorAll('td')[k].parentNode;
-					var phoneValue = phoneRow.cells[resCol].innerHTML.replace(",", "");
-					phoneValue = parseInt(phoneValue);
-				} else {
-					//phoneValue = 0;
-				}
-				if (tbody.querySelectorAll('td')[k].textContent === "Support Email Tickets") {
-					var emailRow = tbody.querySelectorAll('td')[k].parentNode;
-					var emailValue = emailRow.cells[resCol].innerHTML.replace(",", "");
-					emailValue = parseInt(emailValue);
-				} else {
-					//emailValue = 0;
-				}
-			}
-			calculateTicketTotals(phoneValue,emailValue);
 		}
 	}
 }
@@ -1083,5 +1085,4 @@ function OdoSPFCheck()
      }
 }
 
-
-
+console.log("Success! Odo Enhanced Works!");
