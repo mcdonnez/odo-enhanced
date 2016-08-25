@@ -23,7 +23,7 @@
 		"storage",
 		"tabs"
 	],
-	"web_accessible_resources": ["resources/options.html", "css/starWars.css", "css/squawkPosts.css", "css/greyAlerts.css"],
+	"web_accessible_resources": ["resources/options.html", "css/starWars.css", "css/squawkPosts.css", "css/greyAlerts.css", "css/search.css"],
 	"icons": {
 		"128": "img/icon.png"
 	},
@@ -31,7 +31,7 @@
 	"content_scripts": [
 		{
 			"matches": ["http://odo.corp.qualtrics.com/*"],
-			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "js/quni.js", "js/starWars.js", "resources/firebase.js", "js/resources.js"],
+			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "js/quni.js", "js/starWars.js", "resources/firebase.js", "js/resources.js", "js/search.js", "js/autoSearch.js"],
 			"css": ["resources/jquery.dataTables.css", "css/odo-enhanced.css"],
 			"run_at": "document_end"
 	}

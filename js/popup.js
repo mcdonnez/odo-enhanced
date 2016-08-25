@@ -12,13 +12,20 @@ function save_options() {
   chrome.storage.sync.set(obj, function() {
     console.log('Saved ', key, url);
     // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 750);
+    // var status = document.getElementById('status');
+    // status.textContent = 'Options saved.';
+    // setTimeout(function() {
+    //   status.textContent = '';
+    // }, 750);
   });
 }
 
-document.getElementById('save').addEventListener('click',
+document.getElementById('url').addEventListener('change',
     save_options);
+
+function openOptions() {
+  console.log('opening options');
+  chrome.tabs.create({url: "chrome-extension://iepikmnganjgdmieobnonlejjnnjoplg/resources/options.html" });
+}
+
+document.getElementById("openOptions").addEventListener("click", openOptions);
