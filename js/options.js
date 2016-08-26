@@ -23,6 +23,7 @@ function save_options() {
 	var hideSquawkPosts = document.getElementById('hideSquawkPosts').checked;
 	var spamCount = document.getElementById('SpamCount').value;
 	var blockSpam = document.getElementById('BlockSpam').checked;
+	var omniSearch = document.getElementById('OmniSearch').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -46,7 +47,8 @@ function save_options() {
 		ltxt: loginText,
 		hidePosts: hideSquawkPosts,
 		spamCount: spamCount,
-		blockSpam: blockSpam
+		blockSpam: blockSpam,
+		omniSearch: omniSearch
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -83,7 +85,8 @@ function restore_options() {
 		ltxt: "",
 		hidePosts: false,
 		spamCount: 25,
-		blockSpam: true
+		blockSpam: true,
+		omniSearch: true
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -108,6 +111,7 @@ function restore_options() {
 		document.getElementById('hideSquawkPosts').checked = items.hidePosts;
 		document.getElementById('SpamCount').value = items.spamCount;
 		document.getElementById('BlockSpam').checked = items.blockSpam;
+		document.getElementById('OmniSearch').checked = items.omniSearch;
 		makeOpaque();
 	});
 }
@@ -138,6 +142,7 @@ document.getElementById("Overlay").addEventListener("click", closeFeedback);
 		} else {
 			progOps.style.display = "none";
 		}
+		
 	}
 	function loadFeedback() {
 		document.getElementById('Overlay').style.display = "block";
