@@ -25,7 +25,7 @@ document.getElementById('url').addEventListener('change',
 
 function openOptions() {
   console.log('opening options');
-  chrome.tabs.create({url: "chrome-extension://iepikmnganjgdmieobnonlejjnnjoplg/resources/options.html" });
+  chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
 }
 
 document.getElementById("openOptions").addEventListener("click", openOptions);
