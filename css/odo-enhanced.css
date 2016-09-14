@@ -85,6 +85,9 @@ th {
 	margin: 1em;
 }
 
+.SearchBar {
+	float: right;
+}
 
 /*OmniSearch CSS*/
 #OmniSearch, #OmniSearchValue {
