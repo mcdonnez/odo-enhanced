@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.7.4",
+	"version": "1.8.4",
 
 
 	"permissions": [
@@ -12,11 +12,11 @@
 		"storage",
 		"tabs"
 	],
-	"web_accessible_resources": ["resources/options.html", "css/starWars.css", "css/squawkPosts.css", "css/greyAlerts.css"],
+	"web_accessible_resources": ["views/options.html", "css/starWars.css", "css/squawkPosts.css", "css/greyAlerts.css"],
 	"icons": {
 		"128": "img/icon.png"
 	},
-	"options_page": "resources/options.html",
+	"options_page": "views/options.html",
 	"content_scripts": [
 		{
 			"matches": ["http://odo.corp.qualtrics.com/*"],
