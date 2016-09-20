@@ -412,7 +412,7 @@ function addTab(name, height, id, src, pageTitle, type) {
 
 var customTabs = {
 	addChromeOptions: function() {
-		var optionsUrl = chrome.extension.getURL("../resources/options.html");
+		var optionsUrl = chrome.extension.getURL("../views/options.html");
 		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options", "inPage");
 	},
 	addDesign: function() {

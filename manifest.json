@@ -2,8 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.8.3",
-	
+	"version": "1.8.6",
 	"omnibox": {
     	"keyword": ";q"
 	},
@@ -15,7 +14,7 @@
     "browser_action": {
     	"default_popup": "resources/popup.html"
     },
-    
+
 	"permissions": [
 		"activeTab",
 		"https://ajax.googleapis.com/",
@@ -23,16 +22,37 @@
 		"storage",
 		"tabs"
 	],
-	"web_accessible_resources": ["resources/options.html", "css/starWars.css", "css/squawkPosts.css", "css/greyAlerts.css", "css/search.css"],
+
+	"web_accessible_resources": [
+		"css/starWars.css",
+		"css/squawkPosts.css",
+		"css/greyAlerts.css",
+		"css/search.css",
+		"views/options.html"
+	],
 	"icons": {
 		"128": "img/icon.png"
 	},
-	"options_page": "resources/options.html",
+	"options_page": "views/options.html",
 	"content_scripts": [
 		{
 			"matches": ["http://odo.corp.qualtrics.com/*"],
-			"js": ["resources/jquery-1.11.3.min.js", "resources/jquery.dataTables.min.js", "js/quni.js", "js/starWars.js", "resources/firebase.js", "js/resources.js", "js/search.js", "js/autoSearch.js"],
-			"css": ["resources/jquery.dataTables.css", "css/odo-enhanced.css"],
+			"js": [
+				"resources/jquery-1.11.3.min.js",
+				"resources/jquery.dataTables.min.js",
+				"js/quni.js",
+				"js/starWars.js",
+				"resources/firebase.js",
+				"js/resources.js",
+				"js/search.js",
+				"js/autoSearch.js",
+				"js/TicketTable.js",
+				"js/TicketPage.js"
+			],
+			"css": [
+				"resources/jquery.dataTables.css",
+				"css/odo-enhanced.css"
+			],
 			"run_at": "document_end"
 	}
 	]
