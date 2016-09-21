@@ -14,16 +14,16 @@ chrome.storage.sync.get({
 	if (window.location.href.indexOf('TicketViewer') >= 0) {
 
 		if (!EmployeeID) {
-			var EmployeeID = window.prompt("Please enter your employee ID","MLLOYD");
+			var EmployeeID = userData.employeeID;
 			chrome.storage.sync.set({
 				eid: EmployeeID
 			});
 		}
 		if (!EmployeeName) {
-			var EmployeeName = window.prompt("Please enter your name","Max Lloyd");
-			chrome.storage.sync.set({
-				ename: EmployeeName
-			});
+			var EmployeeName = null;
+			// chrome.storage.sync.set({
+			// 	ename: EmployeeName
+			// });
 		}
 
 		console.log("In the Ticket Page");
