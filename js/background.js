@@ -1,10 +1,11 @@
 chrome.runtime.onInstalled.addListener(function(details){
+	if(details.reason == "install"){
     	var key="prefSite";
   		var obj = {};
  		obj[key] = '1https://google.com/search?q=site:qualtrics.com/support ';
  		chrome.storage.sync.set(obj, function() {
     		console.log('Initialized');
-})});
+})}});
 
 function resetDefaultSuggestion() {
   chrome.omnibox.setDefaultSuggestion({
