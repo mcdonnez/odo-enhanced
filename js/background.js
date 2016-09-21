@@ -63,6 +63,13 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
         chrome.tabs.create({url: "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=LINK&LastName="+text.substring(5,text.length)});
         chrome.tabs.update({url: linkURL }); 
       }
+      else if (text.indexOf('sali ')==0){
+      	var salesURL='https://qualtrics.my.salesforce.com/search/SearchResults?sbstr=' + text.substring(5, (text.length));
+      	var linkURL='https://www.linkedin.com/vsearch/f?type=all&keywords=' + text.substring(5, (text.length));
+      	chrome.tabs.create({url: "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=SALI&LastName="+text.substring(5,text.length)});
+      	chrome.tabs.update({url: salesURL });
+      	chrome.tabs.create({url: linkURL });
+      }
       else {
           var site=obj.prefSite.substring(0,1)
           var QSearchURL = obj.prefSite.substring(1,(obj.prefSite.length)) + text;
