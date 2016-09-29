@@ -11,17 +11,17 @@ chrome.storage.sync.get({
 	console.log(EmployeeName);
 
 	if (!EmployeeID) {
-		var EmployeeID = window.prompt("Please enter your employee ID","MLLOYD");
-		chrome.storage.sync.set({
-			eid: EmployeeID
-		});
-	}
-	if (!EmployeeName) {
-		var EmployeeName = window.prompt("Please enter your name","Max Lloyd");
-		chrome.storage.sync.set({
-			ename: EmployeeName
-		});
-	}
+			var EmployeeID = userData.employeeID;
+			chrome.storage.sync.set({
+				eid: EmployeeID
+			});
+		}
+		if (!EmployeeName) {
+			var EmployeeName = userData.employeeName;
+			chrome.storage.sync.set({
+				ename: EmployeeName
+			});
+		}
 
 	if ((window.location.href.indexOf('TicketViewer') == -1) && (((window.location.href.indexOf("a=Tickets") >= 0) && (window.location.href.indexOf("tid")==-1))|| (window.location.href.indexOf("TopNav=Tickets")>=0))){
 		console.log("In the table");
