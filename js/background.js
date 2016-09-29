@@ -31,7 +31,7 @@ chrome.omnibox.onInputEntered.addListener(function(text) {
         xhttp.send();
       }
       else if (text.indexOf('sf ')==0){ //automatically loads the first google result. used if you know the name of the support page
-        var sfURL='http://google.com/search?btnI=I%27m+Feeling+Lucky&sourceid=navclient&q=site:qualtrics.com/support' + text.substring(2,(text.length));
+        var sfURL="https://duckduckgo.com/?q=!ducky+"+text.substring(2,(text.length))+"+site%3Aqualtrics.com";
         chrome.tabs.create({url: sfURL });
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=SF&LastName="+text.substring(3,text.length), false);
