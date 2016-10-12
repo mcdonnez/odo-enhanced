@@ -416,7 +416,7 @@ var customTabs = {
 		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options", "inPage");
 	},
 	addDesign: function() {
-		addTab("Design", "1300", "designTab", "http://itwiki.corp.qualtrics.com/odo-enhanced-resources/Portal.html#noHeader", "Design", "inPage");
+		addTab("Design", "1300", "designTab", "http://itwiki.corp.qualtrics.com/odo-enhanced-resources/designportal/Portal.html#noHeader", "Design", "inPage");
 	},
 	addPanels: function() {
 		addTab("Panels Playbook", "1000", "panelsTab", "http://itwiki.corp.qualtrics.com/panels#noHeader", "Panels Resources", "inPage");
@@ -838,7 +838,7 @@ function addButtons(postElements) {
 								"</div>" +
 							"</div>");
 		}
-		
+
 	}
 }
 
@@ -989,7 +989,7 @@ function OdoSPFCheck()
     document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td.BrandSettingsFieldLabelLight").appendChild(button);
 
     // Add button event handler
-    button.addEventListener ("click", function() 
+    button.addEventListener ("click", function()
     {
      	//Store email domains in array
      	var DomainArray = document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2) > textarea").value.split(',');
@@ -997,7 +997,7 @@ function OdoSPFCheck()
      	//Remove the *, if present
     	var index = DomainArray.indexOf('*');
 
-     	if (index > -1) 
+     	if (index > -1)
         {
         	DomainArray.splice(index, 1);
         }
@@ -1039,13 +1039,13 @@ function OdoSPFCheck()
 
                 Domain_t.innerHTML = Domain;
                 SPF_t.innerHTML = DomainStatus;
-                MX_t.innerHTML = "<a target='_blank' href='http://mxtoolbox.com/SuperTool.aspx?action=spf%3a" + Domain + "&run=toolpage'>Result for " + Domain + "</a>";           
+                MX_t.innerHTML = "<a target='_blank' href='http://mxtoolbox.com/SuperTool.aspx?action=spf%3a" + Domain + "&run=toolpage'>Result for " + Domain + "</a>";
             });
         }
 
         //Add event listener for '?' info button
         var info = document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2) > table > tbody > tr:nth-child(1) > td:nth-child(1)");
-        info.addEventListener("click", function() 
+        info.addEventListener("click", function()
         {
             alert("This SPF Checker uses the Qualtrics SPF Check, which looks for _spf.qualtrics.com on the SPF Record. Uncommon but functional setups such _spf.qemailserver.com or our IP range (162.247.216.0/22) will record as 'No', but can be checked on MXToolbox.");
         });
@@ -1061,12 +1061,12 @@ function OdoSPFCheck()
         var URL = "http://itwiki.corp.qualtrics.com:4040/api/spf-checker?domain=" + domain;
         var DomainStatus = null;
 
-        
+
         xhr.addEventListener("readystatechange", function ()
         	{
        			 if (this.readyState === 4)
         		{
-                    if( this.responseText == '{"hasQualtricsSpf":true}') 
+                    if( this.responseText == '{"hasQualtricsSpf":true}')
                     {
                         DomainStatus = '<font color="green">Yes</font>';
                     }
