@@ -58,6 +58,7 @@ function getVars() {
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
 		td: "",//Ticket Goal Date
+		showQuniTickets: "",//Quni Ticket BReakdown
 		tips: true,
 		ename: "",
 		panels: false,
@@ -91,6 +92,8 @@ function getVars() {
 		hidePosts = items.hidePosts;
 		spamCount = items.spamCount;
 		blockSpam = items.blockSpam;
+		showQuniTickets = items.showQuniTickets;
+		console.log("Show em? " + showQuniTickets);
 		addons();
 	});
 }
@@ -901,6 +904,10 @@ function addons() {
 	if (PanelsTabOn) {
 		customTabs.addPanels();
 	}
+	//QUNI TICKET BREAKOUT
+	if (showQuniTickets) {
+		addDashTable();
+	}
 	//SNIPPETS AND CHROME OPTIONS
 	if ((urlParams["a"] == "Home") || (urlParams["a"] == null && urlParams['TopNav'] != "Tickets" && urlParams['TopNav'] != "Company" && urlParams['TopNav'] != "Reports")) {
 		customTabs.addChromeOptions();
@@ -966,6 +973,7 @@ function addons() {
 	//SPF CHECKER
 	if (urlParams["b"] == "RSBrandProfile"){
 		window.setTimeout(OdoSPFCheck, 300);
+
 	}
 }
 /*****************************************************
@@ -1279,7 +1287,5 @@ function assignQueue(ticketCode, ticketTier) {
 	return assignedQueue;
 
 }
-
-addDashTable();
 
 console.log("Success! Odo Enhanced Works!");
