@@ -27,12 +27,12 @@ chrome.storage.sync.get({
 		console.log("In the table");
 		var firebaseRef = new Firebase("https://odo-enhanced.firebaseio.com/tickets");
 		function addColumn () {
-			$('table').eq(1).find("thead > tr").append('<th class="TicketDescription sorting" tabindex="0" aria-controls="9d48ef152aea2424d4a555b4c702e23e6" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending">Ticket Owner</th>');
+			$('table').eq(2).find("thead > tr").append('<th class="TicketDescription sorting" tabindex="0" aria-controls="9d48ef152aea2424d4a555b4c702e23e6" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending">Ticket Owner</th>');
 			var tblength = $('table').eq(1).find('tr').length;
 			firebaseRef.once("value", function(snapshot) {
 			    firebaseTickets = snapshot.val();
 				for (i=1; i<=tblength; i++){
-					var tid =$('table').eq(1).find("tbody > tr:nth-child("+i+") > td:nth-child(7) > a").attr('ticketid');
+					var tid =$('table').eq(2).find("tbody > tr:nth-child("+i+") > td:nth-child(7) > a").attr('ticketid');
 					if (firebaseTickets[tid]) {
 						var owner = firebaseTickets[tid]["owner"];
 						if (firebaseTickets[tid]["eid"] == EmployeeID){
@@ -41,7 +41,7 @@ chrome.storage.sync.get({
 					} else {
 						owner = 'You';
 					}
-					$('table').eq(1).find("tbody > tr:nth-child("+i+")").append("<td><strong>"+ owner +"</strong></td>");
+					$('table').eq(2).find("tbody > tr:nth-child("+i+")").append("<td><strong>"+ owner +"</strong></td>");
 				}
 			});
 

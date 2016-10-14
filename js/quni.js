@@ -1084,5 +1084,202 @@ function OdoSPFCheck()
         xhr.send(data);
      }
 }
+////////////////////////////////////////////////////////////////
+function addDashTable() {
+
+	if ((urlParams["TopNav"] == "Tickets" || urlParams["a"] == "Tickets" ) && (urlParams["b"] == undefined || urlParams["b"] == "TicketsSupportInBox")) {
+		var menu = $('.menu-items');
+		//$('#BodyContent').prepend("Hello");
+
+		$('.PageSectionToolbar').after('<h2>Available Tickets Breakdown</h2><div class="container" id="DashTableOuter" style="max-width: 99%; margin-top: 10px; padding: 0px;"><div class="table-responsive"><style>#RecommendedTable > thead > tr > th {text-align: center; padding: 10px 15px 10px 3px; font-weight: normal; border-bottom: 1px solid #C7C7C7; overflow: hidden;} #RecommendedTable > tbody > tr > td {text-align: center; padding-left: 0px; } .right-wall { border-right: 1px solid #C7C7C7; }</style><table id="RecommendedTable" class="Green dataTable table" style="table-layout: fixed;"><thead><tr><th id="StudentHead">Student</th><th id="ZRHead">Zebra/ Rhino</th><th id="TigerHead">Tiger</th><th id="DLHead" class="right-wall">Dragon/ Lion</th><th id="SIHead">SI</th><th id="TAHead">TA</th><th id="360Head">360</th><th id="EEHead">EE</th><th id="ThemesHead">Themes</th><th id="VCHead">VoC</th><th id="SWHead">Statwing</th><th id="IntegrationsHead">Int</th></tr></thead><tbody><tr class="text-center"><td id="StudentItem">0</td><td id="ZRItem">0</td><td id="TigerItem">0</td><td id="DLItem" class="right-wall">0</td><td id="SIItem">0</td><td id="TAItem">0</td><td id="360Item">0</td><td id="EEItem">0</td><td id="ThemesItem">0</td><td id="VCItem">0</td><td id="SWItem">0</td><td id="IntegrationsItem">0</td></tr></tbody></table></div></div>');
+
+		var Tickets;
+
+		var QueueObjects = {
+
+			"Student": {
+				"head": "StudentHead",
+				"item": "StudentItem",
+				"count": 0
+			},
+			"ZebraRhino": {
+				"head": "ZRHead",
+				"item": "ZRItem",
+				"count": 0
+			},
+			"Tiger": {
+				"head": "TigerHead",
+				"item": "TigerItem",
+				"count": 0
+			},
+			"DragonLion": {
+				"head": "DLHead" ,
+				"item": "DLItem",
+				"count":0
+			},
+			"SI": {
+				"head": "SIHead" ,
+				"item": "SIItem",
+				"count":0
+			},
+			"TA": {
+				"head": "TAHead" ,
+				"item": "TAItem",
+				"count":0
+			},
+			"360": {
+				"head": "360Head" ,
+				"item": "360Item",
+				"count":0
+			},
+			"EE": {
+				"head": "EEHead",
+				"item": "EEItem",
+				"count": 0
+			},
+			"Themes": {
+				"head": "ThemesHead",
+				"item": "ThemesItem",
+				"count": 0
+			},
+			"VC": {
+				"head": "VCHead",
+				"item": "VCItem",
+				"count": 0
+			},
+			"SW": {
+				"head": "SWHead",
+				"item": "SWItem",
+				"count": 0
+			},
+			"Integrations": {
+				"head": "IntegrationsHead",
+				"item": "IntegrationsItem",
+				"count": 0
+			}
+
+		};
+
+		var EmployeeID;
+		chrome.storage.sync.get({ eid: "" }, function(items) {
+			EmployeeID = items.eid;
+			console.log(EmployeeID);
+
+		var ajaxURL = 'http://odo-js-services1-app.b1-prv.qops.net:3002/tickets?recommended=true&employeeID=' + EmployeeID;
+		console.log(ajaxURL);
+
+		$.ajax({
+			url: 'http://odo-js-services1-app.b1-prv.qops.net:3002/tickets?recommended=true&employeeID=' + EmployeeID,
+			success: function (data) {
+				console.log(EmployeeID);
+				console.log(data);
+				Tickets = data;
+				for (var i=0; i<Tickets.length; i++) {
+					var ticket = Tickets[i];
+					//Capture the interaction code to assign queue
+					var ticketCode = ticket["InteractionCode"];
+					if (ticketCode === null) {
+						ticketCode = "";
+					}
+					var ticketTier = ticket["ClientTier"];
+					//Assign Tier Variable that can also be used as the queue if it's a standard GS ticket
+					if (ticketTier == "") {
+						ticketTier = "Student";
+					}
+					else if (ticketTier == "Dragon" || ticketTier == "Lion") {
+						ticketTier = "DragonLion";
+					}
+					else if (ticketTier == "Zebra" || ticketTier == "Rhino") {
+						ticketTier = "ZebraRhino";
+					}
+					//call assignQueue() helper function
+					var queue = assignQueue(ticketCode, ticketTier);
+					
+					var queueItem = QueueObjects[queue]["item"];
+					//Increment ticket count
+					QueueObjects[queue]["count"] = QueueObjects[queue]["count"] + 1;
+					//Update count in widget
+					document.getElementById(queueItem).innerHTML = QueueObjects[queue]["count"];
+					if (QueueObjects[queue]["count"] > 0) {
+						//Bold the text
+						$("#" + QueueObjects[queue]["head"]).css("font-weight", "bold");
+						$("#" + QueueObjects[queue]["item"]).css("font-weight", "bold");
+					}
+					
+				}
+			}
+		});
+		});
+	}
+}
+
+/////// Helper function to assign queue ////////
+
+function assignQueue(ticketCode, ticketTier) {
+
+	var assignedQueue = null;
+	var nextQueue = null;
+	var ticketCodeArray = ticketCode.split(",");
+	var specialties = ["SI", "EE", "TA", "360", "EE", "Themes", "VC", "Statwing", "Integrations"];
+	
+	for (var i=0; i<ticketCodeArray.length; i++) {
+
+		var thisCode = ticketCodeArray[i];
+		//Split up the current code into the product code and subcode
+		thisCode = thisCode.split("|");
+		var thisProductCode = thisCode[0];
+		var thisSubCode;
+		if (thisCode[1] === undefined) {
+			thisSubCode = "";
+		}
+		else {
+			thisSubCode = thisCode[1];
+		}
+		//Assign the queue based on the current code
+		if (thisProductCode == "GS" && thisSubCode == "11") {
+			nextQueue = "Integrations";
+		}
+		else if (thisProductCode == "GS") {
+			nextQueue = ticketTier;
+		} 
+		else if (thisProductCode == "OT" && thisSubCode == "3") {
+			nextQueue = "Themes";
+		}
+		else if (thisProductCode == "OT") {
+			nextQueue = ticketTier;
+		}
+		else if (thisProductCode == "SI") {
+			nextQueue = "SI";
+		}
+		else if (thisProductCode == "TA" ) {
+			nextQueue = "TA";
+		}
+		else if (thisProductCode == "360") {
+			nextQueue = "360";
+		}
+		else if (thisProductCode == "VC") {
+			nextQueue = "VC";
+		}
+		else if (thisProductCode == "EE") {
+			nextQueue = "EE";
+		}
+		else if (thisProductCode == "SW") {
+			nextQueue = "SW";
+		}
+		else {
+			nextQueue = ticketTier;
+		}
+		
+		if (assignedQueue === null || (specialties.indexOf(assignedQueue) < 0 && specialties.indexOf(nextQueue) > -1)) {
+			assignedQueue = nextQueue;
+		}
+
+	}
+	console.log(assignedQueue);
+	return assignedQueue;
+
+}
+
+addDashTable();
 
 console.log("Success! Odo Enhanced Works!");
