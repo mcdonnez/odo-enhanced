@@ -58,7 +58,7 @@ function getVars() {
 		tm: "", // Current Theme
 		tg: 3700, //Ticket Goal
 		td: "",//Ticket Goal Date
-		showQuniTickets: "",//Quni Ticket BReakdown
+		showQuniTickets: "",//Quni Ticket Breakdown
 		tips: true,
 		ename: "",
 		panels: false,
