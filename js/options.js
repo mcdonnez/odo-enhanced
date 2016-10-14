@@ -24,6 +24,7 @@ function save_options() {
 	var spamCount = document.getElementById('SpamCount').value;
 	var blockSpam = document.getElementById('BlockSpam').checked;
 	var omniSearch = document.getElementById('OmniSearch').checked;
+	var quniTickets = document.getElementById('QuniTickets').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -48,7 +49,8 @@ function save_options() {
 		hidePosts: hideSquawkPosts,
 		spamCount: spamCount,
 		blockSpam: blockSpam,
-		omniSearch: omniSearch
+		omniSearch: omniSearch,
+		showQuniTickets: quniTickets
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -86,7 +88,8 @@ function restore_options() {
 		hidePosts: false,
 		spamCount: 25,
 		blockSpam: true,
-		omniSearch: true
+		omniSearch: true,
+		showQuniTickets: true
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -112,6 +115,7 @@ function restore_options() {
 		document.getElementById('SpamCount').value = items.spamCount;
 		document.getElementById('BlockSpam').checked = items.blockSpam;
 		document.getElementById('OmniSearch').checked = items.omniSearch;
+		document.getElementById('QuniTickets').checked = items.showQuniTickets;
 		makeOpaque();
 	});
 }
