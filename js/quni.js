@@ -1191,7 +1191,7 @@ function addDashTable() {
 					}
 					var ticketTier = ticket["ClientTier"];
 					//Assign Tier Variable that can also be used as the queue if it's a standard GS ticket
-					if (ticketTier == "") {
+					if (ticketTier == "Trial User" || ticketTier == "") {
 						ticketTier = "Student";
 					}
 					else if (ticketTier == "Dragon" || ticketTier == "Lion") {
