@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.8.15",
+	"version": "1.8.16",
 	"omnibox": {
     	"keyword": ";q"
 	},
@@ -20,7 +20,8 @@
 		"https://ajax.googleapis.com/",
 		"http://odo.corp.qualtrics.com/*",
 		"storage",
-		"tabs"
+		"tabs",
+		"contextMenus"
 	],
 
 	"web_accessible_resources": [
