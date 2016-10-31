@@ -9,6 +9,11 @@ var child3 = chrome.contextMenus.create({"title": "Reset Q and A",
                   "parentId": parent, "onclick": resetQandA})
 var child4 = chrome.contextMenus.create({"title": "Show Q and A",
                   "parentId": parent, "onclick": showQandA})
+var employee;
+
+chrome.identity.getProfileUserInfo(function(obj){
+  employee = obj.email;
+});
 
 function questionOnClick(info, tab) {
   question = prompt("Please paste the question into the box");
@@ -44,7 +49,7 @@ function teachBarnabot(info, tab) {
         obj1[key2] = obj.answer;
         console.log("Set Answer: "+obj1[key2]);
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://itwiki.corp.qualtrics.com:2345/newData?params="+JSON.stringify({"data":{"question":obj1[key1],"answer":obj1[key2]}}), false);
+        xhttp.open("GET", "http://itwiki.corp.qualtrics.com:2345/newData?params="+JSON.stringify({"data":{"question":obj1[key1],"answer":obj1[key2],"employee":employee}}), false);
         alert("Barnabot is getting smarter");
         var key="question";
         var obj = {};
