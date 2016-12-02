@@ -47,9 +47,28 @@ div.PageTitle {
 
 .LeftMenuColumn,
 .RightMenuColumn,
-#BodyContentBackground,
-.SectionTabsBarContainer {
+#BodyContentBackground {
 	opacity: .8;
+	background-color: transparent !important;
+}
+
+.SectionTabsBarContainer {
+	background-color: black !important;
+	height: 47px !important;
+}
+
+.PageFrameLeftMenuItem {
+	color: #ddd !important;
+}
+
+.LeftMenuColumn .Title {
+	color: #ddd !important;
+}
+
+.Discussion {
+	background-color: #ddd;
+	border-radius: 4px;
+	opacity: .95;
 }
 
 ul.SectionTabsList,
@@ -127,7 +146,7 @@ img[src$="img/Unknown.png"] {
 }
 
 html body {
-	background-image: url("https://blurppy.files.wordpress.com/2015/09/star-wars-the-force-awakens-hd-wallpaper.png");
+	background-image: url("http://nukethefridge.com/wp-content/uploads/2016/07/c7d5dB8.png");
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
@@ -135,13 +154,18 @@ html body {
 }
 
 div.SearchBar {
-	background-color: transparent !important;
+	background-color: #ddd !important;
 	border: none !important;
+	opacity: .7;
 }
 
 #QualtricsTimezonesTable {
-	background-color: aliceblue;
+	background-color: #ddd;
 	opacity: .7;
+}
+
+span.InactiveTime {
+	color: azure;
 }
 
 .btn.btn-success {

@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.8.18",
+	"version": "1.8.19",
 	"omnibox": {
     	"keyword": ";q"
 	},
@@ -28,7 +28,8 @@
 		"css/squawkPosts.css",
 		"css/greyAlerts.css",
 		"css/search.css",
-		"views/options.html"
+		"views/options.html",
+		"css/starjedihollow-webfont.ttf"
 	],
 	"icons": {
 		"128": "img/icon.png"

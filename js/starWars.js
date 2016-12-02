@@ -54,11 +54,13 @@ var swBackground = {
 var swPageLogo = {
 	1: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2n43aCvxR8EdRUF&V=1444520373", //Darth Vader
 	2: "https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Dw5zn24UferpIN&V=1444519104" //Bobba Fett
-}
+};
 var starWars = {
 	changeBackground: function (id) {
 		if (!id)
 			id = Math.floor((Math.random() * Object.keys(swBackground).length) + 1);
+
+		console.log(id);
 		document.body.style.swBackgroundImage = "url('" + swBackground[id] + "')";
 	},
 	changeText: function () {
@@ -154,16 +156,13 @@ function changeThemes() {
 		if (ClinicButtonOn && usingKB != true) {
 			document.getElementById('newClinic').querySelectorAll('span')[1].innerHTML = "R2D2 Assistance";
 		}
-		if (HelpDeskTabOn && usingKB != true) {
-			document.getElementById('helpdeskTab').innerHTML = "Ask Darth Sidious";
-		}
 		if (DesignTabOn && usingKB != true) {
 			document.getElementById('designTab').innerHTML = "Droid Factory";
 		}
 		if (SnippetsOn && usingKB != true) {
 			//document.getElementById('SnippetsHeader').innerHTML = "Emperor's Task List";
 		}
-		if (PlaybookTabOn && usingKB != true) {
+		if (PlaybookTabOn && usingKB != true && document.getElementById('playbookTab')) {
 			document.getElementById('playbookTab').innerHTML = "Access Force";
 		}
 		//LOAD ADDITIONAL STYLESHEET
