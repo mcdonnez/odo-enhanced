@@ -146,7 +146,7 @@ var usingKB = currentUrl.indexOf("index.php") != -1;
 
 function changeThemes() {
 	if (Theme === "starwars") {
-		starWars.changeBackground();
+		// starWars.changeBackground(); disable for now
 		starWars.changeText();
 		starWars.changeBarnaby();
 		//USE VAR SET TO CHANGE CUSTOM TABS
