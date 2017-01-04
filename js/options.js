@@ -26,14 +26,14 @@ function save_options() {
 	var omniSearch = document.getElementById('OmniSearch').checked;
 	//Quni Ticket Breakdown
 	var quniTickets = document.getElementById('QuniTickets').checked;
-	var siQueue = document.getElementById('SIQueue').checked;
-	var taQueue = document.getElementById('TAQueue').checked;
-	var three60Queue = document.getElementById('360Queue').checked;
-	var eeQueue = document.getElementById('EEQueue').checked;
-	var themesQueue = document.getElementById('ThemesQueue').checked;
-	var vocQueue = document.getElementById('VocQueue').checked;
-	var statQueue = document.getElementById('StatQueue').checked;
-	var intQueue = document.getElementById('IntQueue').checked;
+	var showSIQueue = document.getElementById('SIQueue').checked;
+	var showTAQueue = document.getElementById('TAQueue').checked;
+	var show360Queue = document.getElementById('360Queue').checked;
+	var showEEQueue = document.getElementById('EEQueue').checked;
+	var showThemesQueue = document.getElementById('ThemesQueue').checked;
+	var showVocQueue = document.getElementById('VocQueue').checked;
+	var showStatQueue = document.getElementById('StatQueue').checked;
+	var showIntQueue = document.getElementById('IntQueue').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -61,14 +61,14 @@ function save_options() {
 		omniSearch: omniSearch,
 		//Quni Ticket Breakdown
 		showQuniTickets: quniTickets,
-		showSIQueue: siQueue,
-		showTAQueue: taQueue,
-		show360Queue: three60Queue,
-		showEEQueue: eeQueue,
-		showThemesQueue: themesQueue,
-		showVocQueue: vocQueue,
-		showStatQueue: statQueue,
-		showIntQueue: intQueue
+		showSIQueue: showSIQueue,
+		showTAQueue: showTAQueue,
+		show360Queue: show360Queue,
+		showEEQueue: showEEQueue,
+		showThemesQueue: showThemesQueue,
+		showVocQueue: showVocQueue,
+		showStatQueue: showStatQueue,
+		showIntQueue: showIntQueue
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
