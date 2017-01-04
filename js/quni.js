@@ -1291,7 +1291,6 @@ function assignQueue(ticketCode, ticketTier) {
 		}
 
 	}
-	console.log(assignedQueue);
 	return assignedQueue;
 
 }
