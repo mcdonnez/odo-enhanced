@@ -24,7 +24,16 @@ function save_options() {
 	var spamCount = document.getElementById('SpamCount').value;
 	var blockSpam = document.getElementById('BlockSpam').checked;
 	var omniSearch = document.getElementById('OmniSearch').checked;
+	//Quni Ticket Breakdown
 	var quniTickets = document.getElementById('QuniTickets').checked;
+	var showSIQueue = document.getElementById('SIQueue').checked;
+	var showTAQueue = document.getElementById('TAQueue').checked;
+	var show360Queue = document.getElementById('360Queue').checked;
+	var showEEQueue = document.getElementById('EEQueue').checked;
+	var showThemesQueue = document.getElementById('ThemesQueue').checked;
+	var showVocQueue = document.getElementById('VocQueue').checked;
+	var showStatQueue = document.getElementById('StatQueue').checked;
+	var showIntQueue = document.getElementById('IntQueue').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		cl: createClinic,
@@ -50,7 +59,16 @@ function save_options() {
 		spamCount: spamCount,
 		blockSpam: blockSpam,
 		omniSearch: omniSearch,
-		showQuniTickets: quniTickets
+		//Quni Ticket Breakdown
+		showQuniTickets: quniTickets,
+		showSIQueue: showSIQueue,
+		showTAQueue: showTAQueue,
+		show360Queue: show360Queue,
+		showEEQueue: showEEQueue,
+		showThemesQueue: showThemesQueue,
+		showVocQueue: showVocQueue,
+		showStatQueue: showStatQueue,
+		showIntQueue: showIntQueue
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
@@ -89,7 +107,16 @@ function restore_options() {
 		spamCount: 25,
 		blockSpam: true,
 		omniSearch: true,
-		showQuniTickets: true
+		//Quni Ticket breakdowns
+		showQuniTickets: false,
+		showSIQueue: false,
+		showTAQueue: false,
+		show360Queue: false,
+		showEEQueue: false,
+		showThemesQueue: false,
+		showVocQueue: false,
+		showStatQueue: false,
+		showIntQueue: false
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -115,7 +142,16 @@ function restore_options() {
 		document.getElementById('SpamCount').value = items.spamCount;
 		document.getElementById('BlockSpam').checked = items.blockSpam;
 		document.getElementById('OmniSearch').checked = items.omniSearch;
+		//Quni Ticket Breakdown
 		document.getElementById('QuniTickets').checked = items.showQuniTickets;
+		document.getElementById('SIQueue').checked = items.showSIQueue;
+		document.getElementById('TAQueue').checked = items.showTAQueue;
+		document.getElementById('360Queue').checked = items.show360Queue;
+		document.getElementById('EEQueue').checked = items.showEEQueue;
+		document.getElementById('ThemesQueue').checked = items.showThemesQueue;
+		document.getElementById('VocQueue').checked = items.showVocQueue;
+		document.getElementById('StatQueue').checked = items.showStatQueue;
+		document.getElementById('IntQueue').checked = items.showIntQueue;
 		makeOpaque();
 	});
 }

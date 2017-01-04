@@ -30,6 +30,43 @@
 				<span>Show Tickets Breakdown in Quni Inbox</span>
 			</label>
 			<br>
+			<div id="TicketBreakdownOptions">
+				<div class="Description" id="SpecialtyQueuesDescription">Which specialty queues are you a part of?</div>
+				<div class="SpecialtyQueues">
+				<label class='CheckLabel QueueLabel' for='SIQueue'>
+					<input class="Check" id="SIQueue" type='checkbox' />
+					<span class="Queue">SI</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='TAQueue'>
+					<input class="Check" id='TAQueue' type='checkbox' />
+					<span class="Queue">TA</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='360Queue'>
+					<input class="Check" id='360Queue' type='checkbox' />
+					<span class="Queue">360</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='EEQueue'>
+					<input class="Check" id='EEQueue' type='checkbox' />
+					<span class="Queue">EE</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='ThemesQueue'>
+					<input class="Check" id='ThemesQueue' type='checkbox' />
+					<span class="Queue">Themes</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='VocQueue'>
+					<input class="Check" id='VocQueue' type='checkbox' />
+					<span class="Queue">VoC</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='StatQueue'>
+					<input class="Check" id='StatQueue' type='checkbox' />
+					<span class="Queue">Statwing</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='IntQueue'>
+					<input class="Check" id='IntQueue' type='checkbox' />
+					<span class="Queue">Int</span>
+				</label>
+				</div>
+			</div>
 		</div>
 		<div class='OptionSection'>Buttons</br>
 			<div class='Description'>Add Custom buttons to Odo</div>
@@ -180,6 +217,12 @@ body {
 	padding: 10px;
 	text-transform: none;
 }
+#SpecialtyQueuesDescription {
+	padding-bottom: 0px;
+}
+.SpecialtyQueues {
+	padding: 3px;
+}
 #status {
 	margin-top: 30px;
 }
@@ -192,7 +235,7 @@ label {
 .CheckLabel span {
 	padding: 3px 12px;
 	display: inline-block;
-	margin: 3px auto;
+	margin: 16px 0px 7px 0px;
 	text-transform: none;
 	border: 2px solid #ddd;
 	border-radius: 15px;
@@ -200,6 +243,15 @@ label {
 	transition: .3s;
 	cursor: pointer;
 	background-color: #cacaca;
+}
+.CheckLabel .Queue {
+	width: auto;
+	padding: 3px 6px;
+}
+.QueueLabel {
+	display: inline;
+	font-size: 11px;
+	margin: 0px 3px;
 }
 input[type=text] {
 	width: 90%;
@@ -222,13 +274,12 @@ input[type=checkbox]:checked + span {
 	color: #fff;
 	border-color: #14b375;
 }
-.NonCheckLabel {
-}
 input[type=checkbox], select, input[type=color] {
 	float: right;
 }
 input[type=checkbox] {
 	visibility: hidden;
+	display:none;
 }
 .OtherType {
 	text-align: left;
