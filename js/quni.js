@@ -59,6 +59,14 @@ function getVars() {
 		tg: 3700, //Ticket Goal
 		td: "",//Ticket Goal Date
 		showQuniTickets: "",//Quni Ticket Breakdown
+		showSIQueue: "", 
+		showTAQueue: "",
+		show360Queue: "",
+		showEEQueue: "",
+		showThemesQueue: "",
+		showVocQueue: "",
+		showStatQueue: "",
+		showIntQueue: "",
 		tips: true,
 		ename: "",
 		panels: false,
@@ -93,6 +101,14 @@ function getVars() {
 		spamCount = items.spamCount;
 		blockSpam = items.blockSpam;
 		showQuniTickets = items.showQuniTickets;
+		showSIQueue = items.showSIQueue;
+		showTAQueue = items.showTAQueue;
+		show360Queue = items.show360Queue;
+		showEEQueue = items.showEEQueue;
+		showThemesQueue = items.showThemesQueue;
+		showVocQueue = items.showVocQueue;
+		showStatQueue = items.showStatQueue;
+		showIntQueue = items.showIntQueue;
 		addons();
 	});
 }
@@ -1078,9 +1094,6 @@ function addDashTable() {
 
 	if ((urlParams["TopNav"] == "Tickets" || urlParams["a"] == "Tickets" ) && (urlParams["b"] == undefined || urlParams["b"] == "TicketsSupportInBox")) {
 		var menu = $('.menu-items');
-		//$('#BodyContent').prepend("Hello");
-
-		$('.PageSectionToolbar').after('<h2>Available Tickets Breakdown</h2><div class="container" id="DashTableOuter" style="max-width: 99%; margin-top: 10px; padding: 0px;"><div class="table-responsive"><style>#RecommendedTable > thead > tr > th {text-align: center; padding: 10px 15px 10px 3px; font-weight: normal; border-bottom: 1px solid #C7C7C7; overflow: hidden;} #RecommendedTable > tbody > tr > td {text-align: center; padding-left: 0px; } .right-wall { border-right: 1px solid #C7C7C7; }</style><table id="RecommendedTable" class="Green dataTable table" style="table-layout: fixed;"><thead><tr><th id="StudentHead">Student</th><th id="ZRHead">Zebra/ Rhino</th><th id="TigerHead">Tiger</th><th id="DLHead" class="right-wall">Dragon/ Lion</th><th id="SIHead">SI</th><th id="TAHead">TA</th><th id="360Head">360</th><th id="EEHead">EE</th><th id="ThemesHead">Themes</th><th id="VCHead">VoC</th><th id="SWHead">Statwing</th><th id="IntegrationsHead">Int</th></tr></thead><tbody><tr class="text-center"><td id="StudentItem">0</td><td id="ZRItem">0</td><td id="TigerItem">0</td><td id="DLItem" class="right-wall">0</td><td id="SIItem">0</td><td id="TAItem">0</td><td id="360Item">0</td><td id="EEItem">0</td><td id="ThemesItem">0</td><td id="VCItem">0</td><td id="SWItem">0</td><td id="IntegrationsItem">0</td></tr></tbody></table></div></div>');
 
 		var Tickets;
 
@@ -1109,45 +1122,68 @@ function addDashTable() {
 			"SI": {
 				"head": "SIHead",
 				"item": "SIItem",
-				"count": 0
+				"count": 0,
+				"show": showSIQueue
 			},
 			"TA": {
 				"head": "TAHead",
 				"item": "TAItem",
-				"count": 0
+				"count": 0,
+				"show": showTAQueue
 			},
 			"360": {
 				"head": "360Head",
 				"item": "360Item",
-				"count": 0
+				"count": 0,
+				"show": show360Queue
 			},
 			"EE": {
 				"head": "EEHead",
 				"item": "EEItem",
-				"count": 0
+				"count": 0,
+				"show": showEEQueue
 			},
 			"Themes": {
 				"head": "ThemesHead",
 				"item": "ThemesItem",
-				"count": 0
+				"count": 0,
+				"show": showThemesQueue
 			},
 			"VC": {
 				"head": "VCHead",
 				"item": "VCItem",
-				"count": 0
+				"count": 0,
+				"show": showVocQueue
 			},
 			"SW": {
 				"head": "SWHead",
 				"item": "SWItem",
-				"count": 0
+				"count": 0,
+				"show": showStatQueue
 			},
 			"Integrations": {
 				"head": "IntegrationsHead",
 				"item": "IntegrationsItem",
-				"count": 0
+				"count": 0,
+				"show": showIntQueue
 			}
 
 		};
+
+		$('.PageSectionToolbar').after('<div id="TicketBreakdownDiv"></div>');
+		var ticketBreakdownURL = chrome.extension.getURL('views/TicketBreakdown.html');
+
+		$('#TicketBreakdownDiv').load(ticketBreakdownURL, function() {
+			var queues = Object.keys(QueueObjects);
+			for (var i=0; i<queues.length; i++) {
+				var queue = queues[i];
+				if (QueueObjects[queue].show === false) {
+					$("#" + QueueObjects[queue]["head"]).hide();
+					$("#" + QueueObjects[queue]["item"]).hide();
+			}
+		}
+		});
+
 
 		chrome.storage.sync.get({eid: ""}, function (items) {
 			$.ajax({
@@ -1255,6 +1291,7 @@ function assignQueue(ticketCode, ticketTier) {
 		}
 
 	}
+	console.log(assignedQueue);
 	return assignedQueue;
 
 }
