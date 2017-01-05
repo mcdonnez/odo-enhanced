@@ -1270,7 +1270,7 @@ function assignQueue(ticketCode, ticketTier) {
 		else if (thisProductCode == "TA") {
 			nextQueue = "TA";
 		}
-		else if (thisProductCode == "360") {
+		else if (thisProductCode == "TS") {
 			nextQueue = "360";
 		}
 		else if (thisProductCode == "VC") {
