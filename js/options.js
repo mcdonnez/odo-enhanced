@@ -1,10 +1,14 @@
 function save_options() {
 	var createEmail = document.getElementById('EmailButton').checked;
+	var miniCreateEmail = document.getElementById('MiniEmailButton').checked;
 	var createClinic = document.getElementById('ClinicButton').checked;
 	var clinicStartTime = document.getElementById('StartClinicTime').value;
 	var clinicEndTime = document.getElementById('EndClinicTime').value;
 	var clinicDay = document.getElementById('ClinicDayNumber').value;
 	var minifyTicket = document.getElementById('MiniTicketButton').checked;
+	var miniTakeTicket = document.getElementById('MiniTakeTicket').checked;
+	var miniSupportPhone = document.getElementById('MiniSupportPhone').checked;
+	var miniClientIssue = document.getElementById('MiniClientIssue').checked;
 	var design = document.getElementById('Design').checked;
 	var easterEggs = document.getElementById('EasterEggs').checked;
 	var playbook = document.getElementById('Playbook').checked;
@@ -36,8 +40,12 @@ function save_options() {
 	var showIntQueue = document.getElementById('IntQueue').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
+		mem: miniCreateEmail,
 		cl: createClinic,
 		mt: minifyTicket,
+		mtt: miniTakeTicket,
+		msp: miniSupportPhone,
+		mci: miniClientIssue,
 		sct: clinicStartTime,
 		ect: clinicEndTime,
 		cdn: clinicDay,
@@ -84,11 +92,15 @@ function save_options() {
 function restore_options() {
 	chrome.storage.sync.get({
 		em: "",
+		mem: "",
 		cl: "",
 		sct: "",
 		ect: "",
 		cdn: "",
 		mt: "",
+		mtt: "",
+		msp: "",
+		mci: "",
 		de: false,
 		ee: "",
 		pb: "",
@@ -119,11 +131,15 @@ function restore_options() {
 		showIntQueue: false
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
+		document.getElementById('MiniEmailButton').checked = items.mem;
 		document.getElementById('ClinicButton').checked = items.cl;
 		document.getElementById('StartClinicTime').value = items.sct;
 		document.getElementById('EndClinicTime').value = items.ect;
 		document.getElementById('ClinicDayNumber').value = items.cdn;
 		document.getElementById('MiniTicketButton').checked = items.mt;
+		document.getElementById('MiniTakeTicket').checked = items.mtt;
+		document.getElementById('MiniSupportPhone').checked = items.msp;
+		document.getElementById('MiniClientIssue').checked = items.mci;
 		document.getElementById('Design').checked = items.de;
 		document.getElementById('EasterEggs').checked = items.ee;
 		document.getElementById('Playbook').checked = items.pb;
@@ -162,6 +178,7 @@ document.getElementById('save').addEventListener('click',
 document.getElementById('Wrapper').addEventListener('change',
 	save_options);
 document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
+document.getElementById('EmailButton').addEventListener('change', makeOpaque);
 document.getElementById('GradProgress').addEventListener('change', makeOpaque);
 document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
 document.getElementById("Exit").addEventListener("click", closeFeedback);
@@ -174,6 +191,13 @@ document.getElementById("Overlay").addEventListener("click", closeFeedback);
 			clinOps.style.display = "block";
 		} else {
 			clinOps.style.display = "none";
+		}
+		var emailOps = document.getElementById('EmailButtonOptions');
+		var emailToggle = document.getElementById('EmailButton').checked;
+		if (emailToggle) {
+			emailOps.style.display = "block";
+		} else {
+			emailOps.style.display = "none";
 		}
 		var progOps = document.getElementById('ProgressOptions');
 		var progToggle = document.getElementById('GradProgress').checked;
