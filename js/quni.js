@@ -13,11 +13,15 @@
 /*------- Initialize variables from Chrome Storage ------*/
 
 var EmailButtonOn;
+var MiniEmailButtonOn;
 var ClinicButtonOn;
 var ClinicStartTime;
 var ClinicEndTime;
 var ClinicDay;
 var MiniTicketOn;
+var MiniTakeTicketOn;
+var MiniSupportPhoneOn;
+var MiniClientIssueOn;
 var DesignTabOn;
 var EasterEggsOn;
 var PlaybookTabOn;
@@ -39,50 +43,68 @@ var hidePosts;
 var spamCount;
 var blockSpam;
 var showQuniTickets;
+var showSIQueue;
+var showTAQueue;
+var show360Queue;
+var showEEQueue;
+var showThemesQueue;
+var showVocQueue;
+var showStatQueue;
+var showIntQueue;
 
 /*------- Retrieve variables from Chrome Storage ------*/
 
 function getVars() {
 	chrome.storage.sync.get({
-		em: "", //email button
-		cl: "", // clinic button
-		sct: "", //Clinic start time
-		ect: "", // Clinic End Time
-		cdn: "", // Clinic Day
-		mt: '', // minify the ticket button
-		de: "", // Design Tab
-		ee: "", // Easter Eggs
-		pb: "", // Playbook Tab
-		gp: true, // Grad Progress Tracker
-		eid: "", // Employee ID
-		tm: "", // Current Theme
-		tg: 3700, //Ticket Goal
-		td: "",//Ticket Goal Date
-		showQuniTickets: "",//Quni Ticket Breakdown
-		showSIQueue: "", 
-		showTAQueue: "",
-		show360Queue: "",
-		showEEQueue: "",
-		showThemesQueue: "",
-		showVocQueue: "",
-		showStatQueue: "",
-		showIntQueue: "",
+		em: "",
+		mem: "",
+		cl: "",
+		sct: "",
+		ect: "",
+		cdn: "",
+		mt: "",
+		mtt: "",
+		msp: "",
+		mci: "",
+		de: false,
+		ee: "",
+		pb: "",
+		eid: "",
+		gp: true,
+		tm: null,
+		tg: 3700,
+		td: "2016-12-12",
 		tips: true,
 		ename: "",
 		panels: false,
+		calmAlerts: true,
+		minPosts: true,
 		ltxt: "",
-		calmAlerts: false,
-		minPosts: false,
 		hidePosts: false,
 		spamCount: 25,
-		blockSpam: true
+		blockSpam: true,
+		omniSearch: true,
+		//Quni Ticket breakdowns
+		showQuniTickets: false,
+		showSIQueue: false,
+		showTAQueue: false,
+		show360Queue: false,
+		showEEQueue: false,
+		showThemesQueue: false,
+		showVocQueue: false,
+		showStatQueue: false,
+		showIntQueue: false
 	}, function (items) {
 		EmailButtonOn = items.em;
+		MiniEmailButtonOn = items.mem;
 		ClinicButtonOn = items.cl;
 		ClinicStartTime = items.sct;
 		ClinicEndTime = items.ect;
 		ClinicDay = items.cdn;
 		MiniTicketOn = items.mt;
+		MiniTakeTicketOn = items.mtt;
+		MiniSupportPhoneOn = items.msp;
+		MiniClientIssueOn = items.mci;
 		DesignTabOn = items.de;
 		EasterEggsOn = items.ee;
 		PlaybookTabOn = items.pb;
@@ -564,18 +586,30 @@ function addEmailTicket() {
 	node.appendChild(textnode);
 	node.setAttribute("id", "newEmail");
 	node.setAttribute("class", "btn btn-success");
-	node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
-	container.appendChild(node);
-	document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
+	$.ajax({
+		url: 'http://odo.corp.qualtrics.com/global/angularjs/angular.odoApp.js',
+		type: 'HEAD',
+		error: function() {
+			node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
+		},
+		success: function() {
+			node.setAttribute('onclick', 'odoApp.setVar("ReplyToEmailID", "");odoApp.setVar("draft", undefined);odoApp.setVar("NewEmail", "new-email");odoApp.setVar("Account", "Support");odoApp.Dialog("modules/Email/EmailEditor/template.EmailEditor.html");');
+		},
+		complete: function() {
+			container.appendChild(node);
+			document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
+			if (MiniEmailButtonOn) {
+				minimizeTicketButton("Create Email Ticket");
+			}
+		}
+	});
 }
 
 /*------ Minify General Ticket Button ------*/
 
-function minimizeTicketButton() {
-	var btnInner = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5) > span:nth-child(2)');
+function minimizeTicketButton(text) {
+	var btnInner = $('span:contains("' + text + '")');
 	btnInner.remove();
-	var btn = $('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(5)');
-	btn.parent().prepend(btn);
 }
 
 
@@ -933,7 +967,16 @@ function addons() {
 		}
 	}
 	if (MiniTicketOn) {
-		minimizeTicketButton();
+		minimizeTicketButton("Create Ticket");
+	}
+	if (MiniTakeTicketOn) {
+		minimizeTicketButton("Take a Ticket");
+	}
+	if (MiniSupportPhoneOn) {
+		minimizeTicketButton("Support Phone Ticket");
+	}
+	if (MiniClientIssueOn) {
+		minimizeTicketButton("Report Client Issue");
 	}
 	if ((ShowGradProgressOn) && (EmpID != "")) {
 		showQuniProgress();
