@@ -587,7 +587,7 @@ function addEmailTicket() {
 	node.setAttribute("id", "newEmail");
 	node.setAttribute("class", "btn btn-success");
 	$.ajax({
-		url: 'http://odo.corp.qualtrics.com/global/angularjs/angular.odoApp.js',
+		url: '/global/angularjs/angular.odoApp.js',
 		type: 'HEAD',
 		error: function() {
 			node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
