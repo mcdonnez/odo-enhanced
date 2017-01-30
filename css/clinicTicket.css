@@ -1,0 +1,13 @@
+#PopUp > div:nth-child(16) > div
+ {
+  display: none !important;
+}
+
+
+#PopUp > div:nth-child(16){
+  border: none !important;
+}
+
+#PopUp > div:nth-child(15){
+  display: none;
+}
