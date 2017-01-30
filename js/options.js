@@ -1,6 +1,5 @@
 function save_options() {
 	var createEmail = document.getElementById('EmailButton').checked;
-	//My clinic button change
 	var createClinicFeedback = document.getElementById('ClinicFeedbackButton').checked;
 	var miniCreateEmail = document.getElementById('MiniEmailButton').checked;
 	var createClinic = document.getElementById('ClinicButton').checked;
@@ -44,7 +43,6 @@ function save_options() {
 		em: createEmail,
 		mem: miniCreateEmail,
 		cl: createClinic,
-		//My clinic button change
 		clf: createClinicFeedback,
 		mt: minifyTicket,
 		mtt: miniTakeTicket,
@@ -98,7 +96,6 @@ function restore_options() {
 		em: "",
 		mem: "",
 		cl: "",
-		//My clinic button change
 		clf: "",
 		sct: "",
 		ect: "",
@@ -137,7 +134,6 @@ function restore_options() {
 		showIntQueue: false
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
-		//My clinic button change
 		document.getElementById('ClinicFeedbackButton').checked = items.clf;
 		document.getElementById('MiniEmailButton').checked = items.mem;
 		document.getElementById('ClinicButton').checked = items.cl;
@@ -186,7 +182,6 @@ document.getElementById('save').addEventListener('click',
 document.getElementById('Wrapper').addEventListener('change',
 	save_options);
 document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
-//My clinic button change
 document.getElementById('ClinicFeedbackButton').addEventListener('change', makeOpaque);
 document.getElementById('EmailButton').addEventListener('change', makeOpaque);
 document.getElementById('GradProgress').addEventListener('change', makeOpaque);
