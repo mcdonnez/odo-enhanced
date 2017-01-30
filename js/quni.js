@@ -14,6 +14,8 @@
 
 var EmailButtonOn;
 var MiniEmailButtonOn;
+//My clinic button change
+var ClinicFeedbackButtonOn;
 var ClinicButtonOn;
 var ClinicStartTime;
 var ClinicEndTime;
@@ -58,6 +60,7 @@ function getVars() {
 	chrome.storage.sync.get({
 		em: "",
 		mem: "",
+		clf:"",
 		cl: "",
 		sct: "",
 		ect: "",
@@ -97,6 +100,7 @@ function getVars() {
 	}, function (items) {
 		EmailButtonOn = items.em;
 		MiniEmailButtonOn = items.mem;
+		ClinicFeedbackButtonOn = items.clf;
 		ClinicButtonOn = items.cl;
 		ClinicStartTime = items.sct;
 		ClinicEndTime = items.ect;
@@ -576,83 +580,86 @@ function addClinicFeedbackButton() {
 		};
 
 /*------ Add Clinic Feedback Features ------*/
-var myVar = setInterval(function(){ myTimer() }, 1000);
 
-function myTimer() {
-    //If the Create Ticket window exists, fun the functions
-    if ($('.ui-dialog .ui-dialog-title').text() == 'Create Ticket'){
-        if($('.ui-dialog .ui-dialog-title').text() != ''){
-            clearInterval(myVar);
+function addClinicFeedbackFeature() {
+	var myVar = setInterval(function(){ myTimer() }, 1000);
 
-            //Checks that Clinic Ticket is the "Create Ticket" option selected before running anymore code
-            $(document).on('change','select',function() {
+	function myTimer() {
+		//If the Create Ticket window exists, fun the functions
+		if ($('.ui-dialog .ui-dialog-title').text() == 'Create Ticket'){
+			if($('.ui-dialog .ui-dialog-title').text() != ''){
+				clearInterval(myVar);
 
-            //Check for Clinic Ticket option selection  
-   	        console.log( $(this).val() + " has been selected.");
+				//Checks that Clinic Ticket is the "Create Ticket" option selected before running anymore code
+				$(document).on('change','select',function() {
 
-            if( $(this).val() == "CT"){
+				//Check for Clinic Ticket option selection  
+				console.log( $(this).val() + " has been selected.");
 
-                //Check for Clinic Ticket Page
-                console.log("We made it to the Clinic Ticket page!");
+				if( $(this).val() == "CT"){
 
-                //Create an interval that checks for the existence of element with ID InteractionCodes
-                clinicVar = setInterval(function(){clinicTimer()}, 100);
-                function clinicTimer(){
-                    
-                    //When InteractionCodes exists, add the following elements (additional options) below it
-                    if ($('#InteractionCodes').length) {
+					//Check for Clinic Ticket Page
+					console.log("We made it to the Clinic Ticket page!");
 
-                        //CHECK for #InteractionCodes existence
-                        console.log("InteractionCodes detected. Injecting elements.");
+					//Create an interval that checks for the existence of element with ID InteractionCodes
+					clinicVar = setInterval(function(){clinicTimer()}, 100);
+					function clinicTimer(){
+						
+						//When InteractionCodes exists, add the following elements (additional options) below it
+						if ($('#InteractionCodes').length) {
 
-                        $(document).ready(function(){
-                        $("#InteractionCodes").after('<div class="Caption" style="font-family:sans-serif; font-size: 13px; padding:4px 2px 4px 0px; color:#a5a5a5;">Purpose of Visit:</div> <select style="margin-bottom:10px; border:1px solid #ccc; border-radius:5px; height:24px; background:transparent;" id="dropDown" name="Purpose of Visit"> <option></option> <option onClick="something();">Client Support Question</option> <option>Client Use-Case Consultation</option> <option>Personal</option> </select> <div id="textInput" style="font-family:sans-serif; width:515px; font-size:13px; color:#a5a5a5; display:none;"> <div class="Caption">Reason client support question was not routed through Support:</div> <input style="width:100%; overflow:auto; padding:2px; border:1px solid #ccc;border-radius:5px;" type="text" id="Explanation" name="Description" value="" style="width: 515px; height:30px;" autocomplete="off" ></input> </div>');
+							//CHECK for #InteractionCodes existence
+							console.log("InteractionCodes detected. Injecting elements.");
 
-                        addClinicFeedbackButton();    
+							$(document).ready(function(){
+							$("#InteractionCodes").after('<div class="Caption" style="font-family:sans-serif; font-size: 13px; padding:4px 2px 4px 0px; color:#a5a5a5;">Purpose of Visit:</div> <select style="margin-bottom:10px; border:1px solid #ccc; border-radius:5px; height:24px; background:transparent;" id="dropDown" name="Purpose of Visit"> <option></option> <option onClick="something();">Client Support Question</option> <option>Client Use-Case Consultation</option> <option>Personal</option> </select> <div id="textInput" style="font-family:sans-serif; width:515px; font-size:13px; color:#a5a5a5; display:none;"> <div class="Caption">Reason client support question was not routed through Support:</div> <input style="width:100%; overflow:auto; padding:2px; border:1px solid #ccc;border-radius:5px;" type="text" id="Explanation" name="Description" value="" style="width: 515px; height:30px;" autocomplete="off" ></input> </div>');
 
-                        //If "Clinic Support Question" is the selected "Purpose of Visit", give them a text box to explain their reason
-                        $(document).ready(function() {
-                            $('#dropDown').on('change', function() {
-                            var value = $(this).val();
-                            if(value=="Client Support Question"){
-                                document.getElementById("textInput").style.display = "block";
-                            } else {
-                                document.getElementById("textInput").style.display = "none";
-                            };
-                            });
-                        });
+							addClinicFeedbackButton();    
 
-                        //If the Clinic Feedback button is selected, selected the hidden "Mark Resolved"
-                        //MEETING MATERIALS
-                        $('#newClinicButton').on('click', function() {
-                            $('button:contains("Mark Resolved")')[0].click();
-                        });
+							//If "Clinic Support Question" is the selected "Purpose of Visit", give them a text box to explain their reason
+							$(document).ready(function() {
+								$('#dropDown').on('change', function() {
+								var value = $(this).val();
+								if(value=="Client Support Question"){
+									document.getElementById("textInput").style.display = "block";
+								} else {
+									document.getElementById("textInput").style.display = "none";
+								};
+								});
+							});
 
-                        //FIll the NoteBox with the Text Entry input
-                        $(document).ready(function(){
-                            $("#Explanation").change(function(){
-                                var textArray = [$("#Explanation").val()];
-                                $("#NoteBox").text(textArray.join(' '));
+							//If the Clinic Feedback button is selected, selected the hidden "Mark Resolved"
+							//MEETING MATERIALS
+							$('#newClinicButton').on('click', function() {
+								$('button:contains("Mark Resolved")')[0].click();
+							});
 
-                                //Check that text is populated into the hidden textarea
-                                console.log("Text is being passed into the hidden textarea.");
-                                //Log the text that populates hidden textarea
-                                console.log("Hidden textarea has been populated with: " + $('#NoteBox').val());
-                            })
-                        });
+							//FIll the NoteBox with the Text Entry input
+							$(document).ready(function(){
+								$("#Explanation").change(function(){
+									var textArray = [$("#Explanation").val()];
+									$("#NoteBox").text(textArray.join(' '));
 
-                        //End the setInterval
-                        clearInterval(clinicVar);
+									//Check that text is populated into the hidden textarea
+									console.log("Text is being passed into the hidden textarea.");
+									//Log the text that populates hidden textarea
+									console.log("Hidden textarea has been populated with: " + $('#NoteBox').val());
+								})
+							});
 
-                        });  
-                    }
-                }
-            };    
-            });
-            
-        
-        }
-    };
+							//End the setInterval
+							clearInterval(clinicVar);
+
+							});  
+						}
+					}
+				};    
+				});
+				
+			
+			}
+		};
+	};
 };
 
 /******************************************************************/
@@ -1009,18 +1016,24 @@ var customStylesheets = {
 			'<link rel="stylesheet" type="text/css" href="' +
 			chrome.runtime.getURL("css/greyAlerts.css") + '">'
 		);
-	}
-};
-
-// //Clinic Ticket Feedback CSS
-function ClinicTicketStyle () {
+	},
+	clinicTicket: function (){
 		document.head.insertAdjacentHTML('beforeend',
 			'<link rel="stylesheet" type="text/css" href="' +
 			chrome.runtime.getURL("css/clinicTicket.css") + '">'
-		);
-	};
+		);	
+	}
+};
 
-ClinicTicketStyle();
+// // //Clinic Ticket Feedback CSS
+// function ClinicTicketStyle () {
+// 		document.head.insertAdjacentHTML('beforeend',
+// 			'<link rel="stylesheet" type="text/css" href="' +
+// 			chrome.runtime.getURL("css/clinicTicket.css") + '">'
+// 		);
+// 	};
+
+// ClinicTicketStyle();
 
 /******************************************************************/
 /***************                                *******************/
@@ -1065,6 +1078,11 @@ function addons() {
 	//CUSTOM BUTTONS
 	if (EmailButtonOn) {
 		addEmailTicket();
+	}
+	//My clinic button change
+	if(ClinicFeedbackButtonOn) {
+		customStylesheets.clinicTicket();
+		addClinicFeedbackFeature();
 	}
 	if (ClinicButtonOn) {
 		if (currentDay == ClinicDay) {
