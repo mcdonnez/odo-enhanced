@@ -557,6 +557,103 @@ function addNewSnippet(snippet) {
 	});
 }
 
+/*******************************************************************/
+/***************     Add Clinic Feedback Options    ****************/
+/******************************************************************+/
+
+/*------ Add Submit Clinic Feedback Button ------*/
+function addClinicFeedbackButton() {
+	var container = document.getElementsByClassName('ui-dialog-buttonset')[0];
+	var node = document.createElement("Z");
+	var textnode = document.createTextNode("Submit Clinic Feedback");
+	node.appendChild(textnode);
+	node.setAttribute("id", "newClinicButton");
+	node.setAttribute("class", "btn btn-success");
+    node.setAttribute("style", "display:inline; font-size:1em; margin:.5em .4em .5em 0; border:0px solid #cccccc; border-radius:4px;");
+	container.appendChild(node);
+	document.getElementById('newClinicButton').innerHTML = "<span class='icon icon-envelope'></span><span>Submit Clinic Feedback</span>";
+	
+		};
+
+/*------ Add Clinic Feedback Features ------*/
+var myVar = setInterval(function(){ myTimer() }, 1000);
+
+function myTimer() {
+    //If the Create Ticket window exists, fun the functions
+    if ($('.ui-dialog .ui-dialog-title').text() == 'Create Ticket'){
+        if($('.ui-dialog .ui-dialog-title').text() != ''){
+            clearInterval(myVar);
+
+            //Checks that Clinic Ticket is the "Create Ticket" option selected before running anymore code
+            $(document).on('change','select',function() {
+
+            //Check for Clinic Ticket option selection  
+   	        console.log( $(this).val() + " has been selected.");
+
+            if( $(this).val() == "CT"){
+
+                //Check for Clinic Ticket Page
+                console.log("We made it to the Clinic Ticket page!");
+
+                //Create an interval that checks for the existence of element with ID InteractionCodes
+                clinicVar = setInterval(function(){clinicTimer()}, 100);
+                function clinicTimer(){
+                    
+                    //When InteractionCodes exists, add the following elements (additional options) below it
+                    if ($('#InteractionCodes').length) {
+
+                        //CHECK for #InteractionCodes existence
+                        console.log("InteractionCodes detected. Injecting elements.");
+
+                        $(document).ready(function(){
+                        $("#InteractionCodes").after('<div class="Caption" style="font-family:sans-serif; font-size: 13px; padding:4px 2px 4px 0px; color:#a5a5a5;">Purpose of Visit:</div> <select style="margin-bottom:10px; border:1px solid #ccc; border-radius:5px; height:24px; background:transparent;" id="dropDown" name="Purpose of Visit"> <option></option> <option onClick="something();">Client Support Question</option> <option>Client Use-Case Consultation</option> <option>Personal</option> </select> <div id="textInput" style="font-family:sans-serif; width:515px; font-size:13px; color:#a5a5a5; display:none;"> <div class="Caption">Reason client support question was not routed through Support:</div> <input style="width:100%; overflow:auto; padding:2px; border:1px solid #ccc;border-radius:5px;" type="text" id="Explanation" name="Description" value="" style="width: 515px; height:30px;" autocomplete="off" ></input> </div>');
+
+                        addClinicFeedbackButton();    
+
+                        //If "Clinic Support Question" is the selected "Purpose of Visit", give them a text box to explain their reason
+                        $(document).ready(function() {
+                            $('#dropDown').on('change', function() {
+                            var value = $(this).val();
+                            if(value=="Client Support Question"){
+                                document.getElementById("textInput").style.display = "block";
+                            } else {
+                                document.getElementById("textInput").style.display = "none";
+                            };
+                            });
+                        });
+
+                        //If the Clinic Feedback button is selected, selected the hidden "Mark Resolved"
+                        //MEETING MATERIALS
+                        $('#newClinicButton').on('click', function() {
+                            $('button:contains("Mark Resolved")')[0].click();
+                        });
+
+                        //FIll the NoteBox with the Text Entry input
+                        $(document).ready(function(){
+                            $("#Explanation").change(function(){
+                                var textArray = [$("#Explanation").val()];
+                                $("#NoteBox").text(textArray.join(' '));
+
+                                //Check that text is populated into the hidden textarea
+                                console.log("Text is being passed into the hidden textarea.");
+                                //Log the text that populates hidden textarea
+                                console.log("Hidden textarea has been populated with: " + $('#NoteBox').val());
+                            })
+                        });
+
+                        //End the setInterval
+                        clearInterval(clinicVar);
+
+                        });  
+                    }
+                }
+            };    
+            });
+            
+        
+        }
+    };
+};
 
 /******************************************************************/
 /***************     Adding Additional Buttons     ****************/
@@ -914,6 +1011,16 @@ var customStylesheets = {
 		);
 	}
 };
+
+// //Clinic Ticket Feedback CSS
+function ClinicTicketStyle () {
+		document.head.insertAdjacentHTML('beforeend',
+			'<link rel="stylesheet" type="text/css" href="' +
+			chrome.runtime.getURL("css/clinicTicket.css") + '">'
+		);
+	};
+
+ClinicTicketStyle();
 
 /******************************************************************/
 /***************                                *******************/
