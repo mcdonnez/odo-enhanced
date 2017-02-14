@@ -4,10 +4,24 @@
 }
 
 
-#PopUp > div:nth-child(16){
+/*#PopUp > div:nth-child(16){
   border: none !important;
+}*/
+
+/*Summary Box*/
+/*#PopUp > div:nth-child(15){
+  display: none;
+}*/
+
+/*Additional Information Box*/
+#PopUp > div:nth-child(17){
+  display: none !important;
 }
 
-#PopUp > div:nth-child(15){
+/*#PopUp > div:nth-child(14){
   display: none;
+}*/
+
+#PopUp > div:nth-child(16){
+  display:none;
 }
