@@ -582,26 +582,28 @@ function addClinicFeedbackButton() {
 
 function addClinicFeedbackFeature() {
 	var myVar = setInterval(function(){ myTimer() }, 1000);
-
 	function myTimer() {
 		//check for Create Ticket
+		
 		if ($('.ui-dialog .ui-dialog-title').text() == 'Create Ticket'){
 			if($('.ui-dialog .ui-dialog-title').text() != ''){
 				clearInterval(myVar);
-
 				$(document).on('change','select',function() { 
 				console.log( $(this).val() + " has been selected.");
 				if( $(this).val() == "CT"){
 					console.log("We made it to the Clinic Ticket page!");
 					//Check for InteractionCodes element
-					clinicVar = setInterval(function(){clinicTimer()}, 100);
+					clinicVar = setInterval(function(){clinicTimer()}, 10);
 					function clinicTimer(){	
-						if ($('#InteractionCodes').length) {
+						if ($('#InteractionCodes').length && $('div:contains("Clinic Ticket")').length) {
 							console.log("InteractionCodes detected. Injecting elements.");
 							$(document).ready(function(){
+							$('div:nth-child(17)').hide();
+							$('div:nth-child(16)').hide();
 							$("#InteractionCodes").after('<div class="Caption" style="font-family:sans-serif; font-size: 13px; padding:4px 2px 4px 0px; color:#a5a5a5;">Purpose of Visit:</div> <select style="margin-bottom:10px; border:1px solid #ccc; border-radius:5px; height:24px; background:transparent;" id="dropDown" name="Purpose of Visit"> <option></option> <option onClick="something();">Client Support Question</option> <option>Client Use-Case Consultation</option> <option>Personal</option> </select> <div id="textInput" style="font-family:sans-serif; width:515px; font-size:13px; color:#a5a5a5; display:none;"> <div class="Caption">Reason client support question was not routed through Support:</div> <input style="width:100%; overflow:auto; padding:2px; border:1px solid #ccc;border-radius:5px;" type="text" id="Explanation" name="Description" value="" style="width: 515px; height:30px;" autocomplete="off" ></input> </div>');
 							$('button:contains("Mark Resolved")').css("display", "none");
-							addClinicFeedbackButton();    
+							addClinicFeedbackButton();
+
 							//Display textbox if Client Support Question selected
 							$(document).ready(function() {
 								$('#dropDown').on('change', function() {
