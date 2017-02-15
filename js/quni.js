@@ -606,6 +606,7 @@ function addClinicFeedbackFeature() {
 							$(document).ready(function() {
 								$('#dropDown').on('change', function() {
 								var value = $(this).val();
+								purposeOfVisit = value;
 								if(value=="Client Support Question"){
 									document.getElementById("textInput").style.display = "block";
 								} else {
@@ -615,15 +616,10 @@ function addClinicFeedbackFeature() {
 							});
 							$('#newClinicButton').on('click', function() {
 								$('button:contains("Mark Resolved")')[0].click();
-							});
-							//FIll hidden textarea with text entry
-							$(document).ready(function(){
-								$("#Explanation").change(function(){
-									var textArray = [$("#Explanation").val()];
-									$("#NoteBox").text(textArray.join(' '));
+								var textArray = [$("#NoteBox").val(), '\nPurpose:', purposeOfVisit, '\nExplanation:',$("#Explanation").val()];
+									$("#NoteBox").val(textArray.join(' '));
 									console.log("Text is being passed into the hidden textarea.");
 									console.log("Hidden textarea has been populated with: " + $('#NoteBox').val());
-								})
 							});
 							clearInterval(clinicVar);
 							});  
