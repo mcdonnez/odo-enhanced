@@ -1,3 +1,8 @@
+if (window.location.hostname == 'odo.dev' && window.location.port != 80) {
+	return;
+}
+
+
 var s = document;
 var masthead = s.getElementsByClassName("PageMenuBar");
 
@@ -28,21 +33,21 @@ function addSearch(target, name, id, searchType, placeholder) {
 	query.setAttribute("name", "b");
 	query.setAttribute("value", searchType);
 	var submit = document.createElement("BUTTON");
-	submit.setAttribute("type", "")
+	submit.setAttribute("type", "");
 	var submitText = document.createTextNode("Go");
 	submit.appendChild(submitText);
 	form.appendChild(search);
 	form.appendChild(submit);
 	form.appendChild(query);
 	megaSearch.appendChild(form);
-	search.addEventListener("blur", function (event) {
+	search.addEventListener("blur", function(event) {
 		var searchTerm = this.innerHTML;
 		this.innerHTML = encodeURIComponent(searchTerm);
 	});
 }
 
 //if omnisearch = true (in options page of odo-enhanced), enable omnisearch:
-chrome.storage.sync.get('omniSearch', function (data) {
+chrome.storage.sync.get('omniSearch', function(data) {
 	if (data.omniSearch) {
 		document.head.insertAdjacentHTML('beforeend',
 			'<link rel="stylesheet" type="text/css" href="' +
