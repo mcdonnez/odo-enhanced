@@ -1,7 +1,4 @@
 /* ------------- Built by Zach McDonnell & Matt Bloomfield---------------- */
-if (window.location.hostname == 'odo.dev' && window.location.port != 80) {
-	return;
-}
 
 
 /******************************************************************/
@@ -163,6 +160,7 @@ window.onpopstate = function() {
 	while (match == search.exec(query)) {
 		urlParams[decode(match[1])] = decode(match[2]);
 	}
+	setFavicon();
 };
 
 /*------- Get EID and set in Chrome Storage ------*/
@@ -183,87 +181,90 @@ var getEID = function() {
 
 /* --------- Sets the appropriate favicon to use  -------- */
 var favicon;
-switch (urlParams.a) {
-	case 'Tickets':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
-		break;
-	case 'Panels':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
-		break;
-	case 'Sales':
-		favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
-		break;
-	case 'Teams':
-		favicon = 'http://www.faviconshut.com/pics/11/11351-man-meeting-people-support-team-team-building-user-woman-icon-favicon.png';
-		break;
-	case 'Reports':
-		favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
-		break;
-	case 'QUni':
-		favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6RJLiTPRHwyfD7v&V=1437974317';
-		break;
-	default:
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_bDVm16QoQrNWsx7&V=1436414154';
-}
-switch (urlParams.b) {
-	case 'TicketViewer':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
-		break;
-	case 'RSBrandProfile':
-	case 'RSBrandUsers':
-	case 'RSBrandTickets':
-	case 'RSBrandContacts':
-	case 'RSBrandFiles':
-		favicon = 'global/template/img/RSBrand.png';
-		break;
-	case 'RSUserProfile':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6nC2kpkijev6cmh&V=1436415959';
-		break;
-	case 'ClientSummary':
-		favicon = 'global/template/img/Client.png';
-		break;
-	case 'EB_Viewer':
-		favicon = 'global/template/img/Bug.png';
-		break;
-	case 'TicketsMyInBox':
-	case 'TicketsSupportInBox':
-	case 'SupportRecommendedTickets':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
-		break;
-	case 'SupportAlternateEmailTickets':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
-		break;
-	case 'SupportAlternatePhoneTickets':
-	case 'SupportPhoneTickets':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Ua1IiSMuOPGnR3&V=1436402515';
-		break;
-	case 'SupportPulse':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173';
-		break;
-	case 'SupportClinic':
-		favicon = 'global/template/img/Clinic.png';
-		break;
-	case 'SupportOtherTickets':
-		favicon = 'global/template/img/QUniOtherTickets.png';
-		break;
-	case 'RSUserAccountAccess':
-		favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_ebNG2a7ncBOoR5b&V=1436412039';
-		break;
-	case 'SupportTeamStatsNew':
-	case 'SupportVolumeForPhone':
-	case 'SupportVolumeForEmail':
-	case 'SupportVolume':
-	case 'SupportVolumeForTraining':
-	case 'ReportTicketInteractionCodes':
-	case 'SupportTeamStats':
-	case 'ReportSupportNPS':
-	case 'SupportStats':
-		favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
-		break;
-	case 'CompanyOfficeMaps':
-		favicon = '/global/template/img/Map.png';
-		break;
-	default:
+
+function setFavicon() {
+	switch (urlParams.a) {
+		case 'Tickets':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
+			break;
+		case 'Panels':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
+			break;
+		case 'Sales':
+			favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
+			break;
+		case 'Teams':
+			favicon = 'http://www.faviconshut.com/pics/11/11351-man-meeting-people-support-team-team-building-user-woman-icon-favicon.png';
+			break;
+		case 'Reports':
+			favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
+			break;
+		case 'QUni':
+			favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6RJLiTPRHwyfD7v&V=1437974317';
+			break;
+		default:
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_bDVm16QoQrNWsx7&V=1436414154';
+	}
+	switch (urlParams.b) {
+		case 'TicketViewer':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
+			break;
+		case 'RSBrandProfile':
+		case 'RSBrandUsers':
+		case 'RSBrandTickets':
+		case 'RSBrandContacts':
+		case 'RSBrandFiles':
+			favicon = 'global/template/img/RSBrand.png';
+			break;
+		case 'RSUserProfile':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6nC2kpkijev6cmh&V=1436415959';
+			break;
+		case 'ClientSummary':
+			favicon = 'global/template/img/Client.png';
+			break;
+		case 'EB_Viewer':
+			favicon = 'global/template/img/Bug.png';
+			break;
+		case 'TicketsMyInBox':
+		case 'TicketsSupportInBox':
+		case 'SupportRecommendedTickets':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
+			break;
+		case 'SupportAlternateEmailTickets':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
+			break;
+		case 'SupportAlternatePhoneTickets':
+		case 'SupportPhoneTickets':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Ua1IiSMuOPGnR3&V=1436402515';
+			break;
+		case 'SupportPulse':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173';
+			break;
+		case 'SupportClinic':
+			favicon = 'global/template/img/Clinic.png';
+			break;
+		case 'SupportOtherTickets':
+			favicon = 'global/template/img/QUniOtherTickets.png';
+			break;
+		case 'RSUserAccountAccess':
+			favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_ebNG2a7ncBOoR5b&V=1436412039';
+			break;
+		case 'SupportTeamStatsNew':
+		case 'SupportVolumeForPhone':
+		case 'SupportVolumeForEmail':
+		case 'SupportVolume':
+		case 'SupportVolumeForTraining':
+		case 'ReportTicketInteractionCodes':
+		case 'SupportTeamStats':
+		case 'ReportSupportNPS':
+		case 'SupportStats':
+			favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
+			break;
+		case 'CompanyOfficeMaps':
+			favicon = '/global/template/img/Map.png';
+			break;
+		default:
+	}
 }
 
 /* ------------- Dynamic Favicons ---------------- */
@@ -291,7 +292,9 @@ function changeTitle() {
 			title = title.match(/Client Pulse: (.*)/)[1];
 			changeFavicon("https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173");
 		}
-		pageTitle.innerHTML = 'Odo | ' + title;
+		if (pageTitle) {
+			pageTitle.innerHTML = 'Odo | ' + title;
+		}
 		if (urlParams.iid) {
 			pageTitle.innerHTML = 'Odo | ' + urlParams.iid;
 		}
@@ -428,6 +431,7 @@ function hideSquawkPosts() {
 		document.getElementById('SquawkToggle').style.padding = "60px 10px";
 	}
 }
+
 $('#BodyContent').on('click', '#SquawkToggle', function() {
 	hideSquawkPosts();
 });
@@ -457,7 +461,6 @@ function addTab(name, height, id, src, pageTitle, type) {
 		$('.SectionTabsList').append('<li class="SectionTab" id="' + id + '" style="cursor:pointer;"><a href="' + src + '" target="_blank">' + name + '</a></li>');
 	}
 }
-
 
 /*------ Additional tabs to be added using function above ------*/
 
@@ -677,8 +680,10 @@ function addEmailTicket() {
 	} else {
 		node.setAttribute('onclick', 'Dialog("?b=NewEmailEditor&CreateTicketType=SE&account=Support");');
 	}
-	container.appendChild(node);
-	document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
+	if (container) {
+		container.appendChild(node);
+		document.getElementById('newEmail').innerHTML = "<span class='icon icon-envelope'></span><span>Create Email Ticket</span>";
+	}
 	if (MiniEmailButtonOn) {
 		minimizeTicketButton("Create Email Ticket");
 	}

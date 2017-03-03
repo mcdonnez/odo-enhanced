@@ -1,8 +1,3 @@
-if (window.location.hostname == 'odo.dev' && window.location.port != 80) {
-	return;
-}
-
-
 var s = document;
 var masthead = s.getElementsByClassName("PageMenuBar");
 
