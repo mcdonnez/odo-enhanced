@@ -635,11 +635,11 @@ function addClinicFeedbackFeature() {
 					});
 				});
 				$('#newClinicButton').on('click', function() {
-					$('button:contains("Mark Resolved")')[0].click();
 					var textArray = [$("#NoteBox").val(), '\nPurpose:', purposeOfVisit, '\nExplanation:', $("#Explanation").val()];
 					$("#NoteBox").val(textArray.join(' '));
 					console.log("Text is being passed into the hidden textarea.");
 					console.log("Hidden textarea has been populated with: " + $('#NoteBox').val());
+					$('button:contains("Mark Resolved")')[0].click();
 				});
 				clearInterval(clinicVar);
 			});
