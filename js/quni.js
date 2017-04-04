@@ -591,27 +591,14 @@ function addClinicFeedbackButton() {
 /*------ Add Clinic Feedback Features ------*/
 
 function addClinicFeedbackFeature() {
-	var myVar = setInterval(function() {
-		myTimer();
-	}, 1000);
+	var myVar = setInterval(myTimer, 1000);
 
 	function myTimer() {
 		//check for Create Ticket
-		if ($('.ui-dialog .ui-dialog-title').text() == 'Create Ticket') {
-			if ($('.ui-dialog .ui-dialog-title').text() !== '') {
-				clearInterval(myVar);
-
-				$(document).on('change', 'select', function() {
-					console.log($(this).val() + " has been selected.");
-					if ($(this).val() == "CT") {
-						console.log("We made it to the Clinic Ticket page!");
-						//Check for InteractionCodes element
-						clinicVar = setInterval(function() {
-							clinicTimer();
-						}, 100);
-					}
-				});
-			}
+		if ($('.ui-dialog .ui-dialog-title').text() == 'Clinic Ticket') {
+			clearInterval(myVar);
+			//Check for InteractionCodes element
+			clinicVar = setInterval(clinicTimer, 1000);
 		}
 	}
 
@@ -995,24 +982,8 @@ var customStylesheets = {
 			'<link rel="stylesheet" type="text/css" href="' +
 			chrome.runtime.getURL("css/greyAlerts.css") + '">'
 		);
-	},
-	clinicTicket: function() {
-		document.head.insertAdjacentHTML('beforeend',
-			'<link rel="stylesheet" type="text/css" href="' +
-			chrome.runtime.getURL("css/clinicTicket.css") + '">'
-		);
 	}
 };
-
-// // //Clinic Ticket Feedback CSS
-// function ClinicTicketStyle () {
-// 		document.head.insertAdjacentHTML('beforeend',
-// 			'<link rel="stylesheet" type="text/css" href="' +
-// 			chrome.runtime.getURL("css/clinicTicket.css") + '">'
-// 		);
-// 	};
-
-// ClinicTicketStyle();
 
 /******************************************************************/
 /***************                                *******************/
@@ -1060,7 +1031,6 @@ function addons() {
 	}
 	//My clinic button change
 	if (ClinicFeedbackButtonOn) {
-		customStylesheets.clinicTicket();
 		addClinicFeedbackFeature();
 	}
 	if (ClinicButtonOn) {

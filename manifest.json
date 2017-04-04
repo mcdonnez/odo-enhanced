@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.8.28",
+	"version": "1.8.29",
 	"omnibox": {
 		"keyword": ";q"
 	},
@@ -27,7 +27,6 @@
 		"css/starWars.css",
 		"css/squawkPosts.css",
 		"css/greyAlerts.css",
-		"css/clinicTicket.css",
 		"css/search.css",
 		"views/options.html",
 		"views/TicketBreakdown.html",
