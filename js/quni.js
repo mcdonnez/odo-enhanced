@@ -286,7 +286,7 @@ function changeTitle() {
 		var title = $pageTitle.text().trim();
 		var pageTitle = document.head.getElementsByTagName('title')[0];
 		if (urlParams.tid && !title.match(/Client Pulse/) && urlParams.a != 'Team' && !title.match(/User Move/)) {
-			title = $('#BodyContent').find('div:nth-child(3) > div > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(2) > span').text().trim();
+			title = document.getElementById('details-ticket-description').value;
 		}
 		if (title.match(/Client Pulse/)) {
 			title = title.match(/Client Pulse: (.*)/)[1];
