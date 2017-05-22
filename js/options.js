@@ -185,6 +185,7 @@ document.getElementById('ClinicButton').addEventListener('change', makeOpaque);
 document.getElementById('ClinicFeedbackButton').addEventListener('change', makeOpaque);
 document.getElementById('EmailButton').addEventListener('change', makeOpaque);
 document.getElementById('GradProgress').addEventListener('change', makeOpaque);
+document.getElementById('QuniTickets').addEventListener('change', makeOpaque);
 document.getElementById("FeedbackLink").addEventListener("click", loadFeedback);
 document.getElementById("Exit").addEventListener("click", closeFeedback);
 document.getElementById("Overlay").addEventListener("click", closeFeedback);
@@ -217,6 +218,13 @@ document.getElementById("Overlay").addEventListener("click", closeFeedback);
 			progOps.style.display = "block";
 		} else {
 			progOps.style.display = "none";
+		}
+		var quniTicketsOps = document.getElementById('TicketBreakdownOptions');
+		var quniTicketsToggle = document.getElementById('QuniTickets').checked;
+		if (quniTicketsToggle) {
+			quniTicketsOps.style.display = "block";
+		} else {
+			quniTicketsOps.style.display = "none";
 		}
 		
 	}
