@@ -204,13 +204,13 @@ document.getElementById("Overlay").addEventListener("click", closeFeedback);
 		} else {
 			emailOps.style.display = "none";
 		}
-		var clinFeedOps = document.getElementById('ClinicFeedbackButtonOptions');
+		/*var clinFeedOps = document.getElementById('ClinicFeedbackButtonOptions');
 		var clinFeedToggle = document.getElementById('ClinicFeedbackButton').checked;
 		if (clinFeedToggle) {
 			clinFeedOps.style.display = "block";
 		} else {
 			clinFeedOps.style.display = "none";
-		}
+		}*/
 		var progOps = document.getElementById('ProgressOptions');
 		var progToggle = document.getElementById('GradProgress').checked;
 		if (progToggle) {
