@@ -131,7 +131,11 @@ function restore_options() {
 		showThemesQueue: false,
 		showVocQueue: false,
 		showStatQueue: false,
-		showIntQueue: false
+		showIntQueue: false,
+		showFrenchQueue: false,
+		showGermanQueue: false,
+		showSpanishQueue: false,
+		showPortugueseQueue: false
 	}, function(items) {
 		document.getElementById('EmailButton').checked = items.em;
 		document.getElementById('ClinicFeedbackButton').checked = items.clf;
@@ -172,6 +176,10 @@ function restore_options() {
 		document.getElementById('VocQueue').checked = items.showVocQueue;
 		document.getElementById('StatQueue').checked = items.showStatQueue;
 		document.getElementById('IntQueue').checked = items.showIntQueue;
+		document.getElementById('FrenchQueue').checked = items.showFrenchQueue;
+		document.getElementById('GermanQueue').checked = items.showGermanQueue;
+		document.getElementById('SpanishQueue').checked = items.showSpanishQueue;
+		document.getElementById('PortugueseQueue').checked = items.showPortugueseQueue;
 		makeOpaque();
 	});
 }
