@@ -39,6 +39,10 @@ function save_options() {
 	var showVocQueue = document.getElementById('VocQueue').checked;
 	var showStatQueue = document.getElementById('StatQueue').checked;
 	var showIntQueue = document.getElementById('IntQueue').checked;
+	var showFrenchQueue = document.getElementById('FrenchQueue').checked;
+	var showGermanQueue = document.getElementById('GermanQueue').checked;
+	var showSpanishQueue = document.getElementById('SpanishQueue').checked;
+	var showPortugueseQueue = document.getElementById('PortugueseQueue').checked;
 	chrome.storage.sync.set({
 		em: createEmail,
 		mem: miniCreateEmail,
@@ -78,7 +82,11 @@ function save_options() {
 		showThemesQueue: showThemesQueue,
 		showVocQueue: showVocQueue,
 		showStatQueue: showStatQueue,
-		showIntQueue: showIntQueue
+		showIntQueue: showIntQueue,
+		showFrenchQueue: showFrenchQueue,
+		showGermanQueue: showGermanQueue,
+		showSpanishQueue: showSpanishQueue,
+		showPortugueseQueue: showPortugueseQueue
 	}, function() {
 		// Update status to let the user know options were saved.
 		var status = document.getElementById('status');
