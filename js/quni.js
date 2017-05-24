@@ -51,6 +51,10 @@ var showThemesQueue;
 var showVocQueue;
 var showStatQueue;
 var showIntQueue;
+var showFrenchQueue;
+var showGermanQueue;
+var showSpanishQueue;
+var showPortugueseQueue;
 
 /*------- Retrieve variables from Chrome Storage ------*/
 
@@ -94,7 +98,11 @@ function getVars() {
 		showThemesQueue: false,
 		showVocQueue: false,
 		showStatQueue: false,
-		showIntQueue: false
+		showIntQueue: false,
+		showFrenchQueue: false,
+		showGermanQueue: false,
+		showSpanishQueue: false,
+		showPortugueseQueue: false
 	}, function(items) {
 		EmailButtonOn = items.em;
 		MiniEmailButtonOn = items.mem;
@@ -133,6 +141,10 @@ function getVars() {
 		showVocQueue = items.showVocQueue;
 		showStatQueue = items.showStatQueue;
 		showIntQueue = items.showIntQueue;
+		showFrenchQueue = items.showFrenchQueue;
+		showGermanQueue = items.showGermanQueue;
+		showSpanishQueue = items.showSpanishQueue;
+		showPortugueseQueue = items.showPortugueseQueue;
 		addons();
 	});
 }
