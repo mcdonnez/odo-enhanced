@@ -27,7 +27,7 @@ var messages = [
 		"If you're troubleshooting in a long block, add skip logic to the question before the one you need to test out.",
 		"Want to answer those calls faster? Have your headset ring so that you don't have to watch the phone or Calltrics. Check out instructions here: http://screencast.com/t/BAyKzUDip4i",
 		"Stay on top of your pulses by checking the status of the bug that it's linked to toward the bottom of the ticket. Here you will see the most recent comments about the bug from the engineering team. ",
-		"Refresh your troubleshooting by reading this awesome piece by one of our rockstar Res Team members, Greg: http://odo.corp.qualtrics.com/wiki/index.php/How_to_Troubleshoot",
+		"Refresh your troubleshooting by reading this awesome piece by one of our rockstar Res Team members, Greg: https://odo.corp.qualtrics.com/wiki/index.php/How_to_Troubleshoot",
 		"As soon as you hear the words, 'error message', ask the client to grab you a screenshot. Screenshots are crucial for accurately reproducing and for filing pulses. Same thing with anything browser related - always ask for browser type and version number. Never hurts to have and can save you waiting time if you ask right away.",
 		"Download the Survey Toolbox, developed by John Morrell. Do it. Right now.",
 		"Check out this google doc to download the most useful Chrome extensions, as suggested by current and past Quni members: https://docs.google.com/spreadsheets/d/1myTR4as5lwt3bzfH-Q54dl160skMd-Pe9Prj_vOQLxA/edit#gid=0&vpid=A1",

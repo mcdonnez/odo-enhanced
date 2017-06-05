@@ -50,9 +50,9 @@ chrome.storage.sync.get('omniSearch', function(data) {
 		);
 
 		addMegaBar();
-		addSearch("http://odo.corp.qualtrics.com/?", "autoUser", "UserSearch", "ProductToolsUserSearch", "User ID");
-		addSearch("http://odo.corp.qualtrics.com/?", "autoEmail", "EmailSearch", "ProductToolsUserSearch", "Email");
-		addSearch("http://odo.corp.qualtrics.com/?", "autoSurvey", "SurveySearch", "ProductToolsSurveySearch", "Survey ID");
-		addSearch("http://odo.corp.qualtrics.com/wiki/index.php?", "", "KBSearch", "", "Knowledgebase Query");
+		addSearch("https://odo.corp.qualtrics.com/?", "autoUser", "UserSearch", "ProductToolsUserSearch", "User ID");
+		addSearch("https://odo.corp.qualtrics.com/?", "autoEmail", "EmailSearch", "ProductToolsUserSearch", "Email");
+		addSearch("https://odo.corp.qualtrics.com/?", "autoSurvey", "SurveySearch", "ProductToolsSurveySearch", "Survey ID");
+		addSearch("https://odo.corp.qualtrics.com/wiki/index.php?", "", "KBSearch", "", "Knowledgebase Query");
 	}
 });

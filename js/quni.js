@@ -327,7 +327,7 @@ function changeTitle() {
 /*------- Show Quni's progress toward milestones ------*/
 
 function showQuniProgress() {
-	var url = "http://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&eid=" + EmpID + "&a=MyProfile&b=TicketsMyStats";
+	var url = "https://odo.corp.qualtrics.com/?TopNav=Home&query=clinic&eid=" + EmpID + "&a=MyProfile&b=TicketsMyStats";
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("GET", url, true);
 	xmlhttp.responseType = "document";
@@ -547,7 +547,7 @@ function replaceCenterContent(id) {
 	document.getElementById('BodyContent').innerHTML = "<div id='TipOuter'><div id='TipHeader'></div><div id='TipContent'></div><div id='NewTipContainer'><button id='AddToSnippets' class='btn'>Add tip to my Snippets</button><button class='btn' id='NewTip'>Give me a new tip</button><div id='TipList'></div></div><div style='margin-top: 50px; display:inline-block;' id='TipSurvey'></div></div>";
 	document.getElementById('TipContent').innerHTML = messages[id];
 	document.getElementById('TipHeader').innerHTML = "To be more productive this week...";
-	document.getElementById('TipList').innerHTML = "To see the whole list, <a href='http://odo.corp.qualtrics.com/wiki/index.php/Quni#Quni_Culture' target='_blank'>click here</a>.";
+	document.getElementById('TipList').innerHTML = "To see the whole list, <a href='https://odo.corp.qualtrics.com/wiki/index.php/Quni#Quni_Culture' target='_blank'>click here</a>.";
 	document.getElementById('TipSurvey').innerHTML = "<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>Was this Helpful?      </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://qunipdidvds37ijn.co1.qualtrics.com/jfe3/form/SV_5BU8oo1d81MiNbD' style='color: #bbb' target='_blank'>     Suggest a New Tip</a>";
 	currentMessageID = id;
 	chrome.storage.sync.set({
@@ -571,7 +571,7 @@ function addNewSnippet(snippet) {
 	data.append('Description', snippet);
 
 	jQuery.ajax({
-		url: 'http://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor&addSnippet=true&week=ThisWeek&eid=MATTHEWB&date=2016-03-14&Description=test',
+		url: 'https://odo.corp.qualtrics.com/?a=Snippets&b=SnippetsEditor&addSnippet=true&week=ThisWeek&eid=MATTHEWB&date=2016-03-14&Description=test',
 		data: data,
 		cache: false,
 		contentType: false,
@@ -660,7 +660,7 @@ function addClinicTicket() {
 	node.appendChild(textnode);
 	node.setAttribute("id", "newClinic");
 	node.setAttribute("class", "btn btn-success");
-	node.setAttribute('onclick', 'Dialog("http://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
+	node.setAttribute('onclick', 'Dialog("https://odo.corp.qualtrics.com/?a=Tickets&b=CT_Creator&ot=&oid=&uid=");');
 	container.appendChild(node);
 	document.getElementById('newClinic').innerHTML = "<span class='icon btn-icon-plus'></span><span>Create Clinic Ticket</span>";
 }
@@ -1317,7 +1317,7 @@ function addDashTable() {
 			eid: ""
 		}, function(items) {
 			$.ajax({
-				url: 'http://odo-js-services1-app.b1-prv.qops.net:3002/tickets?recommended=true&employeeID=' + items.eid,
+				url: 'https://odoservices.b1-prv.qops.net/Tickets/tickets?recommended=true&employeeID=' + items.eid,
 				success: function(data) {
 					Tickets = data;
 					for (var i = 0; i < Tickets.length; i++) {

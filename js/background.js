@@ -35,19 +35,19 @@ chrome.omnibox.onInputEntered.addListener(function (text) {
 			chrome.tabs.create({url: sfURL});
 			xhttp.open("GET", "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=SF&LastName=" + text.substring(3, text.length), false);
 		} else if (text.indexOf('kb ') == 0) {
-			var kbURL = 'http://odo.corp.qualtrics.com/wiki/index.php?search=' + text.substring(3, (text.length));
+			var kbURL = 'https://odo.corp.qualtrics.com/wiki/index.php?search=' + text.substring(3, (text.length));
 			chrome.tabs.create({url: kbURL});
 			xhttp.open("GET", "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=KB&LastName=" + text.substring(3, text.length), false);
 		} else if (text.indexOf('uid ') == 0) {
-			var uidURL = 'http://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoUser=' + text.substring(4, (text.length));
+			var uidURL = 'https://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoUser=' + text.substring(4, (text.length));
 			chrome.tabs.create({url: uidURL});
 			xhttp.open("GET", "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=UID&LastName=" + text.substring(4, text.length), false);
 		} else if (text.indexOf('uem ') == 0) {
-			var uemURL = 'http://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoEmail=' + text.substring(4, (text.length));
+			var uemURL = 'https://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoEmail=' + text.substring(4, (text.length));
 			chrome.tabs.create({url: uemURL});
 			xhttp.open("GET", "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=UEM&LastName=" + text.substring(4, text.length), false);
 		} else if (text.indexOf('sid ') == 0) {
-			var sidURL = 'http://odo.corp.qualtrics.com/?b=ProductToolsSurveySearch&autoSurvey=' + text.substring(4, (text.length));
+			var sidURL = 'https://odo.corp.qualtrics.com/?b=ProductToolsSurveySearch&autoSurvey=' + text.substring(4, (text.length));
 			chrome.tabs.create({url: sidURL});
 			xhttp.open("GET", "https://survey.qualtrics.com//WRAPI/ControlPanel/api.php?API_SELECT=ControlPanel&Version=2.5&Request=addRecipient&User=zacs%2Bca1%40qualtrics.com&Token=k4zxv0Rwx5uAULtu1vLZrTlCktEFSSztHEkYPx3r&Format=JSON&LibraryID=UR_6EuRzJuG6BBvNTD&PanelID=ML_9RHqBDIHuP6N8EJ&FirstName=SID&LastName=" + text.substring(4, text.length), false);
 		} else if (text.indexOf('sales ') == 0) {
