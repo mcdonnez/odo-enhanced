@@ -1294,8 +1294,31 @@ function addDashTable() {
 				"item": "IntegrationsItem",
 				"count": 0,
 				"show": showIntQueue
+			},
+			"French": {
+				"head": "FrenchHead",
+				"item": "FrenchItem",
+				"count": 0,
+				"show": showFrenchQueue
+			},
+			"German": {
+				"head": "GermanHead",
+				"item": "GermanItem",
+				"count": 0,
+				"show": showGermanQueue
+			},
+			"Spanish": {
+				"head": "SpanishHead",
+				"item": "SpanishItem",
+				"count": 0,
+				"show": showSpanishQueue
+			},
+			"Portuguese": {
+				"head": "PortugueseHead",
+				"item": "PortugueseItem",
+				"count": 0,
+				"show": showPortugueseQueue
 			}
-
 		};
 
 		$('.PageSectionToolbar').after('<div id="TicketBreakdownDiv"></div>');
