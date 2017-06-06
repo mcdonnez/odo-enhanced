@@ -1305,7 +1305,7 @@ function addDashTable() {
 			eid: ""
 		}, function(items) {
 			$.ajax({
-				url: 'https://odo-tickets.b1-prv.qops.net/Tickets/tickets?recommended=true&employeeID=' + items.eid,
+				url: 'https://odo-tickets.b1-prv.qops.net/tickets?recommended=true&employeeID=' + items.eid,
 				success: function(data) {
 					Tickets = data;
 					for (var i = 0; i < Tickets.length; i++) {
