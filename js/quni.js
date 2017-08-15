@@ -476,7 +476,7 @@ var customTabs = {
 		addTab("Panels Playbook", "1000", "panelsTab", "http://itwiki.corp.qualtrics.com/panels#noHeader", "Panels Resources", "inPage");
 	},
 	addPlaybook: function() {
-		addTab("Playbook", "1000", "playbookTab", "http://itwiki.corp.qualtrics.com/playbook#noHeader", "Playbook", "inPage");
+		addTab("Playbook", "1000", "playbookTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?noHeader=true", "Playbook", "inPage");
 	},
 	addHelpMessages: function() {
 		var container = $('.SectionTabsList');
