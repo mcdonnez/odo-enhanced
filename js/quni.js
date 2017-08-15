@@ -470,10 +470,10 @@ var customTabs = {
 		addTab("Extension Options", "2300", "optionsTab", optionsUrl, "Odo Enhanced Options", "inPage");
 	},
 	addDesign: function() {
-		addTab("Design", "1300", "designTab", "http://itwiki.corp.qualtrics.com/odo-enhanced-resources/designportal/Portal.html#noHeader", "Design", "inPage");
+		addTab("Design", "1300", "designTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?category=59934d8461ee2b3e16907509&noHeader=true", "Design", "inPage");
 	},
 	addPanels: function() {
-		addTab("Panels Playbook", "1000", "panelsTab", "http://itwiki.corp.qualtrics.com/panels#noHeader", "Panels Resources", "inPage");
+		addTab("Panels Playbook", "1000", "panelsTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?noHeader=true", "Panels Resources", "inPage");
 	},
 	addPlaybook: function() {
 		addTab("Playbook", "1000", "playbookTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?noHeader=true", "Playbook", "inPage");
@@ -1185,7 +1185,7 @@ function OdoSPFCheck() {
 
 	function SPFCheck(domain, index, callback) {
 		var xhr = new XMLHttpRequest();
-		var URL = "http://itwiki.corp.qualtrics.com:4040/api/spf-checker?domain=" + domain;
+		var URL = "https://global-ops-toolbox.corp.qualtrics.com/qualtrics/spf/?domain=" + domain;
 		var DomainStatus = null;
 
 
