@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.9.6",
+	"version": "1.9.7",
 	"omnibox": {
 		"keyword": ";q"
 	},
