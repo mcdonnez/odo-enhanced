@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "1.9.7",
+	"version": "1.9.8",
 	"omnibox": {
 		"keyword": ";q"
 	},
@@ -38,13 +38,13 @@
 	"options_page": "views/options.html",
 	"content_scripts": [{
 		"matches": [
-			"http://odo.corp.qualtrics.com/*", 
-			"http://odo.dev/*", 
+			"http://odo.corp.qualtrics.com/*",
+			"http://odo.dev/*",
 			"http://odostaging.corp.qualtrics.com/*",
-			"https://odo.corp.qualtrics.com/*", 
-			"https://odo-beta.corp.qualtrics.com/*", 
-			"https://odo-aws.corp.qualtrics.com/*", 
-			"https://odo.dev/*", 
+			"https://odo.corp.qualtrics.com/*",
+			"https://odo-beta.corp.qualtrics.com/*",
+			"https://odo-aws.corp.qualtrics.com/*",
+			"https://odo.dev/*",
 			"https://odostaging.corp.qualtrics.com/*"
 		],
 		"js": [
