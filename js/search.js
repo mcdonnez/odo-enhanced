@@ -24,16 +24,18 @@ function addSearch(target, name, id, searchType, placeholder) {
 	search.setAttribute("id", id);
 	search.setAttribute("placeholder", placeholder);
 	var query = document.createElement("INPUT");
-	query.setAttribute("type", "hidden");
-	query.setAttribute("name", "b");
-	query.setAttribute("value", searchType);
 	var submit = document.createElement("BUTTON");
 	submit.setAttribute("type", "");
 	var submitText = document.createTextNode("Go");
 	submit.appendChild(submitText);
 	form.appendChild(search);
 	form.appendChild(submit);
-	form.appendChild(query);
+	if (searchType) {
+		query.setAttribute("type", "hidden");
+		query.setAttribute("name", "b");
+		query.setAttribute("value", searchType);
+		form.appendChild(query);
+	}
 	megaSearch.appendChild(form);
 	search.addEventListener("blur", function(event) {
 		var searchTerm = this.innerHTML;
@@ -50,9 +52,9 @@ chrome.storage.sync.get('omniSearch', function(data) {
 		);
 
 		addMegaBar();
-		addSearch("https://odo.corp.qualtrics.com/?", "autoUser", "UserSearch", "ProductToolsUserSearch", "User ID");
+		addSearch("https://odo.corp.qualtrics.com/?", "autoUser", "UserSearch", "ProductToolsUserSearch", "Username");
 		addSearch("https://odo.corp.qualtrics.com/?", "autoEmail", "EmailSearch", "ProductToolsUserSearch", "Email");
-		addSearch("https://odo.corp.qualtrics.com/?", "autoSurvey", "SurveySearch", "ProductToolsSurveySearch", "Survey ID");
-		addSearch("https://odo.corp.qualtrics.com/wiki/index.php?", "", "KBSearch", "", "Knowledgebase Query");
+		addSearch("https://odo.corp.qualtrics.com/?", "autoSurvey", "SurveySearch", "ProductToolsSurveySearch", "SurveyID");
+		addSearch("https://odo.corp.qualtrics.com/wiki/index.php?search=", "search", "KBSearch", null, "Knowledgebase Query");
 	}
 });
