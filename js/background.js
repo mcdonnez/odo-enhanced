@@ -19,6 +19,14 @@ resetDefaultSuggestion();
 chrome.omnibox.onInputCancelled.addListener(function () {
 	resetDefaultSuggestion();
 });
+chrome.runtime.onMessage.addListener(
+	function (request, sender, sendResponse) {
+		if (request.msg === "button_clicked") {
+			var sid = request.data;
+			var link= request.link;
+			chrome.tabs.create({ "url":link+ sid, "active": false });
+		};
+	});
 
 chrome.omnibox.onInputEntered.addListener(function (text) {
 	chrome.storage.sync.get('prefSite', function (obj) {

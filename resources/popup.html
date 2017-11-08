@@ -1,26 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head><title>Quni Search Options</title></head>
+<head><title>Quni Search Options</title>
+<script src="jquery-1.11.3.min.js"></script>
+</head>
 <body>
-
+<div id="Survey-IDField">
+    <form>
 Search:
 <select id="url">
-<option id='1' value="1https://google.com/search?q=site:qualtrics.com/support ">Select a site to search</option>
- <option id='2' value="2https://google.com/search?q=site:qualtrics.com/support ">Support Pages</option>
- <option id='3' value="3https://odo.corp.qualtrics.com/wiki/index.php?search=">Knowledge Base</option>
- <option id='4' value="4https://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoUser=">User ID</option>
- <option id='5' value="5https://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoEmail=">User Email</option>
- <option id='6' value="6https://odo.corp.qualtrics.com/?b=ProductToolsSurveySearch&autoSurvey=">Survey ID</option>
- <option id='7' value="7https://qualtrics.my.salesforce.com/search/SearchResults?sbstr=">SalesForce</option>
- <option id='8' value="8https://www.linkedin.com/vsearch/f?type=all&keywords=">LinkedIn</option>
- <option id='9' value="9https://duckduckgo.com/?q=!ducky+site%3Aqualtrics.com+">Support: Feeling Lucky</option>
+<option id='1' value="https://www.google.com/search?q=">Select a site to search</option>
+ <option id='2' value="https://www.qualtrics.com/support/?s=">Support Pages</option>
+ <option id='3' value="https://odo.corp.qualtrics.com/wiki/index.php?search=">Knowledge Base</option>
+ <option id='4' value="https://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoUser=">User ID</option>
+ <option id='5' value="https://odo.corp.qualtrics.com/?b=ProductToolsUserSearch&autoEmail=">User Email</option>
+ <option id='6' value="https://odo.corp.qualtrics.com/?b=ProductToolsSurveySearch&autoSurvey=">Survey ID</option>
+ <option id='7' value="https://qualtrics.my.salesforce.com/search/SearchResults?sbstr=">SalesForce</option>
+ <option id='8' value="https://www.linkedin.com/search/results/index/?keywords=">LinkedIn</option>
+ <option id='9' value="https://duckduckgo.com/?q=!ducky+site%3Aqualtrics.com+">Support: Feeling Lucky</option>
 
  <!-- add every search option incl Jira  -->
 </select>
+<input type="text" id="idtext">
+<div id="surveysearch">
+    <button type="submit">Search</button>
+</div>
+</form>
 
 <div id="options"></div>
 <button id="openOptions">Odo-Enhanced Options</button>
+<style>
+    body {
+        min-width: 200px;
+        background-color: #006FB8;
+        margin: 0;
+        padding: 0;
+        border-radius: 5px;
+        color: white;
+    }
 
+    #Survey-IDField {
+        display: inline-flex;
+        text-align: center;
+    }
+</style>
 <script type="text/javascript" src="../js/popup.js"></script>
 </body>
 </html>
