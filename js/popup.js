@@ -15,3 +15,10 @@ function openOptions() {
 }
 
 document.getElementById("openOptions").addEventListener("click", openOptions);
+	var button = $("#surveysearch");
+	button.click(function () {
+		var sid = $("#idtext").val();
+		var url = $('#url').find(":selected").val();
+		chrome.runtime.sendMessage({ msg: "button_clicked", data: sid, link: url });
+
+	})
