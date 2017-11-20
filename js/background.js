@@ -62,7 +62,7 @@ chrome.omnibox.onInputEntered.addListener(function (text) {
 			chrome.tabs.create({url: linkURL});
 		} else {
 			var site = obj.prefSite.substring(0, 1);
-			var QSearchURL = obj.prefSite.substring(1, (obj.prefSite.length)) + text;
+			var QSearchURL = obj.prefSite.substring(0, (obj.prefSite.length)) + text;
 			chrome.tabs.create({url: QSearchURL});
 		}
 	});
