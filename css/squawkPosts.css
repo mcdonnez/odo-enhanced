@@ -1,5 +1,7 @@
 
 div.DiscussionSummary {
-    display: none !important;
+    height: 0;
+    visibility: hidden;
+    padding: 0;
 }
 

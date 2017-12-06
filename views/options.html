@@ -1,35 +1,33 @@
+<link rel="stylesheet" type="text/css" href="../css/options.css">
+
 <div id='Overlay'>
 		<div id='IframeContainer'>
 		<div id='Exit'>X</div>
 				<iframe id='Iframe' src=''></iframe>
 		</div>
 </div>
-<div style='cursor: pointer' id='FeedbackLink'>F<br>e<br>e<br>d<br>b<br>a<br>c<br>k</div>
+<!-- <div style='cursor: pointer' id='FeedbackLink'>F<br/>e<br/>e<br/>d<br/>b<br/>a<br/>c<br/>k</div> -->
 <div id='Wrapper'>
-	Please choose the options that best fit your Odo experience:
 	<div class='Option'>
-		<div class='OptionSection'>Tabs</br>
+		<div class='OptionSection'>
+			<div class='section-title'>Tabs</div>
 			<div class='Description'>Choose the custom tabs you would like to integrate</div>
 			<label class='CheckLabel' for='Playbook'>
 				<input class='Check' value='playbook' id='Playbook' type='checkbox' />
 				<span>Playbook</span>
 			</label>
-			<br>
 			<label class='CheckLabel' for='Panels'>
 				<input class='Check' value='panels' id='Panels' type='checkbox' />
 				<span>Panels Playbook</span>
 			</label>
-			<br>
 			<label class='CheckLabel' for='Design'>
 				<input class='Check' value='design' id='Design' type='checkbox' />
 				<span>Design Resources (Theme Design Only)</span>
 			</label>
-			<br>
 			<label class='CheckLabel' for='QuniTickets'>
 				<input class='Check' value='qunitickets' id='QuniTickets' type='checkbox' />
 				<span>Show Tickets Breakdown in Quni Inbox</span>
 			</label>
-			<br>
 			<div id="TicketBreakdownOptions">
 				<div class="Description" id="SpecialtyQueuesDescription">Which specialty queues are you a part of?</div>
 				<div class="SpecialtyQueues">
@@ -68,13 +66,49 @@
 				</div>
 			</div>
 		</div>
-		<div class='OptionSection'>Buttons</br>
+
+		<div class='OptionSection' id="Referrals">
+			<div class='section-title'>Work Faster</div>
+			<div class='Description'>Like Odo Enhanced? Check out these other great Qualtrics extenstions</div>
+			<div id="ReferredExtensions">
+			</div>
+		</div>
+
+		<div class='OptionSection'>
+			<div class='section-title'>Themes & Styling</div>
+			<div class='Description'>Choose the themes you want for Odo</div>
+			<label class='NonCheckLabel' for='StarWars'>Choose a theme:
+				<select id='Theme' class="select">
+					<option default value='null'>None</option>
+					<option value='starwars' id='StarWars'>Star Wars</option>
+					<option value='christmas' class='hidden' id='Christmas'>Holiday</option>
+				</select>
+			</label>
+			<label class='CheckLabel' for='shrinkPosts'>
+				<input class='Check' value='shrinkposts' id='shrinkPosts' type='checkbox' />
+				<span>Shrink Closed Squawkbox Posts</span>
+			</label>
+			<label class='CheckLabel' for='greyAlerts'>
+				<input class='Check' value='greyalerts' id='greyAlerts' type='checkbox' />
+				<span>Grey Out Odo Alerts</span>
+			</label>
+			<label class='CheckLabel' for='hideSquawkPosts'>
+				<input class='Check' value='hideSquawkPosts' id='hideSquawkPosts' type='checkbox'/>
+				<span>Hide the Squawkbox</span>
+			</label>
+			<label class='CheckLabel' for='LikeAndCloseBLC'>
+				<input class='Check' value='likeAndCloseBLC' id='LikeAndCloseBLC' type='checkbox'/>
+				<span>Automatically Like & Close 'Billing Like Crazy' Posts</span>
+			</label>
+		</div>
+
+		<div class='OptionSection'>
+			<div class='section-title'>Buttons</div>
 			<div class='Description'>Add Custom buttons to Odo</div>
 			<label class='CheckLabel' for='EmailButton'>
 				<input class='Check' value='emailbutton' id='EmailButton' type='checkbox' />
 				<span>Create Email</span>
 			</label>
-			<br>
 			<div id="EmailButtonOptions">
 				<div class='Description'>Would you like to minify the button?
 				</div>
@@ -86,15 +120,13 @@
 			<label class='CheckLabel' for='ClinicButton'>
 				<input class='Check' value='clinicbutton' id='ClinicButton' type='checkbox'/>
 				<span>Create Clinic Ticket</span>
-			</label><br>
+			</label>
 			<div id='ClinicOptions'>
-				<div class='Description'>What time do you have Clinic/Help Desk Shift? <br>
-					From: <input class='textbox' value=''id='StartClinicTime' type='time'/><br>
-					To: <input class='textbox' value=''id='EndClinicTime' type='time'/>
+				<div class='Description'>What time do you have Clinic/Help Desk Shift?<br />
+					From: <input class='textbox' id='StartClinicTime' type='time'/>
+					To: <input class='textbox' id='EndClinicTime' type='time'/>
 					</div>
-				<br>
 				<label class='Description' for='DayNumber'>On which day?
-					<br>
 					<select id='ClinicDayNumber'>
 						<option default value='null'></option>
 						<option value='1' id=''>Monday</option>
@@ -106,288 +138,66 @@
 					</select>
 				</label>
 			</div>
-			<label class='CheckLabel' for='MiniTicketButton'>
-				<input class='Check' value='minibutton' id='MiniTicketButton' type='checkbox'/>
-				<span>Minify "Create Ticket" Button</span>
-			</label>
-			<br>
-			<label class='CheckLabel' for='MiniTakeTicket'>
-				<input class='Check' value='minitaketicket' id='MiniTakeTicket' type='checkbox'/>
-				<span>Minify "Take a Ticket" Button</span>
-			</label>
-			<br>
-			<label class='CheckLabel' for='MiniSupportPhone'>
-				<input class='Check' value='minisupportphone' id='MiniSupportPhone' type='checkbox'/>
-				<span>Minify "Support Phone" Button</span>
-			</label>
-			<br>
-			<label class='CheckLabel' for='MiniClientIssue'>
-				<input class='Check' value='miniclientissue' id='MiniClientIssue' type='checkbox'/>
-				<span>Minify "Report Client Issue" Button</span>
-			</label>
-<br>
-		</div>
-		<div class='OptionSection'>Themes & Styling</br>
-			<div class='Description'>Choose the themes you want for Odo</div>
-			<label class='NonCheckLabel' for='StarWars'>Choose a theme:
-				<br>
-				<select id='Theme'>
-					<option default value='null'>None</option>
-					<option value='starwars' id='StarWars'>Star Wars</option>
-					<option value='christmas' class='hidden' id='Christmas'>Holiday</option>
-				</select>
-			</label>
-			<label class='CheckLabel' for='shrinkPosts'>
-				<input class='Check' value='shrinkposts' id='shrinkPosts' type='checkbox' />
-				<span>Shrink Closed Squawkbox Posts</span>
-			</label><br>
-			<label class='CheckLabel' for='greyAlerts'>
-				<input class='Check' value='greyalerts' id='greyAlerts' type='checkbox' />
-				<span>Change Odo Red/Yellow alerts banner to grey</span>
-			</label><br>
-			<br>
+			<div>
+				<div class="Description">Minified Buttons</div>
+				<div>
+					<label class='CheckLabel QueueLabel' for='MiniTicketButton'>
+						<input class='Check' value='minibutton' id='MiniTicketButton' type='checkbox'/>
+						<span class="Queue">Create Ticket</span>
+					</label>
+					<label class='CheckLabel QueueLabel' for='MiniTakeTicket'>
+						<input class='Check' value='minitaketicket' id='MiniTakeTicket' type='checkbox'/>
+						<span class="Queue">Take a Ticket</span>
+					</label>
+					<label class='CheckLabel QueueLabel' for='MiniSupportPhone'>
+						<input class='Check' value='minisupportphone' id='MiniSupportPhone' type='checkbox'/>
+						<span class="Queue">Support Phone</span>
+					</label>
+					<label class='CheckLabel QueueLabel' for='MiniClientIssue'>
+						<input class='Check' value='miniclientissue' id='MiniClientIssue' type='checkbox'/>
+						<span class="Queue">Report Client Issue</span>
+					</label>
+				</div>
+			</div>
 		</div>
 
-		<div class='OptionSection'>Misc</br>
-			<div class='Description'>Choose any other options here: </div>
-			<label class='CheckLabel' for='ClinicFeedbackButton'>
-				<input class='Check' value='clinicfeedbackbutton' id='ClinicFeedbackButton' type='checkbox' />
-				<span>Submit Clinic Feedback</span>
-			</label><br>
-			<label class='CheckLabel' for='EasterEggs'>
-				<input class='Check' value='eastereggs' id='EasterEggs' type='checkbox' />
-				<span>Allow Easter Eggs (may impact load times)</span>
-			</label><br>
+		<div class='OptionSection'>
+			<div class='section-title'>Ticketing</div>
 			<label class='CheckLabel' for='GradProgress'>
 				<input class='Check' value='gradview' id='GradProgress' type='checkbox'/>
 				<span>Show Progress Toward Ticket Goal</span>
-			</label><br>
+			</label>
 			<div class='subOption' id="ProgressOptions">
 				<div class='Description'>Specify your Ticket Goal: </div>
 					<input class='textbox' value='3700' id='TicketGoal' type='text'/>
-				<br>
 				<div class='Description'>When would you like to achieve this goal? </div>
-					<input class='textbox' value='2016-12-12'id='TicketDate' type='date'/>
+					<input class='textbox' value='2016-12-12' id='TicketDate' type='date'/>
 			</div>
+			<label class='CheckLabel' for='ClinicFeedbackButton'>
+				<input class='Check' value='clinicfeedbackbutton' id='ClinicFeedbackButton' type='checkbox' />
+				<span>Submit Clinic Feedback</span>
+			</label>
+			<div class='Description'>Default text for when forcing login</div>
+			<input class='textbox' value='logintext' id='LoginText' type='text'/>
+		</div>
+
+		<div class='OptionSection'>
+			<div class='section-title'>Misc</div>
+			<div class='Description'>Choose any other options here: </div>
 			<div class='Description'>Verify your EmployeeID (i.e. "MATTHEWB"): </div>
-				<input class='textbox' value='employeeid' id='EmployeeID' type='text'/>
-			<br>
-			<div class='Description'>Verify your name as displayed in Odo: </div>
-				<input class='textbox' value='name' id='Name' type='text'/>
-			<br>
+			<input class='textbox' value='employeeid' id='EmployeeID' type='text'/>
 			<label class='CheckLabel' for='Tips'>
 				<input class='Check' value='tips' id='Tips' type='checkbox'/>
 				<span>Show Weekly Tips</span>
-			</label><br>
-			<label class='CheckLabel' for='hideSquawkPosts'>
-				<input class='Check' value='hideSquawkPosts' id='hideSquawkPosts' type='checkbox'/>
-				<span>Hide the Squawkbox</span>
-			</label><br>
-
-			<label class='CheckLabel' for='BlockSpam'>
-				<input class='Check' value='markSpammyPosts' id='BlockSpam' type='checkbox'/>
-				<span>Mark Spammy Posts</span>
-			</label><br>
-			<div class='Description'>After how many aggregate spam clicks should we mark them as spam?</div>
-				<input class='textbox' value='spamCount' id='SpamCount' type='text'/>
-			<br/>
-			<div class='Description'>Custom text for when forcing login</div>
-				<input class='textbox' value='logintext' id='LoginText' type='text'/>
-			<br/>
+			</label>
 			<label class='CheckLabel' for='OmniSearch'>
 				<input class='Check' value='omnisearch' id='OmniSearch' type='checkbox' />
 				<span>Activate OmniSearch</span>
-			</label><br>
-
+			</label>
 		</div>
-
 	</div>
 	<div id='status'></div>
-	<input id='save' type='button' value='Save'>
-
 </div>
 
-<style>
-body {
-	font-weight: 200;
-	background: #eaeaea;
-	text-align: center;
-}
-#Wrapper {
-	font-size: 16px;
-	font-family: "Helvetica Neue", Helvetica, Arial;
-	text-align: center;
-	margin: 3em;
-}
-.Option {
-	margin: 2em auto;
-	text-align: center;
-	max-width: 1200px;
-	font-size: 14px;
-}
-.OptionSection {
-	text-transform: uppercase;
-	padding: .6em;
-	display: inline-block;
-	box-shadow: 0 0 15px #ddd;
-	margin: 2em;
-	border-radius: 15px;
-	background: #fff;
-	font-size: 20px;
-	width: 400px;
-	vertical-align: top;
-	text-align: center;
-}
-.Description {
-	font-size: 15px;
-	color: #aaa;
-	padding: 10px;
-	text-transform: none;
-}
-#SpecialtyQueuesDescription {
-	padding-bottom: 0px;
-}
-.SpecialtyQueues {
-	padding: 3px;
-}
-#status {
-	margin-top: 30px;
-}
-label {
-	display: inline-block;
-	font-size: 16px;
-	text-transform: none;
-	width: 90%;
-}
-.CheckLabel span {
-	padding: 3px 12px;
-	display: inline-block;
-	margin: 16px 0px 7px 0px;
-	text-transform: none;
-	border: 2px solid #ddd;
-	border-radius: 15px;
-	width: 350px;
-	transition: .3s;
-	cursor: pointer;
-	background-color: #cacaca;
-}
-.CheckLabel .Queue {
-	width: auto;
-	padding: 3px 6px;
-}
-.QueueLabel {
-	display: inline;
-	font-size: 11px;
-	margin: 0px 3px;
-}
-input[type=text] {
-	width: 90%;
-	padding: .4em .6em;
-	border: 1px solid #ddd;
-	border-radius: .2em;
-}
-input[type=text]:focus {
-	border-color: #04a365;
-	outline: 0;
-}
-.CheckLabel span:hover {
-	background-color: #ddd;
-}
-input[type=checkbox]:checked + span:hover {
-	background-color: #14b375;
-}
-input[type=checkbox]:checked + span {
-	background-color: #04a365;
-	color: #fff;
-	border-color: #14b375;
-}
-input[type=checkbox], select, input[type=color] {
-	float: right;
-}
-input[type=checkbox] {
-	visibility: hidden;
-	display:none;
-}
-.OtherType {
-	text-align: left;
-	padding: 5px 12px;
-	display: block;
-}
-select, input[type=color] {
-	display: block;
-}
-.hidden {
-	display:none;
-}
-#save {
-	border: 0;
-	color: #fff;
-	background: #6DC44E;
-	font-size: 15px;
-	padding: 8px 10px;
-	border-radius: 5px;
-	transition: .2s;
-	cursor: pointer;
-	margin: 0 auto;
-}
-#save:hover {
-	background: #7DD45E;
-}
-/*FOR IFRAME*/
-#Overlay {
-		background: rgba(0,0,0,.5);
-		position: fixed;
-		top:0;
-		left:0;
-		right:0;
-		bottom:0;
-		z-index: 999;
-		display: none;
-}
-#Exit {
-		top: 5px;
-		right: 10px;
-		position: absolute;
-		cursor: pointer;
-}
-#IframeContainer {
-		margin: 3em auto;
-		padding: 1em;
-		background: #fff;
-		z-index: 9999;
-		border-radius: 10px;
-		height: 80%;
-		width: 90%;
-		position: relative;
-}
-#Iframe {
-		width: 100%;
-		height: 100%;
-		border: none;
-		border-radius: 10px;
-}
-#FeedbackLink {
-		position: fixed;
-		background: #fff;
-		border: 1px solid #bbb;
-		width: 40px;
-		text-align: center;
-		top: 90px;
-		left: 0px;
-		cursor: pointer;
-		border-radius: 0 5px 5px 0;
-		transition: .2s ease-in-out;
-		text-decoration: none;
-		font-size: 12px;
-		padding: 10px 0;
-		border-left: 0;
-		line-height: 13px;
-}
-#FeedbackLink:hover {
-		background: #007ac0;
-		width: 50px;
-		color: #fff;
-}
-</style>
-
+<script type="text/javascript" src="../resources/jquery-1.11.3.min.js"></script>
 <script src="../js/options.js"></script>

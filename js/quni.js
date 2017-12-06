@@ -51,6 +51,7 @@ var showThemesQueue;
 var showVocQueue;
 var showStatQueue;
 var showIntQueue;
+var likeAndCloseBLC;
 
 /*------- Retrieve variables from Chrome Storage ------*/
 
@@ -94,7 +95,8 @@ function getVars() {
 		showThemesQueue: false,
 		showVocQueue: false,
 		showStatQueue: false,
-		showIntQueue: false
+		showIntQueue: false,
+		likeAndCloseBLC: true
 	}, function(items) {
 		EmailButtonOn = items.em;
 		MiniEmailButtonOn = items.mem;
@@ -133,6 +135,7 @@ function getVars() {
 		showVocQueue = items.showVocQueue;
 		showStatQueue = items.showStatQueue;
 		showIntQueue = items.showIntQueue;
+		likeAndCloseBLC = items.likeAndCloseBLC;
 		addons();
 	});
 }
@@ -572,6 +575,23 @@ function addNewSnippet(snippet) {
 }
 
 /*******************************************************************/
+/************  Close and Like Billing Like Crazy Posts  ************/
+/*******************************************************************/
+
+function likeAndCloseAllBLC() {
+	if ($('.Discussion')) {
+		$('.Discussion').each(function() {
+			if (!$('#' + this.id + ' .DiscussionSummary').is(":visible")) {
+				if ($('#' + this.id + ' .DiscussionName').html().indexOf('Billing Like Crazy') > -1) {
+					$('#' + this.id + ' .DiscussionPlusOneButton').click();
+					$('#' + this.id + ' .DiscussionToggle').click();
+				}
+			}
+		});
+	}
+}
+
+/*******************************************************************/
 /***************     Add Clinic Feedback Options    ****************/
 /******************************************************************+/
 
@@ -827,7 +847,9 @@ function addons() {
 	//SPF CHECKER
 	if (urlParams.b == "RSBrandProfile") {
 		window.setTimeout(OdoSPFCheck, 300);
-
+	}
+	if (likeAndCloseBLC) {
+		likeAndCloseAllBLC();
 	}
 }
 /*****************************************************
