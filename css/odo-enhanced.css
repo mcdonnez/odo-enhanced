@@ -33,13 +33,21 @@ th {
     box-shadow: 0px 0px 25px green;
 }
 
+#ScreenpopIssuesButton {
+    float: right;
+    top: -5px;
+    position: absolute;
+    right: 0;
+    color: #999;
+    margin: .5em;
+}
 
 
 /*FOR PULSES*/
 .pulse-helpers {
-	padding: 5px 10px; 
-	background: #fff; 
-	border-radius: 10px; 
+	padding: 5px 10px;
+	background: #fff;
+	border-radius: 10px;
 	border: #007ac0 solid 2px;
 	margin: 2px 5px;
 	transition:.2s;

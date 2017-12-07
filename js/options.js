@@ -1,17 +1,18 @@
 function init() {
-	addReferredExtensions();
-	restoreOptions();
-	makeOpaque();
+	restoreOptions(function() {
+		addReferredExtensions();
+		makeOpaque();
+	});
 	$('#Wrapper').change(function() {
 		saveOptions();
-	});
-	$('#ClinicButton').change(function() {
-		makeOpaque();
 	});
 	$('#ClinicFeedbackButton').change(function() {
 		makeOpaque();
 	});
 	$('#EmailButton').change(function() {
+		makeOpaque();
+	});
+	$('#ClinicButton').change(function() {
 		makeOpaque();
 	});
 	$('#GradProgress').change(function() {
@@ -58,32 +59,24 @@ function addReferredExtensions() {
 function saveOptions() {
 	chrome.storage.sync.set({
 		em: $('#EmailButton').prop('checked'),
-		mem: $('#MiniEmailButton').prop('checked'),
-		cl: $('#ClinicButton').prop('checked'),
-		clf: $('#ClinicFeedbackButton').prop('checked'),
-		mt: $('#MiniTicketButton').prop('checked'),
-		mtt: $('#MiniTakeTicket').prop('checked'),
-		msp: $('#MiniSupportPhone').prop('checked'),
-		mci: $('#MiniClientIssue').prop('checked'),
-		sct: $('#StartClinicTime').val(),
-		ect: $('#EndClinicTime').val(),
-		cdn: $('#ClinicDayNumber').val(),
-		de: $('#Design').prop('checked'),
-		ee: $('#EasterEggs').prop('checked'),
-		pb: $('#Playbook').prop('checked'),
-		tm: $('#Theme').val(),
-		eid: $('#EmployeeID').val(),
-		gp: $('#GradProgress').prop('checked'),
-		tg: $('#TicketGoal').val(),
-		td: $('#TicketDate').val(),
+		miniEmailBtn: $('#MiniEmailButton').prop('checked'),
+		miniClinicBtn: $('#MiniClinicButton').prop('checked'),
+		clinicButton: $('#ClinicButton').prop('checked'),
+		clinicFeedbackBtn: $('#ClinicFeedbackButton').prop('checked'),
+		miniTicketButton: $('#MiniTicketButton').prop('checked'),
+		miniTakeTicketBtn: $('#MiniTakeTicket').prop('checked'),
+		miniSupportPhoneBtn: $('#MiniSupportPhone').prop('checked'),
+		miniClientIssueBtn: $('#MiniClientIssue').prop('checked'),
+		designTab: $('#Design').prop('checked'),
+		playbookTab: $('#Playbook').prop('checked'),
+		odoTheme: $('#Theme').val(),
 		tips: $('#Tips').prop('checked'),
 		ename: $('#Name').val(),
 		panels: $('#Panels').prop('checked'),
 		calmAlerts: $('#greyAlerts').prop('checked'),
 		minPosts: $('#shrinkPosts').prop('checked'),
-		ltxt: $('#LoginText').val(),
+		loginText: $('#LoginText').val(),
 		hidePosts: $('#hideSquawkPosts').prop('checked'),
-		spamCount: $('#SpamCount').val(),
 		blockSpam: $('#BlockSpam').prop('checked'),
 		omniSearch: $('#OmniSearch').prop('checked'),
 		showQuniTickets: $('#QuniTickets').prop('checked'),
@@ -106,35 +99,27 @@ function saveOptions() {
 
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
-function restoreOptions() {
+function restoreOptions(cb) {
 	chrome.storage.sync.get({
-		em: "",
-		mem: "",
-		cl: "",
-		clf: "",
-		sct: "",
-		ect: "",
-		cdn: "",
-		mt: "",
-		mtt: "",
-		msp: "",
-		mci: "",
-		de: false,
-		ee: "",
-		pb: "",
-		eid: "",
-		gp: true,
-		tm: null,
-		tg: 3700,
-		td: "2016-12-12",
+		emailButton: "",
+		miniEmailBtn: false,
+		miniClinicBtn: false,
+		clinicButton: "",
+		clinicFeedbackBtn: "",
+		miniTicketButton: "",
+		miniTakeTicketBtn: "",
+		miniSupportPhoneBtn: "",
+		miniClientIssueBtn: "",
+		designTab: false,
+		playbookTab: "",
+		odoTheme: null,
 		tips: true,
 		ename: "",
 		panels: false,
 		calmAlerts: true,
 		minPosts: true,
-		ltxt: "",
+		loginText: "",
 		hidePosts: false,
-		spamCount: 25,
 		blockSpam: true,
 		omniSearch: true,
 		showQuniTickets: false,
@@ -148,28 +133,22 @@ function restoreOptions() {
 		showIntQueue: false,
 		likeAndCloseBLC: true
 	}, function(items) {
-		$('#EmailButton').prop('checked', items.em);
-		$('#ClinicFeedbackButton').prop('checked', items.clf);
-		$('#MiniEmailButton').prop('checked', items.mem);
-		$('#ClinicButton').prop('checked', items.cl);
-		$('#StartClinicTime').val(items.sct);
-		$('#EndClinicTime').val(items.ect);
-		$('#ClinicDayNumber').val(items.cdn);
-		$('#MiniTicketButton').prop('checked', items.mt);
-		$('#MiniTakeTicket').prop('checked', items.mtt);
-		$('#MiniSupportPhone').prop('checked', items.msp);
-		$('#MiniClientIssue').prop('checked', items.mci);
-		$('#Design').prop('checked', items.de);
+		$('#EmailButton').prop('checked', items.emailButton);
+		$('#ClinicFeedbackButton').prop('checked', items.clinicFeedbackBtn);
+		$('#MiniEmailButton').prop('checked', items.miniEmailBtn);
+		$('#MiniClinicButton').prop('checked', items.miniClinicBtn);
+		$('#ClinicButton').prop('checked', items.clinicButton);
+		$('#MiniTicketButton').prop('checked', items.miniTicketButton);
+		$('#MiniTakeTicket').prop('checked', items.miniTakeTicketBtn);
+		$('#MiniSupportPhone').prop('checked', items.miniSupportPhoneBtn);
+		$('#MiniClientIssue').prop('checked', items.miniClientIssueBtn);
+		$('#Design').prop('checked', items.designTab);
 		$('#EasterEggs').prop('checked', items.ee);
-		$('#Playbook').prop('checked', items.pb);
-		$('#EmployeeID').val(items.eid);
-		$('#GradProgress').prop('checked', items.gp);
-		$('#Theme').val(items.tm);
-		$('#TicketGoal').val(items.tg);
-		$('#TicketDate').val(items.td);
+		$('#Playbook').prop('checked', items.playbookTab);
+		$('#Theme').val(items.odoTheme);
 		$('#Tips').prop('checked', items.tips);
 		$('#Name').val(items.ename);
-		$('#LoginText').val(items.ltxt);
+		$('#LoginText').val(items.loginText);
 		$('#Panels').prop('checked', items.panels);
 		$('#greyAlerts').prop('checked', items.calmAlerts);
 		$('#shrinkPosts').prop('checked', items.minPosts);
@@ -177,7 +156,6 @@ function restoreOptions() {
 		$('#SpamCount').val(items.spamCount);
 		$('#BlockSpam').prop('checked', items.blockSpam);
 		$('#OmniSearch').prop('checked', items.omniSearch);
-		//Quni Ticket Breakdown
 		$('#QuniTickets').prop('checked', items.showQuniTickets);
 		$('#SIQueue').prop('checked', items.showSIQueue);
 		$('#TAQueue').prop('checked', items.showTAQueue);
@@ -188,19 +166,20 @@ function restoreOptions() {
 		$('#StatQueue').prop('checked', items.showStatQueue);
 		$('#IntQueue').prop('checked', items.showIntQueue);
 		$('#LikeAndCloseBLC').prop('checked', items.likeAndCloseBLC);
+		cb();
 	});
 }
 
 function makeOpaque() {
-	if ($('#ClinicButton').prop('checked')) {
-		$('#ClinicOptions').show();
-	} else {
-		$('#ClinicOptions').hide();
-	}
 	if ($('#EmailButton').prop('checked')) {
-		$('#EmailButtonOptions').show();
+		$('#MiniEmailLabel').show();
 	} else {
-		$('#EmailButtonOptions').hide();
+		$('#MiniEmailLabel').hide();
+	}
+	if ($('#ClinicButton').prop('checked')) {
+		$('#MiniClinicLabel').show();
+	} else {
+		$('#MiniClinicLabel').hide();
 	}
 	if ($('#ClinicFeedbackButton').prop('checked')) {
 		$('#ClinicFeedbackButtonOptions').show();

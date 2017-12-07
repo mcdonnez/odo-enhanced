@@ -52,12 +52,10 @@
 			"resources/jquery.dataTables.min.js",
 			"js/quni.js",
 			"js/starWars.js",
-			"resources/firebase.js",
 			"js/resources.js",
 			"js/search.js",
 			"js/autoSearch.js",
-			"js/TicketTable.js",
-			"js/TicketPage.js"
+			"js/TicketTable.js"
 		],
 		"css": [
 			"resources/jquery.dataTables.css",

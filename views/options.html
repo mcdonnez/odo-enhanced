@@ -109,35 +109,10 @@
 				<input class='Check' value='emailbutton' id='EmailButton' type='checkbox' />
 				<span>Create Email</span>
 			</label>
-			<div id="EmailButtonOptions">
-				<div class='Description'>Would you like to minify the button?
-				</div>
-				<label class='CheckLabel' for='MiniEmailButton'>
-					<input class='Check' value='miniemailbutton' id='MiniEmailButton' type='checkbox' />
-					<span>Minify "Create Email" Button</span>
-				</label>
-			</div>
 			<label class='CheckLabel' for='ClinicButton'>
 				<input class='Check' value='clinicbutton' id='ClinicButton' type='checkbox'/>
 				<span>Create Clinic Ticket</span>
 			</label>
-			<div id='ClinicOptions'>
-				<div class='Description'>What time do you have Clinic/Help Desk Shift?<br />
-					From: <input class='textbox' id='StartClinicTime' type='time'/>
-					To: <input class='textbox' id='EndClinicTime' type='time'/>
-					</div>
-				<label class='Description' for='DayNumber'>On which day?
-					<select id='ClinicDayNumber'>
-						<option default value='null'></option>
-						<option value='1' id=''>Monday</option>
-						<option value='2' id=''>Tuesday</option>
-						<option value='3' id=''>Wednesday</option>
-						<option value='4' id=''>Thursday</option>
-						<option value='5' id=''>Friday</option>
-
-					</select>
-				</label>
-			</div>
 			<div>
 				<div class="Description">Minified Buttons</div>
 				<div>
@@ -156,6 +131,14 @@
 					<label class='CheckLabel QueueLabel' for='MiniClientIssue'>
 						<input class='Check' value='miniclientissue' id='MiniClientIssue' type='checkbox'/>
 						<span class="Queue">Report Client Issue</span>
+					</label>
+					<label class='CheckLabel QueueLabel' for='MiniEmailButton' id="MiniEmailLabel">
+						<input class='Check' value='miniemailbutton' id='MiniEmailButton' type='checkbox' />
+						<span class="Queue">Create Email</span>
+					</label>
+					<label class='CheckLabel QueueLabel' for='MiniClinicButton' id="MiniClinicLabel">
+						<input class='Check' value='miniclinicbutton' id='MiniClinicButton' type='checkbox' />
+						<span class="Queue">Create Clinic</span>
 					</label>
 				</div>
 			</div>
@@ -184,8 +167,6 @@
 		<div class='OptionSection'>
 			<div class='section-title'>Misc</div>
 			<div class='Description'>Choose any other options here: </div>
-			<div class='Description'>Verify your EmployeeID (i.e. "MATTHEWB"): </div>
-			<input class='textbox' value='employeeid' id='EmployeeID' type='text'/>
 			<label class='CheckLabel' for='Tips'>
 				<input class='Check' value='tips' id='Tips' type='checkbox'/>
 				<span>Show Weekly Tips</span>

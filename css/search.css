@@ -14,18 +14,21 @@
 	height: 18px;
 	padding: 0px 0px 0px 3px;
 	width: 65px;
+	transition .2s all;
 }
 
 #megaSearch button {
+	transition: .2s all;
 	color: white;
 	background-color: #04b26e;
 	border: none;
 	border-radius: 0px 3px 3px 0px;
 	border-image-source: none;
 	border-width: 0px;
-	margin-left: 0px
+	margin-left: 0px;
+	padding: 2.5px 6px;
 }
 
 #KBSearch {
-	width: 120px;
+	width: 150px;
 }

@@ -9,21 +9,17 @@ var ClinicButtonOn;
 
 function getVars() {
 	chrome.storage.sync.get({
-		tm: "",
-		em: "",
-		hd: true,
-		de: "",
-		cl: "",
-		pb: "",
-		s: true
+		odoTheme: "",
+		emailButton: "",
+		designTab: "",
+		clinicButton: "",
+		playbookTab: ""
 	}, function (items) {
-		Theme = items.tm;
-		EmailButtonOn = items.em;
-		HelpDeskTabOn = items.hd;
-		ClinicButtonOn = items.cl;
-		DesignTabOn = items.de;
-		PlaybookTabOn = items.pb;
-		SnippetsOn = items.s;
+		Theme = items.odoTheme;
+		EmailButtonOn = items.emailButton;
+		ClinicButtonOn = items.clinicButton;
+		DesignTabOn = items.designTab;
+		PlaybookTabOn = items.playbookTab;
 		changeThemes();
 	});
 }
