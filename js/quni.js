@@ -111,6 +111,7 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 		$('.SiteLogo').attr('src','https://qglobalops.co1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_9HWUQ2oSQWKWbvD');
 		$('.SiteLogo').css('margin','0px');
 		$('.SiteLogo').css('height','100%');
+		$('.SiteLogo').css('opacity','1');
 	}
 
 	features.createScreenPopIssueButton();
