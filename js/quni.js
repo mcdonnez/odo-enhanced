@@ -13,6 +13,7 @@ function init() {
 	helpers.getVars(function(chromeStorageVars) {
 		addCustomFeatures(urlParams, chromeStorageVars);
 		listeners.create();
+		ticketQueues.init(chromeStorageVars);
 		console.log("Success! Odo Enhanced Works!");
 	});
 }
@@ -63,6 +64,13 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 		pageHelperService.addCustomLoginText(chromeStorageVars.loginText);
 		window.setTimeout(features.addPermissionSearch, 500);
 	}
+
+	// Tickets Pages
+	if ((urlParams.TopNav == "Tickets" || urlParams.a == "Tickets") && (urlParams.b === undefined || urlParams.b == "TicketsSupportInBox")) {
+		if (chromeStorageVars.showQuniTickets) {
+			features.addQuniDashboardView();
+		}
+	}
 	// any page
 	if (chromeStorageVars.DesignTabOn) {
 		features.tabs.add("Design", "1300", "designTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?category=59934d8461ee2b3e16907509", "Design", "inPage");
@@ -72,9 +80,6 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 	}
 	if (chromeStorageVars.TipsOn) {
 		features.tabs.addHelpMessages();
-	}
-	if (chromeStorageVars.showQuniTickets) {
-		features.addQuniDashboardView();
 	}
 	if (chromeStorageVars.EmailButtonOn) {
 		features.buttons.add('SectionButtonsContainer', 'newEmail', 'odoApp.Dialog("modules/Email/EmailEditor/template.EmailEditor.html");', 'Create Email Ticket', 'envelope');
@@ -228,16 +233,7 @@ var features = {
 			MX_t.innerHTML = "<b>Verify on MXToolbox</b>";
 			document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2)").appendChild(spftable);
 			for (var i = 0; i < DomainArray.length; i++) {
-				SPFCheck(DomainArray[i], i, checkDomain);
-			}
-			function checkDomain(Domain, DomainStatus) {
-				var row = spftable.insertRow(-1);
-				var Domain_t = row.insertCell(0);
-				var SPF_t = row.insertCell(1);
-				var MX_t = row.insertCell(2);
-				Domain_t.innerHTML = Domain;
-				SPF_t.innerHTML = DomainStatus;
-				MX_t.innerHTML = "<a target='_blank' href='http://mxtoolbox.com/SuperTool.aspx?action=spf%3a" + Domain + "&run=toolpage'>Result for " + Domain + "</a>";
+				helpers.SPFCheck(DomainArray[i], i, helpers.checkDomain);
 			}
 			var info = document.querySelector("#ControlPanelBrandSettings > form > table:nth-child(1) > tbody > tr:nth-child(11) > td:nth-child(2) > table > tbody > tr:nth-child(1) > td:nth-child(1)");
 			info.addEventListener("click", function() {
@@ -245,155 +241,24 @@ var features = {
 			});
 		});
 		var data = null;
-		function SPFCheck(domain, index, callback) {
-			var xhr = new XMLHttpRequest();
-			var URL = "https://global-ops-toolbox.corp.qualtrics.com/qualtrics/spf/?domain=" + domain;
-			var DomainStatus = null;
-			xhr.addEventListener("readystatechange", function() {
-				if (this.readyState === 4) {
-					if (this.responseText == '{"hasQualtricsSpf":true}') {
-						DomainStatus = '<font color="green">Yes</font>';
-					} else if (this.responseText == '{"hasQualtricsSpf":false}') {
-						DomainStatus = '<font color="red">No</font>';
-					} else {
-						DomainStatus = '<font color="yellow">Error</font>';
-					}
-					callback(domain, DomainStatus);
-				}
-			});
-			xhr.open("GET", URL);
-			xhr.send(data);
-		}
 	},
 	addQuniDashboardView: function() {
-
-		if ((urlParams.TopNav == "Tickets" || urlParams.a == "Tickets") && (urlParams.b === undefined || urlParams.b == "TicketsSupportInBox")) {
-			var menu = $('.menu-items');
-			var Tickets;
-			var QueueObjects = {
-
-				"Student": {
-					"head": "StudentHead",
-					"item": "StudentItem",
-					"count": 0
-				},
-				"ZebraRhino": {
-					"head": "ZRHead",
-					"item": "ZRItem",
-					"count": 0
-				},
-				"Tiger": {
-					"head": "TigerHead",
-					"item": "TigerItem",
-					"count": 0
-				},
-				"DragonLion": {
-					"head": "DLHead",
-					"item": "DLItem",
-					"count": 0
-				},
-				"SI": {
-					"head": "SIHead",
-					"item": "SIItem",
-					"count": 0,
-					"show": showSIQueue
-				},
-				"TA": {
-					"head": "TAHead",
-					"item": "TAItem",
-					"count": 0,
-					"show": showTAQueue
-				},
-				"360": {
-					"head": "360Head",
-					"item": "360Item",
-					"count": 0,
-					"show": show360Queue
-				},
-				"EE": {
-					"head": "EEHead",
-					"item": "EEItem",
-					"count": 0,
-					"show": showEEQueue
-				},
-				"Themes": {
-					"head": "ThemesHead",
-					"item": "ThemesItem",
-					"count": 0,
-					"show": showThemesQueue
-				},
-				"VC": {
-					"head": "VCHead",
-					"item": "VCItem",
-					"count": 0,
-					"show": showVocQueue
-				},
-				"SW": {
-					"head": "SWHead",
-					"item": "SWItem",
-					"count": 0,
-					"show": showStatQueue
-				},
-				"Integrations": {
-					"head": "IntegrationsHead",
-					"item": "IntegrationsItem",
-					"count": 0,
-					"show": showIntQueue
+		$('.PageSectionToolbar').after('<div id="TicketBreakdownDiv"></div>');
+		var ticketBreakdownURL = chrome.extension.getURL('views/TicketBreakdown.html');
+		$('#TicketBreakdownDiv').load(ticketBreakdownURL, function() {
+			var queues = Object.keys(ticketQueues.list);
+			for (var i = 0; i < queues.length; i++) {
+				var queue = queues[i];
+				if (ticketQueues.list[queue].show === false) {
+					$("#" + ticketQueues.list[queue].head).hide();
+					$("#" + ticketQueues.list[queue].item).hide();
 				}
-			};
+			}
+		});
 
-			$('.PageSectionToolbar').after('<div id="TicketBreakdownDiv"></div>');
-			var ticketBreakdownURL = chrome.extension.getURL('views/TicketBreakdown.html');
-
-			$('#TicketBreakdownDiv').load(ticketBreakdownURL, function() {
-				var queues = Object.keys(QueueObjects);
-				for (var i = 0; i < queues.length; i++) {
-					var queue = queues[i];
-					if (QueueObjects[queue].show === false) {
-						$("#" + QueueObjects[queue].head).hide();
-						$("#" + QueueObjects[queue].item).hide();
-					}
-				}
-			});
-
-			$.ajax({
-				url: 'https://odo-tickets.corp.qualtrics.com/tickets?recommended=true&employeeID=' + tmpInfo.userData.employeeID,
-				success: function(data) {
-					Tickets = data;
-					for (var i = 0; i < Tickets.length; i++) {
-						var ticket = Tickets[i];
-						//Capture the interaction code to assign queue
-						var ticketCode = ticket.InteractionCode;
-						if (ticketCode === null) {
-							ticketCode = "";
-						}
-						var ticketTier = ticket.ClientTier;
-						//Assign Tier Variable that can also be used as the queue if it's a standard GS ticket
-						if (ticketTier == "Trial User" || ticketTier === "") {
-							ticketTier = "Student";
-						} else if (ticketTier == "Dragon" || ticketTier == "Lion") {
-							ticketTier = "DragonLion";
-						} else if (ticketTier == "Zebra" || ticketTier == "Rhino") {
-							ticketTier = "ZebraRhino";
-						}
-						//call assignQueue() helper function
-						var queue = helpers.assignQueue(ticketCode, ticketTier);
-
-						var queueItem = QueueObjects[queue].item;
-						//Increment ticket count
-						QueueObjects[queue].count = QueueObjects[queue].count + 1;
-						//Update count in widget
-						document.getElementById(queueItem).innerHTML = QueueObjects[queue].count;
-						if (QueueObjects[queue].count > 0) {
-							//Bold the text
-							$("#" + QueueObjects[queue].head).css("font-weight", "bold");
-							$("#" + QueueObjects[queue].item).css("font-weight", "bold");
-						}
-
-					}
-				}
-			});
-		}
+		helpers.dashboards.addTicketData();
+		helpers.dashboards.addCallData();
+		window.setInterval(helpers.dashboards.addCallData, 5000);
 	},
 	createScreenPopIssueButton: function() {
 		$('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(2)').click(function() {
@@ -496,88 +361,8 @@ var pageHelperService = {
 		}
 	},
 	setFavicon: function(urlParams) {
-		switch (urlParams.a) {
-			case 'Tickets':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
-				break;
-			case 'Panels':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
-				break;
-			case 'Sales':
-				favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
-				break;
-			case 'Teams':
-				favicon = 'http://www.faviconshut.com/pics/11/11351-man-meeting-people-support-team-team-building-user-woman-icon-favicon.png';
-				break;
-			case 'Reports':
-				favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
-				break;
-			case 'QUni':
-				favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6RJLiTPRHwyfD7v&V=1437974317';
-				break;
-			default:
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_bDVm16QoQrNWsx7&V=1436414154';
-		}
-		switch (urlParams.b) {
-			case 'TicketViewer':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
-				break;
-			case 'RSBrandProfile':
-			case 'RSBrandUsers':
-			case 'RSBrandTickets':
-			case 'RSBrandContacts':
-			case 'RSBrandFiles':
-				favicon = 'global/template/img/RSBrand.png';
-				break;
-			case 'RSUserProfile':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6nC2kpkijev6cmh&V=1436415959';
-				break;
-			case 'ClientSummary':
-				favicon = 'global/template/img/Client.png';
-				break;
-			case 'EB_Viewer':
-				favicon = 'global/template/img/Bug.png';
-				break;
-			case 'TicketsMyInBox':
-			case 'TicketsSupportInBox':
-			case 'SupportRecommendedTickets':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045';
-				break;
-			case 'SupportAlternateEmailTickets':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869';
-				break;
-			case 'SupportAlternatePhoneTickets':
-			case 'SupportPhoneTickets':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Ua1IiSMuOPGnR3&V=1436402515';
-				break;
-			case 'SupportPulse':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173';
-				break;
-			case 'SupportClinic':
-				favicon = 'global/template/img/Clinic.png';
-				break;
-			case 'SupportOtherTickets':
-				favicon = 'global/template/img/QUniOtherTickets.png';
-				break;
-			case 'RSUserAccountAccess':
-				favicon = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_ebNG2a7ncBOoR5b&V=1436412039';
-				break;
-			case 'SupportTeamStatsNew':
-			case 'SupportVolumeForPhone':
-			case 'SupportVolumeForEmail':
-			case 'SupportVolume':
-			case 'SupportVolumeForTraining':
-			case 'ReportTicketInteractionCodes':
-			case 'SupportTeamStats':
-			case 'ReportSupportNPS':
-			case 'SupportStats':
-				favicon = 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981';
-				break;
-			case 'CompanyOfficeMaps':
-				favicon = '/global/template/img/Map.png';
-				break;
-			default:
-		}
+		var defaultUrl = 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_bDVm16QoQrNWsx7&V=1436414154';
+		var favicon = favicons[urlParams.b] || favicons[urlParams.a] || defaultUrl;
 	}
 };
 
@@ -799,7 +584,223 @@ var helpers = {
 		} else {
 			return {};
 		}
+	},
+	SPFCheck: function(domain, index, callback) {
+		var xhr = new XMLHttpRequest();
+		var URL = "https://global-ops-toolbox.corp.qualtrics.com/qualtrics/spf/?domain=" + domain;
+		var DomainStatus = null;
+		xhr.addEventListener("readystatechange", function() {
+			if (this.readyState === 4) {
+				if (this.responseText == '{"hasQualtricsSpf":true}') {
+					DomainStatus = '<font color="green">Yes</font>';
+				} else if (this.responseText == '{"hasQualtricsSpf":false}') {
+					DomainStatus = '<font color="red">No</font>';
+				} else {
+					DomainStatus = '<font color="yellow">Error</font>';
+				}
+				callback(domain, DomainStatus);
+			}
+		});
+		xhr.open("GET", URL);
+		xhr.send(data);
+	},
+	checkDomain: function(Domain, DomainStatus) {
+		var row = spftable.insertRow(-1);
+		var Domain_t = row.insertCell(0);
+		var SPF_t = row.insertCell(1);
+		var MX_t = row.insertCell(2);
+		Domain_t.innerHTML = Domain;
+		SPF_t.innerHTML = DomainStatus;
+		MX_t.innerHTML = "<a target='_blank' href='http://mxtoolbox.com/SuperTool.aspx?action=spf%3a" + Domain + "&run=toolpage'>Result for " + Domain + "</a>";
+	},
+	dashboards: {
+		addTicketData: function() {
+			$.ajax({
+				url: 'https://odo-tickets.corp.qualtrics.com/tickets?recommended=true&employeeID=' + tmpInfo.userData.employeeID,
+				success: function(data) {
+					for (var i = 0; i < data.length; i++) {
+						var ticket = data[i];
+						var ticketCode = ticket.InteractionCode;
+						if (ticketCode === null) {
+							ticketCode = "";
+						}
+						var ticketTier = ticket.ClientTier;
+						if (ticketTier == "Trial User" || ticketTier === "") {
+							ticketTier = "Student";
+						} else if (ticketTier == "Dragon" || ticketTier == "Lion") {
+							ticketTier = "DragonLion";
+						} else if (ticketTier == "Zebra" || ticketTier == "Rhino") {
+							ticketTier = "ZebraRhino";
+						}
+						var queue = helpers.assignQueue(ticketCode, ticketTier);
+						var queueItem = ticketQueues.list[queue].item;
+						ticketQueues.list[queue].count = ticketQueues.list[queue].count + 1;
+						document.getElementById(queueItem).innerHTML = ticketQueues.list[queue].count;
+						if (ticketQueues.list[queue].count > 0) {
+							$("#" + ticketQueues.list[queue].head).css("font-weight", "bold");
+							$("#" + ticketQueues.list[queue].item).css("font-weight", "bold");
+						}
+					}
+				}
+			});
+		},
+		addCallData: function() {
+			$.ajax({
+				url: 'https://global-ops-calltrics.corp.qualtrics.com/calls',
+				success: function(callData) {
+					console.log('callData',callData.result);
+					for (var q in ticketQueues.list) {
+						console.log(q, ticketQueues.list[q].show)
+						if (ticketQueues.list[q].show != false) {
+							var calls = 0;
+							if (callData.result[ticketQueues.list[q].main]) {
+								calls += callData.result[ticketQueues.list[q].main].calls;
+							}
+							if (callData.result[ticketQueues.list[q].overflow]) {
+								calls += callData.result[ticketQueues.list[q].overflow].calls;
+							}
+							if (calls > 0) {
+								plural = "";
+								if (calls > 1) {plural = "s";}
+								$("#" + ticketQueues.list[q].head).css('font-weight', 'bold');
+								$('#' + ticketQueues.list[q].item + 'Calls').html(calls + ' call' + plural + ' waiting!');
+								$('#' + ticketQueues.list[q].item + 'Calls').css('color', '#04b26e');
+								$('#' + ticketQueues.list[q].item).css('opacity','.5');
+							} else {
+								$('#' + ticketQueues.list[q].item + 'Calls').html('0');
+								$('#' + ticketQueues.list[q].item + 'Calls').css('color', '#000');
+								$('#' + ticketQueues.list[q].item).css('opacity','1');
+							}
+						} else {
+							$('#' + ticketQueues.list[q].item + 'Calls').hide();
+						}
+					}
+				}
+			});
+		}
 	}
 };
+
+var favicons = {
+	Tickets: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045',
+	Panels: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869',
+	Sales: 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981',
+	Teams: 'http://www.faviconshut.com/pics/11/11351-man-meeting-people-support-team-team-building-user-woman-icon-favicon.png',
+	Reports: 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981',
+	QUni: 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6RJLiTPRHwyfD7v&V=1437974317',
+	TicketViewer: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869',
+	RSBrandFiles: 'global/template/img/RSBrand.png',
+	RSUserProfile: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6nC2kpkijev6cmh&V=1436415959',
+	ClientSummary: 'global/template/img/Client.png',
+	EB_Viewer: 'global/template/img/Bug.png',
+	SupportRecommendedTickets: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2gaY9v560X0FrU1&V=1436414045',
+	SupportAlternateEmailTickets: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1MtenAjhuRu5wjz&V=1436405869',
+	SupportPhoneTickets: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_3Ua1IiSMuOPGnR3&V=1436402515',
+	SupportPulse: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5APFMnqaGHAp1UF&V=1436413173',
+	SupportClinic: 'global/template/img/Clinic.png',
+	SupportOtherTickets: 'global/template/img/QUniOtherTickets.png',
+	RSUserAccountAccess: 'https://mypantsareonfire.qualtrics.com/ControlPanel/Graphic.php?IM=IM_ebNG2a7ncBOoR5b&V=1436412039',
+	SupportStats: 'https://s.qualtrics.com/ControlPanel/Graphic.php?IM=IM_etfqljehHYElSAJ&V=1437972981',
+	CompanyOfficeMaps: '/global/template/img/Map.png'
+};
+
+var ticketQueues = {
+	list: {
+		"Student": {
+			"head": "StudentHead",
+			"item": "StudentItem",
+			"count": 0,
+			"main": "q10",
+			"overflow": "q11"
+		},
+		"ZebraRhino": {
+			"head": "ZRHead",
+			"item": "ZRItem",
+			"count": 0,
+			"main": "q8",
+			"overflow": "q9"
+		},
+		"Tiger": {
+			"head": "TigerHead",
+			"item": "TigerItem",
+			"count": 0,
+			"main": "q6",
+			"overflow": "q7"
+		},
+		"DragonLion": {
+			"head": "DLHead",
+			"item": "DLItem",
+			"count": 0,
+			"main": "q4",
+			"overflow": "q5"
+		},
+		"SI": {
+			"head": "SIHead",
+			"item": "SIItem",
+			"count": 0,
+			"main": "q18",
+			"overflow": ""
+		},
+		"TA": {
+			"head": "TAHead",
+			"item": "TAItem",
+			"count": 0,
+			"main": "q17",
+			"overflow": ""
+		},
+		"360": {
+			"head": "360Head",
+			"item": "360Item",
+			"count": 0,
+			"main": "q14",
+			"overflow": ""
+		},
+		"EE": {
+			"head": "EEHead",
+			"item": "EEItem",
+			"count": 0,
+			"main": "q15",
+			"overflow": ""
+		},
+		"Themes": {
+			"head": "ThemesHead",
+			"item": "ThemesItem",
+			"count": 0,
+			"main": "",
+			"overflow": ""
+		},
+		"VC": {
+			"head": "VCHead",
+			"item": "VCItem",
+			"count": 0,
+			"main": "q13",
+			"overflow": ""
+		},
+		"SW": {
+			"head": "SWHead",
+			"item": "SWItem",
+			"count": 0,
+			"main": "21",
+			"overflow": ""
+		},
+		"Integrations": {
+			"head": "IntegrationsHead",
+			"item": "IntegrationsItem",
+			"count": 0,
+			"main": "q12",
+			"overflow": ""
+		}
+	},
+	init: function(chromeStorageVars) {
+		ticketQueues.list.SI.show = chromeStorageVars.showSIQueue;
+		ticketQueues.list.TA.show = chromeStorageVars.showTAQueue;
+		ticketQueues.list['360'].show = chromeStorageVars.show360Queue;
+		ticketQueues.list.EE.show = chromeStorageVars.showEEQueue;
+		ticketQueues.list.Themes.show = chromeStorageVars.showThemesQueue;
+		ticketQueues.list.VC.show = chromeStorageVars.showVocQueue;
+		ticketQueues.list.SW.show = chromeStorageVars.showStatQueue;
+		ticketQueues.list.Integrations.show = chromeStorageVars.showIntQueue;
+	}
+}
 
 init();
