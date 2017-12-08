@@ -35,7 +35,7 @@
 }
 
 html .Masthead {
-	background: #73B9C1;
+	transition: 1s all;
 }
 
 /*FOR PULSES*/
