@@ -58,7 +58,7 @@ function addReferredExtensions() {
 
 function saveOptions() {
 	chrome.storage.sync.set({
-		em: $('#EmailButton').prop('checked'),
+		emailButton: $('#EmailButton').prop('checked'),
 		miniEmailBtn: $('#MiniEmailButton').prop('checked'),
 		miniClinicBtn: $('#MiniClinicButton').prop('checked'),
 		clinicButton: $('#ClinicButton').prop('checked'),
@@ -87,7 +87,9 @@ function saveOptions() {
 		showThemesQueue: $('#ThemesQueue').prop('checked'),
 		showVocQueue: $('#VocQueue').prop('checked'),
 		showStatQueue: $('#StatQueue').prop('checked'),
-		showIntQueue: $('#IntQueue').prop('checked')
+		showIntQueue: $('#IntQueue').prop('checked'),
+		likeAndCloseBLC: $('#LikeAndCloseBLC').prop('checked'),
+		newBarnaby: $('#NewBarnaby').prop('checked')
 	}, function() {
 		// Update status to let the user know options were saved.
 		$('#status').html('Options updated.');
@@ -131,7 +133,8 @@ function restoreOptions(cb) {
 		showVocQueue: false,
 		showStatQueue: false,
 		showIntQueue: false,
-		likeAndCloseBLC: true
+		likeAndCloseBLC: true,
+		newBarnaby: true
 	}, function(items) {
 		$('#EmailButton').prop('checked', items.emailButton);
 		$('#ClinicFeedbackButton').prop('checked', items.clinicFeedbackBtn);
@@ -166,6 +169,7 @@ function restoreOptions(cb) {
 		$('#StatQueue').prop('checked', items.showStatQueue);
 		$('#IntQueue').prop('checked', items.showIntQueue);
 		$('#LikeAndCloseBLC').prop('checked', items.likeAndCloseBLC);
+		$('#NewBarnaby').prop('checked', items.newBarnaby);
 		cb();
 	});
 }

@@ -24,82 +24,6 @@
 				<input class='Check' value='design' id='Design' type='checkbox' />
 				<span>Design Resources (Theme Design Only)</span>
 			</label>
-			<label class='CheckLabel' for='QuniTickets'>
-				<input class='Check' value='qunitickets' id='QuniTickets' type='checkbox' />
-				<span>Show Tickets Breakdown in Quni Inbox</span>
-			</label>
-			<div id="TicketBreakdownOptions">
-				<div class="Description" id="SpecialtyQueuesDescription">Which specialty queues are you a part of?</div>
-				<div class="SpecialtyQueues">
-				<label class='CheckLabel QueueLabel' for='SIQueue'>
-					<input class="Check" id="SIQueue" type='checkbox' />
-					<span class="Queue">SI</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='TAQueue'>
-					<input class="Check" id='TAQueue' type='checkbox' />
-					<span class="Queue">TA</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='360Queue'>
-					<input class="Check" id='360Queue' type='checkbox' />
-					<span class="Queue">360</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='EEQueue'>
-					<input class="Check" id='EEQueue' type='checkbox' />
-					<span class="Queue">EE</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='ThemesQueue'>
-					<input class="Check" id='ThemesQueue' type='checkbox' />
-					<span class="Queue">Themes</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='VocQueue'>
-					<input class="Check" id='VocQueue' type='checkbox' />
-					<span class="Queue">VoC</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='StatQueue'>
-					<input class="Check" id='StatQueue' type='checkbox' />
-					<span class="Queue">Statwing</span>
-				</label>
-				<label class='CheckLabel QueueLabel' for='IntQueue'>
-					<input class="Check" id='IntQueue' type='checkbox' />
-					<span class="Queue">Int</span>
-				</label>
-				</div>
-			</div>
-		</div>
-
-		<div class='OptionSection' id="Referrals">
-			<div class='section-title'>Work Faster</div>
-			<div class='Description'>Like Odo Enhanced? Check out these other great Qualtrics extenstions</div>
-			<div id="ReferredExtensions">
-			</div>
-		</div>
-
-		<div class='OptionSection'>
-			<div class='section-title'>Themes & Styling</div>
-			<div class='Description'>Choose the themes you want for Odo</div>
-			<label class='NonCheckLabel' for='StarWars'>Choose a theme:
-				<select id='Theme' class="select">
-					<option default value='null'>None</option>
-					<option value='starwars' id='StarWars'>Star Wars</option>
-					<option value='christmas' class='hidden' id='Christmas'>Holiday</option>
-				</select>
-			</label>
-			<label class='CheckLabel' for='shrinkPosts'>
-				<input class='Check' value='shrinkposts' id='shrinkPosts' type='checkbox' />
-				<span>Shrink Closed Squawkbox Posts</span>
-			</label>
-			<label class='CheckLabel' for='greyAlerts'>
-				<input class='Check' value='greyalerts' id='greyAlerts' type='checkbox' />
-				<span>Grey Out Odo Alerts</span>
-			</label>
-			<label class='CheckLabel' for='hideSquawkPosts'>
-				<input class='Check' value='hideSquawkPosts' id='hideSquawkPosts' type='checkbox'/>
-				<span>Hide the Squawkbox</span>
-			</label>
-			<label class='CheckLabel' for='LikeAndCloseBLC'>
-				<input class='Check' value='likeAndCloseBLC' id='LikeAndCloseBLC' type='checkbox'/>
-				<span>Automatically Like & Close 'Billing Like Crazy' Posts</span>
-			</label>
 		</div>
 
 		<div class='OptionSection'>
@@ -144,6 +68,45 @@
 			</div>
 		</div>
 
+		<div class='OptionSection' id="Referrals">
+			<div class='section-title'>Work Faster</div>
+			<div class='Description'>Like Odo Enhanced? Check out these other great Qualtrics extenstions</div>
+			<div id="ReferredExtensions">
+			</div>
+		</div>
+
+		<div class='OptionSection'>
+			<div class='section-title'>Themes & Styling</div>
+			<div class='Description'>Choose the themes you want for Odo</div>
+			<label class='NonCheckLabel' for='StarWars'>Choose a theme:
+				<select id='Theme' class="select">
+					<option default value='null'>None</option>
+					<option value='starwars' id='StarWars'>Star Wars</option>
+					<option value='christmas' class='hidden' id='Christmas'>Holiday</option>
+				</select>
+			</label>
+			<label class='CheckLabel' for='shrinkPosts'>
+				<input class='Check' value='shrinkposts' id='shrinkPosts' type='checkbox' />
+				<span>Shrink Closed Squawkbox Posts</span>
+			</label>
+			<label class='CheckLabel' for='greyAlerts'>
+				<input class='Check' value='greyalerts' id='greyAlerts' type='checkbox' />
+				<span>Grey Out Odo Alerts</span>
+			</label>
+			<label class='CheckLabel' for='hideSquawkPosts'>
+				<input class='Check' value='hideSquawkPosts' id='hideSquawkPosts' type='checkbox'/>
+				<span>Hide the Squawkbox</span>
+			</label>
+			<label class='CheckLabel' for='LikeAndCloseBLC'>
+				<input class='Check' value='likeAndCloseBLC' id='LikeAndCloseBLC' type='checkbox'/>
+				<span>Automatically Like & Close 'Billing Like Crazy' Posts</span>
+			</label>
+			<label class='CheckLabel' for='NewBarnaby'>
+				<input class='Check' value='newBarnaby' id='NewBarnaby' type='checkbox'/>
+				<span>Use New Barnaby</span>
+			</label>
+		</div>
+
 		<div class='OptionSection'>
 			<div class='section-title'>Ticketing</div>
 			<label class='CheckLabel' for='GradProgress'>
@@ -162,6 +125,47 @@
 			</label>
 			<div class='Description'>Default text for when forcing login</div>
 			<input class='textbox' value='logintext' id='LoginText' type='text'/>
+			<label class='CheckLabel' for='QuniTickets'>
+				<input class='Check' value='qunitickets' id='QuniTickets' type='checkbox' />
+				<span>Show Tickets Breakdown in Quni Inbox</span>
+			</label>
+			<div id="TicketBreakdownOptions">
+				<div class="Description" id="SpecialtyQueuesDescription">Which specialty queues are you a part of?</div>
+				<div class="SpecialtyQueues">
+				<label class='CheckLabel QueueLabel' for='SIQueue'>
+					<input class="Check" id="SIQueue" type='checkbox' />
+					<span class="Queue">SI</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='TAQueue'>
+					<input class="Check" id='TAQueue' type='checkbox' />
+					<span class="Queue">TA</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='360Queue'>
+					<input class="Check" id='360Queue' type='checkbox' />
+					<span class="Queue">360</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='EEQueue'>
+					<input class="Check" id='EEQueue' type='checkbox' />
+					<span class="Queue">EE</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='ThemesQueue'>
+					<input class="Check" id='ThemesQueue' type='checkbox' />
+					<span class="Queue">Themes</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='VocQueue'>
+					<input class="Check" id='VocQueue' type='checkbox' />
+					<span class="Queue">VoC</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='StatQueue'>
+					<input class="Check" id='StatQueue' type='checkbox' />
+					<span class="Queue">Statwing</span>
+				</label>
+				<label class='CheckLabel QueueLabel' for='IntQueue'>
+					<input class="Check" id='IntQueue' type='checkbox' />
+					<span class="Queue">Int</span>
+				</label>
+				</div>
+			</div>
 		</div>
 
 		<div class='OptionSection'>
@@ -173,7 +177,7 @@
 			</label>
 			<label class='CheckLabel' for='OmniSearch'>
 				<input class='Check' value='omnisearch' id='OmniSearch' type='checkbox' />
-				<span>Activate OmniSearch</span>
+				<span>Show OmniSearch</span>
 			</label>
 		</div>
 	</div>

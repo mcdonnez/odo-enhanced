@@ -19,7 +19,7 @@ function init() {
 
 function addCustomFeatures(urlParams, chromeStorageVars) {
 	//squawkbox page
-	if (!urlParams.a && !urlParams.b) {
+	if (!urlParams.a && !urlParams.b && !urlParams.TopNav) {
 		//squawkbox loaded
 		var count = 0;
 		tmpInfo.squawkboxChecker = window.setInterval(function() {
@@ -35,7 +35,7 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 			}
 		}, 500);
 		if (chromeStorageVars.PlaybookTabOn) {
-			features.tabs.add("Playbook", "1000", "playbookTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?noHeader=true", "Playbook", "inPage");
+			features.tabs.add("Playbook", "1000", "playbookTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook", "Playbook", "inPage");
 		}
 		if (chromeStorageVars.hidePosts) {
 			features.toggleSquawkboxPosts();
@@ -48,19 +48,27 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 
 	// unauthorized user account access page
 	if (urlParams.b == "RSUserAccountAccess") {
-	    pageHelperService.addCustomLoginText();
+	    pageHelperService.addCustomLoginText(chromeStorageVars.loginText);
 	}
 
 	// Brand Page
 	if (urlParams.b == "RSBrandProfile") {
 		window.setTimeout(features.OdoSPFCheck, 300);
+		window.setTimeout(features.addPermissionSearch, 500);
+	}
+
+	// User Page
+	if (urlParams.b == "RSUserProfile") {
+		features.addSurveySnapshotLinks();
+		pageHelperService.addCustomLoginText(chromeStorageVars.loginText);
+		window.setTimeout(features.addPermissionSearch, 500);
 	}
 	// any page
 	if (chromeStorageVars.DesignTabOn) {
-		features.tabs.addfeatures.tabs.add("Design", "1300", "designTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?category=59934d8461ee2b3e16907509&noHeader=true", "Design", "inPage");
+		features.tabs.add("Design", "1300", "designTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?category=59934d8461ee2b3e16907509", "Design", "inPage");
 	}
 	if (chromeStorageVars.PanelsTabOn) {
-		features.tabs.addfeatures.tabs.add("Panels Playbook", "1000", "panelsTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook?noHeader=true", "Panels Resources", "inPage");
+		features.tabs.add("Panels Playbook", "1000", "panelsTab", "https://global-ops-toolbox.corp.qualtrics.com/#/playbook", "Panels Resources", "inPage");
 	}
 	if (chromeStorageVars.TipsOn) {
 		features.tabs.addHelpMessages();
@@ -97,6 +105,12 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 	}
 	if (chromeStorageVars.calmAlertsOn) {
 		pageHelperService.customStylesheets.add("greyAlerts");
+	}
+	if (chromeStorageVars.newBarnaby) {
+		$('.Masthead').css('background', '#73B9C1');
+		$('.SiteLogo').attr('src','https://qglobalops.co1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_9HWUQ2oSQWKWbvD');
+		$('.SiteLogo').css('margin','0px');
+		$('.SiteLogo').css('height','100%');
 	}
 
 	features.createScreenPopIssueButton();
@@ -398,6 +412,22 @@ var features = {
 				});
 			},500);
 		});
+	},
+	addSurveySnapshotLinks: function() {
+		window.setTimeout(function() {
+			$('#RSUserSurveys table tr td:first-child').each(function() {
+				$(this).html("<a target='_blank' href='https://global-ops-toolbox.corp.qualtrics.com/surveyViewer/?surveyId=" + $(this).html() + "'>" + $(this).html() + "</a>");
+			});
+		}, 2500);
+	},
+	addPermissionSearch: function() {
+		$('.RightsContainer').prepend('<div id="CustomSearchContainer"><input type="text" id="PermissionSearch" placeholder="Filter Permissions..."/></div>');
+		$('#PermissionSearch').keyup(function() {
+			helpers.searchPermissions($(this).val());
+		});
+		// random css fix
+		$('#RightMenuColumn > table.Green button').addClass('btn');
+		$('#RightMenuColumn > table.Green button').css('height','auto')
 	}
 };
 
@@ -413,7 +443,7 @@ var pageHelperService = {
 			ucSetDate: new Date().toString()
 		});
 	},
-	addCustomLoginText: function() {
+	addCustomLoginText: function(loginText) {
 		var checkboxContainer = $('#EmergencyLoginCheckbox').parent();
 		var newText = '<label for="EmergencyLoginCheckbox">I need to access an account where the customer has not granted permission through the product</label>';
 		var newElement = checkboxContainer.html().replace('I need to access an account where the customer has not granted permission through the product', newText);
@@ -576,6 +606,14 @@ var listeners = {
 };
 
 var helpers = {
+	searchPermissions: function(text) {
+		$('td.Col_PermissionName').each(function() {
+			$(this).closest('tr').show();
+	 		if ($(this).html().toLowerCase().indexOf(text.toLowerCase()) == -1) {
+				$(this).closest('tr').hide();
+	        }
+	    });
+	},
 	toggleMessages: function(refresh) {
 		chrome.storage.sync.get({
 			cm: 0
@@ -663,7 +701,7 @@ var helpers = {
 	getVars: function(cb) {
 		var chromeStorageVars = {};
 		chrome.storage.sync.get({
-			em: "",
+			emailButton: "",
 			miniEmailBtn: "",
 			clinicFeedbackBtn: "",
 			clinicButton: "",
@@ -686,7 +724,6 @@ var helpers = {
 			spamCount: 25,
 			blockSpam: true,
 			omniSearch: true,
-			//Quni Ticket breakdowns
 			showQuniTickets: false,
 			showSIQueue: false,
 			showTAQueue: false,
@@ -696,9 +733,10 @@ var helpers = {
 			showVocQueue: false,
 			showStatQueue: false,
 			showIntQueue: false,
-			likeAndCloseBLC: true
+			likeAndCloseBLC: true,
+			newBarnaby: true
 		}, function(items) {
-			chromeStorageVars.EmailButtonOn = items.em;
+			chromeStorageVars.EmailButtonOn = items.emailButton;
 			chromeStorageVars.MiniEmailButtonOn = items.miniEmailBtn;
 			chromeStorageVars.ClinicFeedbackButtonOn = items.clinicFeedbackBtn;
 			chromeStorageVars.ClinicButtonOn = items.clinicButton;
@@ -729,6 +767,7 @@ var helpers = {
 			chromeStorageVars.showStatQueue = items.showStatQueue;
 			chromeStorageVars.showIntQueue = items.showIntQueue;
 			chromeStorageVars.likeAndCloseBLC = items.likeAndCloseBLC;
+			chromeStorageVars.newBarnaby = items.newBarnaby;
 			cb(chromeStorageVars);
 		});
 	},
