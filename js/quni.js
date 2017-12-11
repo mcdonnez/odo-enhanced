@@ -82,7 +82,7 @@ function addCustomFeatures(urlParams, chromeStorageVars) {
 		features.tabs.addHelpMessages();
 	}
 	if (chromeStorageVars.EmailButtonOn) {
-		features.buttons.add('SectionButtonsContainer', 'newEmail', 'odoApp.Dialog("modules/Email/EmailEditor/template.EmailEditor.html");', 'Create Email Ticket', 'envelope');
+		features.buttons.add('SectionButtonsContainer', 'newEmail', 'openEmailEditorForNewThread("Support", "SE")', 'Create Email Ticket', 'envelope');
 		if (chromeStorageVars.MiniEmailButtonOn) {
 			features.buttons.minimize("Create Email Ticket");
 		}
