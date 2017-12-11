@@ -2,13 +2,16 @@
 	"manifest_version": 2,
 	"name": "Odo Enhanced",
 	"description": "Favicons, Buttons, Reactions, and more",
-	"version": "2.0.0",
+	"version": "2.0.5",
 	"omnibox": {
 		"keyword": ";q"
 	},
 
 	"background": {
-		"scripts": ["js/background.js"]
+		"scripts": [
+			"js/background.js",
+			"resources/jquery-1.11.3.min.js"
+		]
 	},
 
 	"browser_action": {
@@ -20,6 +23,8 @@
 		"https://ajax.googleapis.com/",
 		"http://odo.corp.qualtrics.com/*",
 		"storage",
+		"https://*.qualtrics.com/*",
+		"https://accounts.google.com/o/oauth2/*",
 		"tabs"
 	],
 
@@ -55,7 +60,8 @@
 			"js/resources.js",
 			"js/search.js",
 			"js/autoSearch.js",
-			"js/TicketTable.js"
+			"js/TicketTable.js",
+			"js/mba.js"
 		],
 		"css": [
 			"resources/jquery.dataTables.css",
