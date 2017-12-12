@@ -262,21 +262,23 @@ var features = {
 	},
 	createScreenPopIssueButton: function() {
 		$('body > div.SearchBar > div.SectionButtonsContainer > a:nth-child(2)').click(function() {
-			window.setTimeout(function() {
-				$('.ui-dialog-titlebar').css('position', 'relative');
-				$('.ui-dialog-titlebar').append('<button class="btn" id="ScreenpopIssuesButton">Screenpop issues?</button>');
-				$('#ScreenpopIssuesButton').click(function() {
-					var phone = $('#ContactMainPhone').val() || $('#CurrentlyConnected').val() || $('#OtherPhone').val();
-					var url = "https://qglobalops.co1.qualtrics.com/jfe/form/SV_bE2WapB9Au7oi3P?RSUser=" + $('#RSUserID').val() +
-																							"&TicketID=" + $('#TicketID').val() +
-																							"&ClientID=" + $('#ClientID').val() +
-																							"&RSBrandID=" + $('#RSBrandID').val() +
-																							"&EmployeeName=" + $('#EmployeeName').val() +
-																							"&EmployeeID=" + tmpInfo.userData.employeeID +
-																							"&Phone=" + phone;
-					window.open(url);
-				});
-			},500);
+			if ($('#ScreenpopIssuesButton').length === 0) {
+				window.setTimeout(function() {
+					$('.ui-dialog-titlebar').css('position', 'relative');
+					$('.ui-dialog-titlebar').append('<button class="btn" id="ScreenpopIssuesButton">Screenpop issues?</button>');
+					$('#ScreenpopIssuesButton').click(function() {
+						var phone = $('#ContactMainPhone').val() || $('#CurrentlyConnected').val() || $('#OtherPhone').val();
+						var url = "https://qglobalops.co1.qualtrics.com/jfe/form/SV_bE2WapB9Au7oi3P?RSUser=" + $('#RSUserID').val() +
+																								"&TicketID=" + $('#TicketID').val() +
+																								"&ClientID=" + $('#ClientID').val() +
+																								"&RSBrandID=" + $('#RSBrandID').val() +
+																								"&EmployeeName=" + $('#EmployeeName').val() +
+																								"&EmployeeID=" + tmpInfo.userData.employeeID +
+																								"&Phone=" + phone;
+						window.open(url);
+					});
+				},500);
+			}
 		});
 	},
 	addSurveySnapshotLinks: function() {
