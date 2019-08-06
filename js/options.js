@@ -58,6 +58,7 @@ function addReferredExtensions() {
 
 function saveOptions() {
 	chrome.storage.sync.set({
+		eid: $('#EmployeeID').val(),
 		emailButton: $('#EmailButton').prop('checked'),
 		miniEmailBtn: $('#MiniEmailButton').prop('checked'),
 		miniClinicBtn: $('#MiniClinicButton').prop('checked'),
@@ -103,6 +104,7 @@ function saveOptions() {
 // stored in chrome.storage.
 function restoreOptions(cb) {
 	chrome.storage.sync.get({
+		eid:"",
 		emailButton: "",
 		miniEmailBtn: false,
 		miniClinicBtn: false,
@@ -136,6 +138,7 @@ function restoreOptions(cb) {
 		likeAndCloseBLC: true,
 		newBarnaby: true
 	}, function(items) {
+		$('#EmployeeID').val(items.eid),
 		$('#EmailButton').prop('checked', items.emailButton);
 		$('#ClinicFeedbackButton').prop('checked', items.clinicFeedbackBtn);
 		$('#MiniEmailButton').prop('checked', items.miniEmailBtn);
